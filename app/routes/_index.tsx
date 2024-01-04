@@ -1,4 +1,7 @@
-import type { MetaFunction } from "@remix-run/node";
+import { json, type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import { WeatherSDK } from "~/models/WeatherSDK";
+import { useLoaderData } from "@remix-run/react";
+import { getRealTimeWeather, getWeatherForecast, getWeatherRecentHistory } from "~/services/tomorrowAPI";
 
 export const meta: MetaFunction = () => {
   return [
@@ -7,7 +10,14 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export async function loader()  {
+  return getWeatherRecentHistory("new york");
+
+}
+
 export default function Index() {
+  const data = useLoaderData();
+  console.log(data);
   return (
     <div className=" bg-white py-6 sm:py-8 lg:py-12">
       <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
@@ -26,3 +36,7 @@ export default function Index() {
     </div>
   );
 }
+function load<T>(arg0: string) {
+  throw new Error("Function not implemented.");
+}
+

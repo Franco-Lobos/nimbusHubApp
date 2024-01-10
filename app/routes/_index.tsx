@@ -24,8 +24,7 @@ export default function Index() {
         <div className="mb-10 md:mb-16">
           <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl">Welcome to NimbusHub</h2>
           <p className="mb-4 text-center">
-            This is a simple app to demonstrate the power of{" "}
-            <a href="https://remix.run">Remix</a>.
+            {}
           </p>
         </div>
 

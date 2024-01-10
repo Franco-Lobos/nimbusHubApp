@@ -48,20 +48,13 @@ export default function App() {
   );
 }
 
+
 function Layout({children}: {children: ReactNode}){
   return(
-    <>
-      <nav className="py-10 bg-white">
-          <Link to="/" prefetch="intent" className="inline-block max-w-content flex flex-row justify-center items-center gap-2">
-              <LogoIcon className="w-20 fill-blue" ></LogoIcon>
-              <LogoText className="w-24" > </LogoText> 
-
-              {/* <LogoText className="flex-2 w-64"></LogoText> */}
-          </Link>
-      </nav>
-      <main>
+    <div className="h-screen overflow-hidden">
+      <main className="h-full">
       {children}
       </main>
-    </>
+    </div>
   )
 }

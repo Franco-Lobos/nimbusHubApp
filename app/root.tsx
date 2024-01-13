@@ -1,10 +1,7 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import stylesheet from "~/tailwind.css";
 
-
 import {
-  Link,
   Links,
   LiveReload,
   Meta,
@@ -13,8 +10,6 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import { ReactNode } from "react";
-import LogoIcon from "./components/icons/LogoIcon";
-import LogoText from "./components/icons/LogoText";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },

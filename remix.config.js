@@ -6,4 +6,15 @@ export default {
   // assetsBuildDirectory: "public/build",
   // publicPath: "/build/",
   // serverBuildPath: "build/index.js",
+  // routes:{
+  //   '/': require.resolve('./app/home.tsx'),
+  // },
+
+  browserNodeBuiltinsPolyfill: {
+    modules: {
+      path: true,
+      os: true,
+      crypto: true,
+    },
+  },
 };

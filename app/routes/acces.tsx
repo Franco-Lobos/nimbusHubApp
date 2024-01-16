@@ -26,8 +26,7 @@ export default function Acces() {
 
   return (
     <>
-    <div className="h-full lg:h-screen flex flex-nowrap items-center justify-center bg-iceLightblue lg:justify-start">
-        
+      <div className="h-full lg:h-screen flex flex-nowrap items-center justify-center bg-iceLightblue lg:justify-start">
         <div className="h-full rounded w-full self-baseline lg:w-3/5">
         <nav className="py-8 bg-themeBlack lg:flex lg:justify-start lg:pl-32 pt-8">
             <Link to="/" prefetch="intent" className="inline-block max-w-content flex flex-row justify-center items-center gap-2">
@@ -36,7 +35,7 @@ export default function Acces() {
             </Link>
         </nav>
         <Outlet/>
-        </div>
+      </div>
       <div className="hidden lg:flex w-2/5 text-themeWhite bg-themeBlack min-h-screen flex flex-col items-center justify-center">
         <LoginImage {...LoginImageProps} ></LoginImage>
         <div className='w-full px-24'>

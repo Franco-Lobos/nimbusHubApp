@@ -28,7 +28,6 @@ export async function loader({
     if(isWeatherLocation(sessionNewLocation)){
       if(session.has("location")){
         const allLocations: WeatherLocation[] = session.get("location")!;
-        console.log(allLocations)
         let flag = false;
         allLocations.forEach(loc => {
           if(sessionNewLocation.name == loc.name){ // if i use lat and long may be different for a rounded location error
@@ -47,20 +46,19 @@ export async function loader({
     else{
       console.log("no location:" , sessionNewLocation)
     }
- 
-    return {};
-  }
+   }
+  return{}
 };
 
 export default function Dashboard() {
   
   return (
-    <div className="flex h-screen bg-themeWhite flex-col lg:flex-row">
+    <div className="flex h-screen bg-themeWhite dark:bg-themeBlack flex-col lg:flex-row">
     {/* Main Content */}
-    <div className="flex-1 flex flex-col overflow-hidden  overflow-x-hidden overflow-y-auto px-6">
+    <div className="flex-1 flex flex-col overflow-hidden  overflow-x-hidden  px-6">
       <Outlet />
     </div>
-    <Navigator />
+    {/* <Navigator /> */}
 
   </div>
   );

@@ -5,14 +5,9 @@ import { WeatherLocation } from '~/models/WeatherLocation';
 import { RealTimeData } from '~/models/RealTime';
 import { isTomorrowError } from '~/models/tomorrow/TomorrowError';
 import ErrorView from '~/components/widgets/error';
-import { defaultRealTime } from '~/components/constants/defaults';
+import { defaultLocation, defaultRealTime } from '~/components/constants/defaults';
+import { getRealTimeWeather } from '~/services/nimbusWeatherAPIService';
 
-const defaultLocation: WeatherLocation = {
-  "lat": 40.71272659301758,
-  "lon": -74.00601196289062,
-  "name": "City of New York, New York, United States",
-  "type": "administrative"
-}
 
 
 const splitedName = (name: string) => {
@@ -34,9 +29,12 @@ export async function loader({
         return redirect("/acces/login");
       }
 
-      let location: WeatherLocation;
-      location = session.has("location")? session.get("location")![0]: defaultLocation;
-
+      let location: WeatherLocation = defaultLocation;
+      if(session.has("location")){
+        const sessionLocations = session.get("location")!;
+        location = sessionLocations[sessionLocations.length-1 ];
+      }
+      // console.log( await getRealTimeWeather(location.name, request));
       // const loadForecast = await getRealTimeWeather(location.name, request);
       const loadForecast = defaultRealTime;
       return loadForecast;
@@ -54,13 +52,14 @@ const ReaLtimeLocation = () => {
     ?
       <ErrorView/>
     :
-    <div className='flex flex-col'>
-      <div className="text-themeBlack p-4 text-center m-8 text-2xl font-bold">
+    <div className='flex flex-col py-6'>
+      <div className="text-themeBlack text-center mt-8 text-2xl font-bold">
           {cityName}
       </div>
-          <div className="text-themeBlack p-2 text-center text-4xl font-bold">
-          {currentWiwather}°C
+          <div className="text-themeBlack p-2 text-center text-6xl ">
+          {Math.round(currentWiwather)}°C <br/>
       </div>
+      
     </div>
     
   );

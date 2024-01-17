@@ -1,5 +1,6 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import stylesheet from "~/tailwind.css";
+import ThemeProvider, { useTheme } from './theme/themeProvider';
 
 import {
   Links,
@@ -9,7 +10,6 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import { ReactNode } from "react";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -26,6 +26,8 @@ import {
   isRouteErrorResponse,
   useRouteError,
 } from "@remix-run/react";
+import clsx from "clsx";
+import { ReactNode } from "react";
 
 export function ErrorBoundary() {
   const error = useRouteError();
@@ -54,9 +56,12 @@ export function ErrorBoundary() {
 }
 
 
-export default function App() {
+function App() {
+  // const [isDark, setIsDark] = useState<boolean>(false);
+  const { theme} = useTheme();
+
   return (
-    <html lang="en">
+    <html lang="en" className={clsx(theme)}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -64,24 +69,22 @@ export default function App() {
         <Links />
       </head>
       <body suppressHydrationWarning={true}>
-        <Layout>
           <Outlet />
           <ScrollRestoration />
           <Scripts />
           <LiveReload />
-        </Layout>
       </body>
     </html>
   );
 }
 
+function Root() {
 
-function Layout({children}: {children: ReactNode}){
-  return(
-    <div className="h-screen overflow-hidden">
-      <main className="h-full">
-      {children}
-      </main>
-    </div>
-  )
+  return (
+    <ThemeProvider>
+        <App></App>
+    </ThemeProvider>
+  );
 }
+
+export default Root;

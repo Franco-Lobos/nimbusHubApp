@@ -3,6 +3,7 @@ import type { Config } from 'tailwindcss'
 export default {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
   important: true,
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -21,7 +22,7 @@ export default {
 
         // Add more custom colors as needed
       },
-    },
+    }
   },
   plugins: [],
 } satisfies Config

@@ -7,6 +7,7 @@ type SessionData = {
   userId: string;
   userName: string;
   location: WeatherLocation[];
+  ip:string;
   // Add any other session data you need
 };
 

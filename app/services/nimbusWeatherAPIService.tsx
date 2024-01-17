@@ -16,8 +16,7 @@ export const getWeatherForecast = async (location: string, request: Request) => 
           'Cookie': request.headers.get("Cookie")!
         }
       })
-      
-    if (data.status === 403) {
+    if (!data.ok) {
       // Handle forbidden error
       throw new Error('Forbidden');
     }
@@ -39,7 +38,12 @@ export const getRealTimeWeather = async (location: string, request: Request) => 
           'Cookie': request.headers.get("Cookie")!
         }
       })
-    return json(await data.json())
+      if (!data.ok) {
+        // Handle forbidden error
+        throw new Error('Forbidden');
+      }
+      
+    return await data.json();
 }
 
 export const getWeatherRecentHistory = async (location: string, request: Request) => {

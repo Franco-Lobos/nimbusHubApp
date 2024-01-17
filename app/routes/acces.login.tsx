@@ -46,8 +46,9 @@ export async function action({
 
     const response: Response = await loginService(email,password);
     const responseBody = await response.json();
-    const userId = responseBody._id;
-
+    if (response.status === 202) {
+      ("LOADING...")
+    } 
     if (response.status==200) { //response?._id && response?.authentication?.sessionToken
       const storage =createCookieSessionStorage({
         cookie:{
@@ -65,17 +66,25 @@ export async function action({
         "type": "administrative"
       }
       const session = await storage.getSession();
-      session.set("userId", userId);
-      session.set("userName", responseBody.userName);
+      session.set("userId", responseBody.user._id);
+      session.set("userName", responseBody.user.userName);
       session.set("location", [defaultLocation]);
+      session.set("ip", [responseBody.ipAddress == '::ffff:127.0.0.1' ? "46.172.250.35" : responseBody.ipAddress]);
 
       // Commit the session with an expiration time and signing
       const sessionOptions = { expires: new Date(Date.now() + 12 * 60 * 60 * 1000), signed: true };
-      const commitedSession = await commitSession(session, sessionOptions); // await storage.commitSession(session, { expires: new Date(Date.now() + 12 * 60 * 60 * 1000 ) }); // Expires in 12 hour
+      const commitedSession:string = await commitSession(session, sessionOptions); // await storage.commitSession(session, { expires: new Date(Date.now() + 12 * 60 * 60 * 1000 ) }); // Expires in 12 hour
 
-      response.headers.append("Set-Cookie", commitedSession);
+      const newHeaders = new Headers();
+      newHeaders.append("Set-Cookie", response.headers.get("Set-Cookie")!);
+      newHeaders.append("Set-Cookie", commitedSession);
 
-      return response;
+      const newResponse = new Response(responseBody, {
+        status: response.status,
+        headers: newHeaders,
+      });
+
+      return newResponse;
     }
 
     return (responseBody);

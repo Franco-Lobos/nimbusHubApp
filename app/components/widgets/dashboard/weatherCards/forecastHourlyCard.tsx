@@ -1,7 +1,8 @@
 import { HourlyItem } from "~/models/WeatherHourly";
 import { SunIcon, CloudIcon,CloudSunIcon,  SnowIcon, RainIcon  } from "~/components/images/status/icons";
+import { addZeroToNumber } from "~/library/stringManagement";
 
-const ForecastHourlyCard : React.FC<{ hourlyItem: HourlyItem }> = ({ hourlyItem }) => {
+const ForecastHourlyCard : React.FC<{ hourlyItem: HourlyItem, now?:boolean }> = ({ hourlyItem, now=false }) => {
     const code = hourlyItem.values.weatherCode;
     let selectedComponent;
 
@@ -33,16 +34,16 @@ const ForecastHourlyCard : React.FC<{ hourlyItem: HourlyItem }> = ({ hourlyItem 
         // Add more cases as needed
       
         default:
-          selectedComponent = null; // Handle unknown weather codes
+          selectedComponent = <CloudIcon containerProps={{ className: "" }} cloudClasses={"fill-snowGray stroke-snowGray stroke-4"} />;
           break;
     }
 
 
     return(
         <li key={hourlyItem.time} className="mb-4 p-2 flex flex-col justify-center items-center">
-            <p className="text-lg text-blue font-semibold">{new Date(hourlyItem.time).getHours().toString()}</p>
+            <p className="text text-blue font-bold ">{now ? "Now" :addZeroToNumber(new Date(hourlyItem.time).getHours())}</p>
             {selectedComponent}
-            <p className="text-lg text-blue  font-semibold">{hourlyItem.values.temperature}°</p>
+            <p className="text text-blue  font-bold">{Math.round(hourlyItem.values.temperature)}°</p>
             {/* Add more details as needed */}
         </li>
     )

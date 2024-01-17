@@ -17,6 +17,7 @@ export default {
         themeBlack: '#2c3e50',
         blue: '#34495e',
         pink: '#ffb8b8',
+        
 
         // Add more custom colors as needed
       },
@@ -24,4 +25,5 @@ export default {
   },
   plugins: [],
 } satisfies Config
+
 

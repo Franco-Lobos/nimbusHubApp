@@ -12,6 +12,8 @@ import {json, useActionData, Form, useNavigate} from '@remix-run/react';
 import { loginService } from '~/services/accesAPIService';
 import Swal from 'sweetalert2'
 import tailwindConfig from 'tailwind.config';
+import { commitSession, getSession } from '~/session';
+import { WeatherLocation } from '~/models/WeatherLocation';
 
 
 
@@ -55,11 +57,23 @@ export async function action({
           secure: true,
         }
       });
+
+      const defaultLocation: WeatherLocation = {
+        "lat": 40.71272659301758,
+        "lon": -74.00601196289062,
+        "name": "City of New York, New York, United States",
+        "type": "administrative"
+      }
       const session = await storage.getSession();
       session.set("userId", userId);
-      await storage.commitSession(session)
+      session.set("userName", responseBody.userName);
+      session.set("location", [defaultLocation]);
 
-      response.headers.append("Set-Cookie", await storage.commitSession(session));
+      // Commit the session with an expiration time and signing
+      const sessionOptions = { expires: new Date(Date.now() + 12 * 60 * 60 * 1000), signed: true };
+      const commitedSession = await commitSession(session, sessionOptions); // await storage.commitSession(session, { expires: new Date(Date.now() + 12 * 60 * 60 * 1000 ) }); // Expires in 12 hour
+
+      response.headers.append("Set-Cookie", commitedSession);
 
       return response;
     }
@@ -69,18 +83,11 @@ export async function action({
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const storage =createCookieSessionStorage({
-    cookie:{
-      name: process.env.NIMBUS_HUB_SESSION,
-      httpOnly: true,
-      secure: true,
-    }
-  });
 
-  const session = await storage.getSession(request.headers.get("Cookie"));
+  const session = await getSession(request.headers.get("Cookie"));
 
   if(session.has("userId")){
-    return redirect("/dashboard");
+    return redirect("/dashboard/forecast/realtime");
   }
   return json({ errors: {}, authentication: {} });
 }

@@ -13,7 +13,7 @@ export const getWeatherForecast = async (location: string, request: Request) => 
         headers:{
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Cookie': request.headers.get("cookie")!
+          'Cookie': request.headers.get("Cookie")!
         }
       })
       
@@ -36,7 +36,7 @@ export const getRealTimeWeather = async (location: string, request: Request) => 
         headers:{
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Cookie': request.headers.get("cookie")!
+          'Cookie': request.headers.get("Cookie")!
         }
       })
     return json(await data.json())
@@ -52,7 +52,7 @@ export const getWeatherRecentHistory = async (location: string, request: Request
       headers:{
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Cookie': request.headers.get("cookie")!
+        'Cookie': request.headers.get("Cookie")!
       }
     })
     return json(await data.json())

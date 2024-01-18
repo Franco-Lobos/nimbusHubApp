@@ -96,7 +96,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
 
   if(session.has("userId")){
-    return redirect("/dashboard/forecast/realtime");
+    return redirect("/dashboard/");
   }
   return json({ errors: {}, authentication: {} });
 }

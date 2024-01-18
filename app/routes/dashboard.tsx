@@ -53,7 +53,11 @@ export async function loader({
 export default function Dashboard() {
   
   return (
-    <div className="flex h-screen bg-themeWhite dark:bg-themeBlack flex-col lg:flex-row">
+    <div className={
+      `flex h-screen flex-col lg:flex-row 
+      bg-gradient-to-br from-themeWhite/20 via-iceLightblue/60 via-${50}% to-themeWhite/20
+      dark:bg-gradient-to-br dark:from-themeBlack/90 dark:via-blue/70 dark:via-${50}% dark:to-themeBlack/90
+    `}>
     {/* Main Content */}
     <div className="flex-1 flex flex-col overflow-hidden  overflow-x-hidden  px-6">
       <Outlet />

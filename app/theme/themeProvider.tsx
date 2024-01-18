@@ -24,8 +24,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
     useEffect(() => {
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-            const newColorScheme = event.matches ? "dark" : "light";
-            setTheme(newColorScheme);
+            setTheme(event.matches ? "dark" : "light");
         });
     },[]);
 

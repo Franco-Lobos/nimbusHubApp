@@ -20,7 +20,7 @@ export async function loader({
     return redirect("/acces/login");
   }
   else{
-    return redirect("/dashboard/forecast/realtime");
+    return redirect("/dashboard");
   }
 };
 

@@ -2,6 +2,10 @@ import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import stylesheet from "~/tailwind.css";
 import ThemeProvider, { useTheme } from './theme/themeProvider';
 
+import ToggelButton from './theme/toggleButton';
+import './tailwind.css';
+import clsx from "clsx";
+
 import {
   Links,
   LiveReload,
@@ -9,7 +13,10 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  isRouteErrorResponse,
+  useRouteError,
 } from "@remix-run/react";
+
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -22,12 +29,6 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-import {
-  isRouteErrorResponse,
-  useRouteError,
-} from "@remix-run/react";
-import clsx from "clsx";
-import { ReactNode } from "react";
 
 export function ErrorBoundary() {
   const error = useRouteError();
@@ -58,18 +59,19 @@ export function ErrorBoundary() {
 
 function App() {
   // const [isDark, setIsDark] = useState<boolean>(false);
-  const { theme} = useTheme();
+  const { theme, toggleTheme} = useTheme();
 
   return (
-    <html lang="en" className={clsx(theme)}>
+    <html lang="en" className={clsx(theme) }>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body suppressHydrationWarning={true}>
+      <body suppressHydrationWarning={true} >
           <Outlet />
+          <ToggelButton></ToggelButton>
           <ScrollRestoration />
           <Scripts />
           <LiveReload />

@@ -1,4 +1,4 @@
-import { useLoaderData } from '@remix-run/react';
+import { Outlet, useLoaderData } from '@remix-run/react';
 import {  type LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { getSession } from '~/session';
 import { WeatherLocation } from '~/models/WeatherLocation';
@@ -7,7 +7,6 @@ import { isTomorrowError } from '~/models/tomorrow/TomorrowError';
 import ErrorView from '~/components/widgets/error';
 import { defaultLocation, defaultRealTime } from '~/components/constants/defaults';
 import { getRealTimeWeather } from '~/services/nimbusWeatherAPIService';
-
 
 
 const splitedName = (name: string) => {
@@ -52,15 +51,19 @@ const ReaLtimeLocation = () => {
     ?
       <ErrorView/>
     :
-    <div className='flex flex-col py-6'>
-      <div className="text-themeBlack text-center mt-8 text-2xl font-bold">
-          {cityName}
+    <div className="flex-1 flex flex-col overflow-hidden overflow-x-hidden overflow-y-auto">
+      <div className='flex flex-col py-6'>
+        <div className="text-themeBlack/80 dark:text-themeWhite/80 text-center mt-8 text-2xl font-bold">
+            {cityName}
+        </div>
+            <div className="text-themeBlack dark:text-themeWhite p-2 text-center text-6xl ">
+            {Math.round(currentWiwather)}°C <br/>
+        </div>
+        
       </div>
-          <div className="text-themeBlack p-2 text-center text-6xl ">
-          {Math.round(currentWiwather)}°C <br/>
-      </div>
-      
+      <Outlet/>
     </div>
+
     
   );
 };

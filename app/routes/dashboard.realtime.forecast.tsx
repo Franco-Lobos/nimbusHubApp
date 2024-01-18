@@ -1,4 +1,4 @@
-import { useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 import {  type LoaderFunctionArgs,  redirect, json } from '@remix-run/node';
 import { getSession } from '~/session';
 import { Outlet } from 'react-router-dom';
@@ -14,6 +14,8 @@ import { DailyItem } from '~/models/WeatherDaily';
 import { useEffect, useState } from 'react';
 import { getWeatherForecast } from '~/services/nimbusWeatherAPIService';
 import { WeatherLocation } from '~/models/WeatherLocation';
+
+import { cardStyleClass } from '~/components/constants/styles';
 
 export async function loader({
   request,
@@ -37,7 +39,6 @@ export async function loader({
 };
 
 
-
 export default function DashboardForecast() {
     const foreceastData = useLoaderData<typeof loader>();
     const cityName: string = useOutletContext();
@@ -46,6 +47,8 @@ export default function DashboardForecast() {
 
     const [minTempWeek, setMinTempWeek] = useState<number>(0); 
     const [maxTempWeek, setMaxTempWeek] = useState<number>(0); 
+
+    const [via, setVia] = useState<number>(10);
 
     useEffect(() => {
       let smaller = Math.round(dailyItems[0].values.temperatureMin);
@@ -68,12 +71,18 @@ export default function DashboardForecast() {
           <ErrorView/>
         :
         <div>
-          <div className="flex-1 flex flex-col overflow-hidden  overflow-x-hidden overflow-y-auto">
-              <Outlet context={cityName}/>
-          </div>
-          <div className='overflow-scroll h-dvh'>
-            <div className="p-4 bg-iceBlue/20 rounded-lg mt-6">
-              <h3 className="font-semibold mb-4 text-blue/60 border-b border-blue/40 pb-2">Hourly Weather Forecast</h3>
+          <div className='overflow-scroll h-dvh rounded-lg pb-56 '>
+            <div className={`
+              p-4 pb-0 rounded-lg mt-6
+              bg-snowGray/0
+              bg-gradient-to-br from-iceLightblue/10 via-iceLightblue/20 via-${via}% to-iceLightblue/60
+              bg-iceLightblue/0
+              dark:bg-gradient-to-br dark:from-iceLightblue/10 dark:via-iceLightblue/20 dark:via-${via}% dark:to-iceLightblue/10
+              `}>
+              <h3 className=" 
+                 text-sm uppercase
+                font-semibold mb-4 pb-2 text-blue/80 border-b border-blue/40 
+                dark:text-iceBlue/80 dark:border-iceBlue/40">Next hours forecast</h3>
                 <ul className='flex flex-row overflow-scroll align-center justify-start'>
                     {
                     hourlyItems.slice(0,24).map((hourlyItem, indx)=> 
@@ -83,9 +92,14 @@ export default function DashboardForecast() {
                 </ul>
             </div>
 
-            <div className="p-4 bg-iceBlue/20 rounded-lg mt-6">
-              <h3 className="font-semibold mb-4 text-blue/60 border-b border-blue/40 pb-2">  Next Week Forecast </h3>
-              <ul className='flex flex-col  align-center justify-start'>
+            <div className={` bg-snowGray/0
+              ${cardStyleClass}
+            `}>
+              <h3 className="
+                text-sm uppercase
+                font-semibold mb-4 text-blue/80 dark:text-iceBlue/80 border-b border-blue/40
+                dark:border-iceBlue/40 pb-2 ">  Next Week Forecast </h3>
+              <ul className='flex flex-col align-center justify-start'>
                   {
                   dailyItems.slice(0,7).map((dailyItem, indx)=> 
                     <ForecastDailyCard dailyItem={dailyItem} today={indx==0} minTempWeek={minTempWeek} maxTempWeek={maxTempWeek}/>
@@ -94,7 +108,16 @@ export default function DashboardForecast() {
               </ul>
             </div>
 
-            
+            <Link to="/dashboard/realtime/history">
+            <div className={` cursor-pointer pb-2  bg-snowGray/0 ${cardStyleClass}`}
+              >
+              <h3 className="
+               text-sm uppercase
+                font-semibold mb-4 text-blue/80 dark:text-iceBlue/80 border-b border-blue/40
+                dark:border-iceBlue/40 pb-2">Last days were...
+              </h3>
+            </div>
+            </Link>
           </div>
         </div>
         // Example styles using Tailwind CSS

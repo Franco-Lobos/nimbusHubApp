@@ -5,6 +5,8 @@ import ThemeProvider, { useTheme } from './theme/themeProvider';
 import ToggelButton from './theme/toggleButton';
 import './tailwind.css';
 import clsx from "clsx";
+import { AnimatePresence, motion } from "framer-motion";
+
 
 import {
   Links,
@@ -14,6 +16,7 @@ import {
   Scripts,
   ScrollRestoration,
   isRouteErrorResponse,
+  useOutlet,
   useRouteError,
 } from "@remix-run/react";
 
@@ -58,8 +61,8 @@ export function ErrorBoundary() {
 
 
 function App() {
-  // const [isDark, setIsDark] = useState<boolean>(false);
   const { theme, toggleTheme} = useTheme();
+  const outlet = useOutlet();
 
   return (
     <html lang="en" className={clsx(theme) }>
@@ -70,11 +73,21 @@ function App() {
         <Links />
       </head>
       <body suppressHydrationWarning={true} >
-          <Outlet />
-          <ToggelButton></ToggelButton>
-          <ScrollRestoration />
-          <Scripts />
-          <LiveReload />
+        <AnimatePresence  initial={false}>
+          <motion.main
+            key={"main"}
+            initial={{ x: "-10%", opacity: 0 }}
+            animate={{ x: "0", opacity: 1 }}
+            exit={{ y: "-10%", opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {outlet}
+          </motion.main>
+        </AnimatePresence>
+        <ToggelButton></ToggelButton>
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
       </body>
     </html>
   );

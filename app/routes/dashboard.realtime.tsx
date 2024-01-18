@@ -51,7 +51,7 @@ const ReaLtimeLocation = () => {
     ?
       <ErrorView/>
     :
-    <div className="flex-1 flex flex-col overflow-hidden overflow-x-hidden overflow-y-auto">
+    <div className="flex-1 flex flex-col overflow-hidden ">
       <div className='flex flex-col py-6'>
         <div className="text-themeBlack/80 dark:text-themeWhite/80 text-center mt-8 text-2xl font-bold">
             {cityName}

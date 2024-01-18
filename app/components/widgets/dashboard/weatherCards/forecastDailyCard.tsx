@@ -2,10 +2,11 @@ import { DailyItem } from "~/models/WeatherDaily";
 import { SunIcon, CloudIcon,CloudSunIcon,  SnowIcon, RainIcon  } from "~/components/images/status/icons";
 import { useEffect, useState } from "react";
 import clsx from 'clsx';
+import { motion } from "framer-motion";
 
 
 const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-const ForecastDailyCard : React.FC<{ dailyItem: DailyItem, today?:boolean,  minTempWeek:number,  maxTempWeek:number }> = ({ dailyItem, today=false, minTempWeek, maxTempWeek }) => {
+const ForecastDailyCard : React.FC<{ dailyItem: DailyItem,  minTempWeek:number,  maxTempWeek:number, indx:number }> = ({ dailyItem,  minTempWeek, maxTempWeek, indx }) => {
     const code = dailyItem.values.weatherCodeMax;
     let selectedComponent;
     const marginLeft = Math.round((dailyItem.values.temperatureMin - minTempWeek) * 100 / (maxTempWeek - minTempWeek));
@@ -44,10 +45,15 @@ const ForecastDailyCard : React.FC<{ dailyItem: DailyItem, today?:boolean,  minT
     }
 
     return(
+        <motion.li
+          initial={{ height: 0, opacity: 0}}
+          animate={{ height: "min-content", opacity: 1}}
+          transition ={{duration: 0.05, delay: 0.4 + indx * 0.05 }}
+        >
         <li key={dailyItem.time} className="mb-4 p-2 flex flex-row justify-between items-center">
             <p className="text-lg text-blue  dark:text-themeWhite/90 font-semibold lex-1 w-24">
             <span className="text-blue/60  dark:text-nimbusGray/90 pr-2">{new Date(dailyItem.time).getDate()}{" "}</span>
-              {today ? "Today" : weekday[new Date(dailyItem.time).getDay()]}
+              {indx==0 ? "Today" : weekday[new Date(dailyItem.time).getDay()]}
             </p>
             <div className="w-20">
               {selectedComponent}
@@ -61,6 +67,7 @@ const ForecastDailyCard : React.FC<{ dailyItem: DailyItem, today?:boolean,  minT
             </div>
             {/* Add more details as needed */}
         </li>
+        </motion.li>
     )
 }
 

@@ -59,7 +59,7 @@ export default function Dashboard() {
       dark:bg-gradient-to-br dark:from-themeBlack/90 dark:via-blue/70 dark:via-${50}% dark:to-themeBlack/90
     `}>
     {/* Main Content */}
-    <div className="flex-1 flex flex-col overflow-hidden  overflow-x-hidden  px-6">
+    <div className="flex-1 flex flex-col overflow-hidden  px-6">
       <Outlet />
     </div>
     {/* <Navigator /> */}

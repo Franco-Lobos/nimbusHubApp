@@ -12,6 +12,9 @@ import ForecastDailyCard from '~/components/widgets/dashboard/weatherCards/forec
 import { useState } from 'react';
 
 import { cardStyleClass } from '~/components/constants/styles';
+import { motion } from 'framer-motion';
+
+import { FaArrowCircleUp } from 'react-icons/fa/index.js';
 
 const splitedName = (name: string) => {
   let nameArray; 
@@ -61,16 +64,31 @@ const RecentHistory = () => {
     :
 
     <>
+
+      <motion.div
+        initial={{ scale: 0.8 , height: 0, opacity: 0}}
+        animate={{ scale: 1 , height: "min-content", opacity:1}}
+        transition={{ duration: 0.5, delay:0.6 }}
+      >
       <Link to="/dashboard/realtime/forecast">
-        <div className={` cursor-pointer pb-2  bg-snowGray/0 ${cardStyleClass}`}
+        <div className={` cursor-pointer  bg-snowGray/0 relative ${cardStyleClass}`}
           >
-          <h3 className="
-            text-sm uppercase
-            font-semibold mb-4 text-blue/80 dark:text-iceBlue/80 border-b border-blue/40
-            dark:border-iceBlue/40 pb-2">Forecast
-          </h3>
+          <div className="flex flex-row justify-between items-center border-b border-blue/40  dark:border-iceBlue/40">
+            <h3 className="text-sm uppercase font-semibold mb-2 text-blue/80 dark:text-iceBlue/80 
+             " >Forecast</h3>
+            <FaArrowCircleUp className="
+            text-blue/80 dark:text-iceBlue/80
+            "></FaArrowCircleUp>
+          </div>
+         
        </div>
       </Link>
+      </motion.div>
+      <motion.div
+        initial={{ scale: 0.8 , height: 0, y:"100vh"}}
+        animate={{ scale: 1 , height: "min-content", y:0}}
+        transition={{ duration: 0.4 }}
+      >
       <div className={`p-4 bg-snowGray/0 ${cardStyleClass}
         `}>
         <h3 className="
@@ -79,11 +97,12 @@ const RecentHistory = () => {
         <ul className='flex flex-col align-center justify-start'>
             {
             dailyItems.slice(0,7).map((dailyItem, indx)=> 
-              <ForecastDailyCard dailyItem={dailyItem} today={indx==0} minTempWeek={0} maxTempWeek={10}/>
+              <ForecastDailyCard dailyItem={dailyItem} minTempWeek={0} maxTempWeek={10} indx={indx}/>
             )
             }
         </ul>
       </div>
+      </motion.div>
     </>
 
     

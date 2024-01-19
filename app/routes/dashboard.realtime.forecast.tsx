@@ -17,7 +17,7 @@ import { WeatherLocation } from '~/models/WeatherLocation';
 
 import { cardStyleClass } from '~/components/constants/styles';
 import { motion } from 'framer-motion';
-import { FaArrowCircleDown } from 'react-icons/fa/index.js';
+import { FaArrowCircleUp } from 'react-icons/fa/index.js';
 
 export async function loader({
   request,
@@ -76,82 +76,80 @@ export default function DashboardForecast() {
           initial={{ y: 30 }}
           animate={{ y: 50 }}
           >
-        <div>
-          <div className='overflow-scroll h-dvh rounded-lg pb-64 '>
-            <motion.div
-                initial={{ scale: 0.8 , height: 0, opacity: 0}}
-                animate={{ scale: 1 , height: "min-content", opacity: 1}}
-                transition={{ duration: 0.3, delay: 0.2 }}
-            >
-              <div className={`
-                p-4 pb-0 rounded-lg mt-6
-                bg-snowGray/0
-                bg-gradient-to-br from-iceLightblue/10 via-iceLightblue/20 via-${via}% to-iceLightblue/60
-                bg-iceLightblue/0
-                dark:bg-gradient-to-br dark:from-iceLightblue/10 dark:via-iceLightblue/20 dark:via-${via}% dark:to-iceLightblue/10
-                `}>
-                <h3 className=" 
-                  text-sm uppercase
-                  font-semibold mb-4 pb-2 text-blue/80 border-b border-blue/40 
-                  dark:text-iceBlue/80 dark:border-iceBlue/40">Next hours forecast</h3>
-                  <ul className='flex flex-row overflow-scroll align-center justify-start'>
-                      {
-                      hourlyItems.slice(0,24).map((hourlyItem, indx)=> 
-                        <ForecastHourlyCard hourlyItem={hourlyItem}  now={indx==0}/>
-                      )
-                      }
-                  </ul>
-              </div>
-            </motion.div>
-            <motion.div
-                initial={{ scale: 0.8 , height: 0, opacity: 0}}
-                animate={{ scale: 1 , height: "min-content", opacity: 1}}
-                transition={{ duration: 0.3, delay: 0.2  }}
-            >
-            <div className={` bg-snowGray/0
-              ${cardStyleClass}
-            `}>
-              <h3 className="
-                  text-sm uppercase
-                  font-semibold mb-4 text-blue/80 dark:text-iceBlue/80 border-b border-blue/40
-                  dark:border-iceBlue/40 pb-2 ">  Next Week Forecast
-              </h3>
-              <motion.ul
-                initial="hidden"
-                animate="visible"
-                variants={{
-                  visible: { opacity: 1 },
-                  hidden: { opacity: 0 },
-                }}
-              ></motion.ul>
-              <ul className='flex flex-col align-center justify-start'>
+        <div className='overflow-scroll h-dvh rounded-lg pb-72 '>
+          <motion.div
+              initial={{ scale: 0.8 , height: 0, opacity: 0}}
+              animate={{ scale: 1 , height: "min-content", opacity: 1}}
+              transition={{ duration: 0.3, delay: 0.2 }}
+          >
+            <div className={`
+              p-4 pb-0 rounded-lg mt-6
+              bg-snowGray/0
+              bg-gradient-to-br from-iceLightblue/10 via-iceLightblue/20 via-${via}% to-iceLightblue/60
+              bg-iceLightblue/0
+              dark:bg-gradient-to-br dark:from-iceLightblue/10 dark:via-iceLightblue/20 dark:via-${via}% dark:to-iceLightblue/10
+              `}>
+              <h3 className=" 
+                text-sm uppercase
+                font-semibold mb-4 pb-2 text-blue/80 border-b border-blue/40 
+                dark:text-iceBlue/80 dark:border-iceBlue/40">Next hours forecast</h3>
+                <ul className='flex flex-row overflow-scroll align-center justify-start'>
                     {
-                    dailyItems.slice(0,7).map((dailyItem, indx)=> 
-                      <ForecastDailyCard dailyItem={dailyItem} minTempWeek={minTempWeek} maxTempWeek={maxTempWeek} indx={indx}/>
+                    hourlyItems.slice(0,24).map((hourlyItem, indx)=> 
+                      <ForecastHourlyCard hourlyItem={hourlyItem}  now={indx==0}/>
                     )
                     }
-              </ul>
+                </ul>
             </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ scale: 0.8 , height: 0, bottom:"100vh"}}
-              animate={{ scale: 1 , height: "min-content", bottom:0}}
+          </motion.div>
+          <motion.div
+              initial={{ scale: 0.8 , height: 0, opacity: 0}}
+              animate={{ scale: 1 , height: "min-content", opacity: 1}}
               transition={{ duration: 0.3, delay: 0.2  }}
-            >
-            <Link to="/dashboard/realtime/history">
-            <div className={` cursor-pointer  bg-snowGray/0 relative ${cardStyleClass}`}>
-              <div className="flex flex-row justify-between items-center border-b border-blue/40  dark:border-iceBlue/40">
-                <h3 className="text-sm uppercase font-semibold mb-2 text-blue/80 dark:text-iceBlue/80 
-                " >Forecast</h3>
-                <FaArrowCircleDown className="
-                text-blue/80 dark:text-iceBlue/80
-                "></FaArrowCircleDown>
-              </div>
-            </div>
-            </Link>
-            </motion.div>
+          >
+          <div className={` bg-snowGray/0
+            ${cardStyleClass}
+          `}>
+            <h3 className="
+                text-sm uppercase
+                font-semibold mb-4 text-blue/80 dark:text-iceBlue/80 border-b border-blue/40
+                dark:border-iceBlue/40 pb-2 ">  Next Week Forecast
+            </h3>
+            <motion.ul
+              initial="hidden"
+              animate="visible"
+              variants={{
+                visible: { opacity: 1 },
+                hidden: { opacity: 0 },
+              }}
+            ></motion.ul>
+            <ul className='flex flex-col align-center justify-start'>
+                  {
+                  dailyItems.slice(0,7).map((dailyItem, indx)=> 
+                    <ForecastDailyCard dailyItem={dailyItem} minTempWeek={minTempWeek} maxTempWeek={maxTempWeek} indx={indx}/>
+                  )
+                  }
+            </ul>
           </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ scale: 0.8 , height: 0, bottom:"100vh"}}
+            animate={{ scale: 1 , height: "min-content", bottom:0}}
+            transition={{ duration: 0.3, delay: 0.2  }}
+          >
+          <Link to="/dashboard/realtime/history">
+          <div className={` cursor-pointer  bg-snowGray/0 relative ${cardStyleClass}`}>
+            <div className="flex flex-row justify-between items-center border-b border-blue/40  dark:border-iceBlue/40">
+              <h3 className="text-sm uppercase font-semibold mb-2 text-blue/80 dark:text-iceBlue/80 
+              " >Last days Were...</h3>
+              <FaArrowCircleUp className="
+              text-blue/80 dark:text-iceBlue/80 pr-2 pb-2 w-6 h-6  
+              "></FaArrowCircleUp>
+            </div>
+          </div>
+          </Link>
+          </motion.div>
         </div>
         </motion.div>        
     );

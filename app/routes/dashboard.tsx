@@ -39,7 +39,7 @@ export async function loader({
         if(!flag){
           allLocations.push(sessionNewLocation);
           session.set("location", allLocations);
-          return redirect('/dashboard/forecast/realTime', { headers: { 'set-cookie': await commitSession(session) } })
+          return redirect('/dashboard', { headers: { 'set-cookie': await commitSession(session) } })
         }
       }
     }
@@ -50,22 +50,15 @@ export async function loader({
   return{}
 };
 
-export default function Dashboard() {
-  
-  return (
-    <div className={
-      `flex h-screen flex-col lg:flex-row 
-      bg-gradient-to-br from-themeWhite/20 via-iceLightblue/60 via-${50}% to-themeWhite/20
-      dark:bg-gradient-to-br dark:from-themeBlack/90 dark:via-blue/70 dark:via-${50}% dark:to-themeBlack/90
-    `}>
-    {/* Main Content */}
-    <div className="flex-1 flex flex-col overflow-hidden  px-6">
-      <Outlet />
-    </div>
-    {/* <Navigator /> */}
 
-  </div>
+export default function Dashboard() {
+  return (
+    <div className="flex flex-col h-screen">
+        {/* Rest of your content */}
+        <Outlet />
+      </div>
   );
 }
+
 
 

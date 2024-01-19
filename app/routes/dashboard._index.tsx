@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs, type MetaFunction, redirect} from "@remix-run/node";
+import { type LoaderFunctionArgs, type MetaFunction, redirect, ActionFunctionArgs} from "@remix-run/node";
 import { WeatherLocation, isWeatherLocation } from "~/models/WeatherLocation";
 import { locationService } from "~/services/userLocationAPIService";
 import { commitSession, getSession } from "~/session";
@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import clsx from "clsx";
 import LocationSelector from "~/components/widgets/dashboard/location/locationSelector";
+import { ICity } from "country-state-city";
 
 export const meta: MetaFunction = () => {
   return [
@@ -18,6 +19,41 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
+
+export async function action({
+  request,
+}: ActionFunctionArgs) {
+  const session = await getSession( request.headers.get("Cookie") );
+  const formData = await request.formData();
+  const rawLocation: ICity = JSON.parse(String(formData.get("location")));
+
+  const locationToPush: WeatherLocation = {
+    "lat": parseFloat(String(rawLocation.latitude)),
+    "lon": parseFloat(String(rawLocation.latitude)),
+    "name": String(rawLocation.name +", " +rawLocation.stateCode + ", "+ rawLocation.countryCode),
+    "type": "administrative"
+  }
+
+  if(session.has("location")){
+    const allLocations: WeatherLocation[] = session.get("location")!;
+    let flag = false;
+
+    allLocations.forEach((loc, index) => {
+      if(locationToPush.name == loc.name){ // if i use lat and long may be different for a rounded location error
+        allLocations.splice(index, 1); // 2nd parameter means remove one item only  
+        return;
+      }
+    });
+    allLocations.push(locationToPush);
+    session.set("location", allLocations);
+    return redirect('/dashboard/realTime/forecast', { headers: { 'set-cookie': await commitSession(session) } })
+  
+  }
+  else{
+    session.set("location", [locationToPush]);
+  }
+  return{}
+}
 
 export async function loader({
   request,
@@ -64,7 +100,7 @@ export default function DashboardIndex() {
   const location = data as WeatherLocation[];
   const lastLocation = location[location.length-1] ?? {name: "No location"};
 
-  const [selectedModal, setSelectedModal] = useState<Boolean>(false); //default false
+  const [selectedModal, setSelectedModal] = useState<Boolean>(true); //default false
   const [redirectioned, setRedirecitoned] = useState<Boolean>(true); //default false
   return (
     <div className={mainBg}>
@@ -81,7 +117,9 @@ export default function DashboardIndex() {
             // exit={{ y: -400 , opacity: 0}}
             // transition={{ duration: 0.3, delay:0 }}
             >
-        <div className="flex-1 flex flex-col overflow-hidden px-6 items-start">
+        <div className={`
+        flex-1 flex flex-col overflow-hidden px-6 items-start`
+        }>
           <div className="flex items-center justify-start py-12 flex-col w-full ">
             <LogoIcon numbProps={{className:"fill-blue/60 w-2/3 dark:fill-themeWhite", style:{height: "20vh"} }}></LogoIcon>
             <div className="text-center">  
@@ -91,7 +129,12 @@ export default function DashboardIndex() {
           </div>
 
           
-          <div className="w-full flex flex-col ">
+          <div className={clsx(`
+            w-full flex flex-col`, 
+            selectedModal
+              ? "pb-24"
+              : "pb-0" 
+            )}>
   
             <Link to={selectedModal ? `#` :`/dashboard/realtime/forecast`} onClick={() => selectedModal ? setSelectedModal(false) : setRedirecitoned(false)}>
                 <div className={`cursor-pointer bg-snowGray/0
@@ -145,7 +188,7 @@ export default function DashboardIndex() {
                       }
                   `}>Choose another location</h2>
                   <AnimatePresence>{
-                    selectedModal ?
+                      selectedModal ?
                       <motion.div
                         initial={{ height: 0, opacity: 0}}
                         animate={{ height: "min-content", opacity: 1}}
@@ -159,7 +202,7 @@ export default function DashboardIndex() {
                     }
                     `}
                     >
-                    <LocationSelector/>
+                    <LocationSelector />
 
                     </div>
                     </motion.div>

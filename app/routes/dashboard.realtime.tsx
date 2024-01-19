@@ -35,6 +35,7 @@ export async function loader({
         const sessionLocations = session.get("location")!;
         location = sessionLocations[sessionLocations.length-1 ];
       }
+      
       // console.log( await getRealTimeWeather(location.name, request));
       // const loadForecast = await getRealTimeWeather(location.name, request);
       const loadForecast = defaultRealTime;

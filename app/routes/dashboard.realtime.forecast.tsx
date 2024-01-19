@@ -19,68 +19,69 @@ import { cardStyleClass } from '~/components/constants/styles';
 import { motion } from 'framer-motion';
 import { FaArrowCircleUp } from 'react-icons/fa/index.js';
 import { ForecastWeatherData } from '~/models/Forecast';
-import { CookieAllForecasts, allForecastsCookie } from "~/cookies.server";
+import { CookieAllForecastsInLocalStorage, SingleForcastSynchronizedCookie, allForecastsCookie } from "~/cookies.server";
 
-// const cookieStorageManager = async (location:WeatherLocation, request: Request) => {
-//   const cookieHeader = request.headers.get("Cookie");
-//   const storedForecasts = (await allForecastsCookie.parse(cookieHeader)) || {};
-//   const parsedForecasts = storedForecasts as CookieAllForecasts;
-//   let foundForecast : ForecastWeatherData | boolean= parsedForecasts?.forecasts?.length > 0;
+const cookieStorageManager = async (location:WeatherLocation, request: Request) => {
+  const cookieHeader = request.headers.get("Cookie");
+  const storedForecasts = (await allForecastsCookie.parse(cookieHeader)) || {};
+  const parsedForecasts = storedForecasts as CookieAllForecastsInLocalStorage;
+  let foundForecast : SingleForcastSynchronizedCookie | boolean= parsedForecasts?.forecasts?.length > 0;
 
-//   if(foundForecast){
-//     parsedForecasts.forecasts.forEach((forecast, index) => {
-//       if(areLocationsEqual(location, forecast.location)){
-//         const savedDate = new Date(forecast.timelines.minutely[0].time);
-//         const now = new Date();
-//         const diff = now.getTime() - savedDate.getTime();
-//         const diffHours = Math.floor(diff / (1000 * 60 * 60));
+  if(foundForecast){
+    parsedForecasts.forecasts.forEach((forecast, index) => {
+      if(areLocationsEqual(location, forecast.location)){
+        const savedDate = new Date(forecast.time);
+        const now = new Date();
+        const diff = now.getTime() - savedDate.getTime();
+        const diffHours = Math.floor(diff / (1000 * 60 * 60));
 
-//         console.log("diffHours: ", diffHours);
-//         if(diffHours > 1){
-//           parsedForecasts.forecasts.splice(index, 1); // 2nd parameter means remove one item only  
-//           foundForecast = false;
-//         }
-//         else{
-//           console.log("Cookies were updated, API call avoided: ", parsedForecasts)
-//           foundForecast = forecast;
-//         }  
-//         return;
-//       }
-//     })
-//     foundForecast = false;
-//   }
+        console.log("diffHours: ", diffHours);
+        if(diffHours > 1){
+          parsedForecasts.forecasts.splice(index, 1); // 2nd parameter means remove one item only  
+          foundForecast = false;
+        }
+        else{
+          console.log("Cookies were updated, API call avoided: ", parsedForecasts)
+          foundForecast = forecast;
+        }  
+        return;
+      }
+    })
+    foundForecast = false;
+  }
 
-//   if(foundForecast){
-//     return foundForecast;
-//   }
+  if(foundForecast){
+    return foundForecast;
+  }
 
-//   //else
-//   console.log("Data not found in cookies. Making a new request to the API.");
-//   const loadForecast : any = await getWeatherForecast(location.name, request);
+  //else
+  console.log("Data not found in cookies. Making a new request to the API.");
+  return  await getWeatherForecast(location.name, request);
+  // Save the data in cookies
+  // if(parsedForecasts?.forecasts){
+  //   parsedForecasts.forecasts.push(loadForecast);
+  // }else{
+  //   parsedForecasts.forecasts = [loadForecast];
+  // }
+  // const serializedCookie = await allForecastsCookie.serialize(parsedForecasts);
+  // // Use the newly fetched data
+  // console.log("Data fetched from API:", loadForecast);
+  // //RELOAD ROUT  WITH THE NEW HEADER (SET-COOKIES:serializedCookie )
 
-//   // Save the data in cookies
-//   if(parsedForecasts?.forecasts){
-//     parsedForecasts.forecasts.push(loadForecast);
-//   }else{
-//     parsedForecasts.forecasts = [loadForecast];
-//   }
-//   const serializedCookie = await allForecastsCookie.serialize(parsedForecasts);
-//   // Use the newly fetched data
-//   console.log("Data fetched from API:", loadForecast);
-//   //RELOAD ROUT  WITH THE NEW HEADER (SET-COOKIES:serializedCookie )
+  // const response = await fetch(request.url, {
+  //   method: 'GET',
+  //   headers: {
+  //     'Set-Cookie': serializedCookie,
+  //     'Content-Type': 'application/json',
+  //   },
+  // });
 
-//   const response = await fetch(request.url, {
-//     method: 'GET',
-//     headers: {
-//       'Set-Cookie': serializedCookie,
-//       'Content-Type': 'application/json',
-//     },
-//   });
+  // console.log(response)
 
-//   console.log(response)
+  // return response.json();
 
-//   return response.json();
-// };
+  
+};
 
 
 export async function loader({

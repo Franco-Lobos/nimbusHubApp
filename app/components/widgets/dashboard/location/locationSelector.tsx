@@ -1,6 +1,13 @@
+import { ActionFunctionArgs } from '@remix-run/node';
+import { Form } from '@remix-run/react';
+import { ICity } from 'country-state-city';
 import { Country, State, City }  from 'country-state-city';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { selectorStyleClass } from '~/components/constants/styles';
+import { WeatherLocation } from '~/models/WeatherLocation';
+import { getSession } from '~/session';
+
 
 const LocationSelector = () => {
 
@@ -11,6 +18,10 @@ const LocationSelector = () => {
     const [transformedCountries, setTransformedCountries] = useState<any[]>([]);
     const [transformedRegions, setTransformedRegions] = useState<any[]>([]);
     const [transformedCities, setTransformedCities] = useState<any[]>([]);
+
+    const [location, setLocation] = useState<ICity>({ name:"", latitude: "0",longitude:"0",countryCode: "", stateCode: ""});
+
+    const [enableSubmit, setEnableSubmit] = useState<boolean>(false);
 
     useEffect(() => {
         const countries = Country.getAllCountries();
@@ -24,7 +35,6 @@ const LocationSelector = () => {
     },[]); 
 
     useEffect(() => {
-        console.log(selectedCountry)
         if(selectedCountry){
             const regions = State.getStatesOfCountry(selectedCountry);
             setTransformedRegions(
@@ -40,28 +50,37 @@ const LocationSelector = () => {
     useEffect(() => {
         if(selectedCountry && selectedRegion){
             const cities = City.getCitiesOfState(selectedCountry, selectedRegion);
-            setTransformedCities(
-                cities.map((city) => ({
-                    value: city.name,
-                    label: city.name,
-                })
-                )
-            )
+            setTransformedCities(cities);
+            // setTransformedCities(
+            //     cities.map((city) => ({
+            //         value: city.name,
+            //         label: city.name,
+            //     })
+            //     )
+            // )
         }
     }, [selectedRegion]);
 
     useEffect(() => {
-        if(selectedCity){
-            console.log("City: ", selectedCity)
+        if(transformedCities.length==1){
+            setSelectedCity(JSON.stringify(transformedCities[0]));
+        }
+    }, [transformedCities]);
+
+    useEffect(() => {
+        if(!selectedCity)return;
+        const parsedCity : ICity= JSON.parse(selectedCity);
+        if(parsedCity){
+            setLocation(parsedCity)
         }
     }, [selectedCity]); 
 
-    useEffect(() => {
-        if(transformedCities.length==0){
-            setSelectedCity(transformedCities[0]);
-        }
-    }, [transformedCities]);
-    
+    useEffect(() => {  
+        if(!location || location.name =="")return;
+        setEnableSubmit(true);
+        console.log(location);
+    },[location]);
+
     return (
         <div>
         <select
@@ -87,7 +106,7 @@ const LocationSelector = () => {
         }
         </select>
         <select
-            onClick={(selectedOption: any ) => setSelectedCity(selectedOption.target.value)}
+            onChange={(selectedOption: any ) => setSelectedCity(selectedOption.target.value)}
             className={selectorStyleClass} 
             // value={selectedCity}
             //placeholder="Select City"
@@ -95,12 +114,38 @@ const LocationSelector = () => {
             {
             transformedCities
             ?
-            transformedCities.map((city) =>
-                <option key={city.value} value={city.value}>{city.label}</option>
+            transformedCities.map((city:ICity) =>
+                <option key={city.name} value={JSON.stringify(city)}>{city.name}</option>
             )
             : null
         }
         </select>
+        {
+            <AnimatePresence>{
+            true ? //enableSubmit
+                <motion.div
+                    initial={{ height: 0, opacity: 0}}
+                    animate={{ height: "min-content", opacity: 1}}
+                    exit={{ height: 0 , opacity: 0}}
+                >
+                <Form method="post">
+                    <input type="hidden" name="location" value={JSON.stringify(location)} />
+                    <button type="submit">
+                        <p className={`
+                        w-full
+                        text-blue dark:ttext-themeWhite font-semibold
+                        bg-gold w-fit px-4 py-2 mt-2 rounded-md
+                        dark:bg-gold    
+                        `}>Observe {location.name}</p>
+                        <p className={`
+                            text-right text-sm text-blue/60 dark:text-themeWhite/80 italic pt-2
+                        `}>{"location.stateCode"}, {"location.countryCode"}</p>
+                    </button>
+                </Form>
+                </motion.div>
+            :null
+            }</AnimatePresence>
+        }
         </div>
     );
 };

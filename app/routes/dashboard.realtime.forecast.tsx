@@ -13,16 +13,79 @@ import ForecastDailyCard from '~/components/widgets/dashboard/weatherCards/forec
 import { DailyItem } from '~/models/WeatherDaily';
 import { useEffect, useState } from 'react';
 import { getWeatherForecast } from '~/services/nimbusWeatherAPIService';
-import { WeatherLocation } from '~/models/WeatherLocation';
+import { WeatherLocation, areLocationsEqual } from '~/models/WeatherLocation';
 
 import { cardStyleClass } from '~/components/constants/styles';
 import { motion } from 'framer-motion';
 import { FaArrowCircleUp } from 'react-icons/fa/index.js';
+import { ForecastWeatherData } from '~/models/Forecast';
+import { CookieAllForecasts, allForecastsCookie } from "~/cookies.server";
+
+// const cookieStorageManager = async (location:WeatherLocation, request: Request) => {
+//   const cookieHeader = request.headers.get("Cookie");
+//   const storedForecasts = (await allForecastsCookie.parse(cookieHeader)) || {};
+//   const parsedForecasts = storedForecasts as CookieAllForecasts;
+//   let foundForecast : ForecastWeatherData | boolean= parsedForecasts?.forecasts?.length > 0;
+
+//   if(foundForecast){
+//     parsedForecasts.forecasts.forEach((forecast, index) => {
+//       if(areLocationsEqual(location, forecast.location)){
+//         const savedDate = new Date(forecast.timelines.minutely[0].time);
+//         const now = new Date();
+//         const diff = now.getTime() - savedDate.getTime();
+//         const diffHours = Math.floor(diff / (1000 * 60 * 60));
+
+//         console.log("diffHours: ", diffHours);
+//         if(diffHours > 1){
+//           parsedForecasts.forecasts.splice(index, 1); // 2nd parameter means remove one item only  
+//           foundForecast = false;
+//         }
+//         else{
+//           console.log("Cookies were updated, API call avoided: ", parsedForecasts)
+//           foundForecast = forecast;
+//         }  
+//         return;
+//       }
+//     })
+//     foundForecast = false;
+//   }
+
+//   if(foundForecast){
+//     return foundForecast;
+//   }
+
+//   //else
+//   console.log("Data not found in cookies. Making a new request to the API.");
+//   const loadForecast : any = await getWeatherForecast(location.name, request);
+
+//   // Save the data in cookies
+//   if(parsedForecasts?.forecasts){
+//     parsedForecasts.forecasts.push(loadForecast);
+//   }else{
+//     parsedForecasts.forecasts = [loadForecast];
+//   }
+//   const serializedCookie = await allForecastsCookie.serialize(parsedForecasts);
+//   // Use the newly fetched data
+//   console.log("Data fetched from API:", loadForecast);
+//   //RELOAD ROUT  WITH THE NEW HEADER (SET-COOKIES:serializedCookie )
+
+//   const response = await fetch(request.url, {
+//     method: 'GET',
+//     headers: {
+//       'Set-Cookie': serializedCookie,
+//       'Content-Type': 'application/json',
+//     },
+//   });
+
+//   console.log(response)
+
+//   return response.json();
+// };
+
 
 export async function loader({
   request,
 }: LoaderFunctionArgs) {
-    // const cityName: string = useOutletContext();
 
   const session = await getSession(request.headers.get("Cookie"));
   if (!session.has("userId")) {
@@ -35,7 +98,7 @@ export async function loader({
     location = sessionLocations[sessionLocations.length-1 ];
   }
 
-  // const loadForecast : any = await getWeatherForecast(location.name, request);
+  // const loadForecast : any = await cookieStorageManager(location, request);
   const loadForecast = defaultForecast;
   return loadForecast;
 };
@@ -43,9 +106,10 @@ export async function loader({
 
 export default function DashboardForecast() {
     const foreceastData = useLoaderData<typeof loader>();
-    const cityName: string = useOutletContext();
-    const hourlyItems: HourlyItem[] = foreceastData.timelines.hourly as HourlyItem[];
-    const dailyItems: DailyItem[] = foreceastData.timelines.daily as DailyItem[];
+    console.log("foreceastData: ", foreceastData)
+    const parsedForecastData : ForecastWeatherData = foreceastData as ForecastWeatherData;
+    const hourlyItems: HourlyItem[] = parsedForecastData?.timelines?.hourly as HourlyItem[];
+    const dailyItems: DailyItem[] = parsedForecastData?.timelines?.daily as DailyItem[];
 
     const [minTempWeek, setMinTempWeek] = useState<number>(0); 
     const [maxTempWeek, setMaxTempWeek] = useState<number>(0); 
@@ -53,6 +117,7 @@ export default function DashboardForecast() {
     const [via, setVia] = useState<number>(10);
 
     useEffect(() => {
+      if(!dailyItems) return;
       let smaller = Math.round(dailyItems[0].values.temperatureMin);
       let bigger  = Math.round(dailyItems[0].values.temperatureMax);
       dailyItems.slice(1,7).forEach((dailyItem, indx)=>{

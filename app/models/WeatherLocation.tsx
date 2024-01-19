@@ -18,3 +18,10 @@ export function isWeatherLocation(obj: any): obj is WeatherLocation {
       typeof obj.type === 'string'
   );
 }
+
+export const areLocationsEqual = (
+  location1: WeatherLocation,
+  location2: WeatherLocation
+): boolean => {
+  return location1.lat === location2.lat && location1.lon === location2.lon;
+};

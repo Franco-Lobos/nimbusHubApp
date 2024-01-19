@@ -51,13 +51,6 @@ const LocationSelector = () => {
         if(selectedCountry && selectedRegion){
             const cities = City.getCitiesOfState(selectedCountry, selectedRegion);
             setTransformedCities(cities);
-            // setTransformedCities(
-            //     cities.map((city) => ({
-            //         value: city.name,
-            //         label: city.name,
-            //     })
-            //     )
-            // )
         }
     }, [selectedRegion]);
 
@@ -122,15 +115,15 @@ const LocationSelector = () => {
         </select>
         {
             <AnimatePresence>{
-            true ? //enableSubmit
+            enableSubmit ? 
                 <motion.div
                     initial={{ height: 0, opacity: 0}}
                     animate={{ height: "min-content", opacity: 1}}
                     exit={{ height: 0 , opacity: 0}}
                 >
-                <Form method="post">
+                <Form method="post" className={`w-full`}>
                     <input type="hidden" name="location" value={JSON.stringify(location)} />
-                    <button type="submit">
+                    <button type="submit" className={`w-full`}>
                         <p className={`
                         w-full
                         text-blue dark:ttext-themeWhite font-semibold
@@ -139,7 +132,7 @@ const LocationSelector = () => {
                         `}>Observe {location.name}</p>
                         <p className={`
                             text-right text-sm text-blue/60 dark:text-themeWhite/80 italic pt-2
-                        `}>{"location.stateCode"}, {"location.countryCode"}</p>
+                        `}>{location.stateCode}, {location.countryCode}</p>
                     </button>
                 </Form>
                 </motion.div>

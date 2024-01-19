@@ -27,6 +27,10 @@ export async function action({
   const formData = await request.formData();
   const rawLocation: ICity = JSON.parse(String(formData.get("location")));
 
+  if(rawLocation.latitude == "0" || rawLocation.longitude == "0"){
+    return {}
+  }
+  
   const locationToPush: WeatherLocation = {
     "lat": parseFloat(String(rawLocation.latitude)),
     "lon": parseFloat(String(rawLocation.latitude)),
@@ -36,7 +40,6 @@ export async function action({
 
   if(session.has("location")){
     const allLocations: WeatherLocation[] = session.get("location")!;
-    let flag = false;
 
     allLocations.forEach((loc, index) => {
       if(locationToPush.name == loc.name){ // if i use lat and long may be different for a rounded location error
@@ -72,6 +75,7 @@ export async function loader({
       if(session.has("location")){
         const allLocations: WeatherLocation[] = session.get("location")!;
         let flag = false;
+
         allLocations.forEach(loc => {
           if(sessionNewLocation.name == loc.name){ // if i use lat and long may be different for a rounded location error
               flag=true;
@@ -100,8 +104,8 @@ export default function DashboardIndex() {
   const location = data as WeatherLocation[];
   const lastLocation = location[location.length-1] ?? {name: "No location"};
 
-  const [selectedModal, setSelectedModal] = useState<Boolean>(true); //default false
-  const [redirectioned, setRedirecitoned] = useState<Boolean>(true); //default false
+  const [selectedModal, setSelectedModal] = useState<Boolean>(false); //default false
+  const [redirectioned, setRedirecitoned] = useState<Boolean>(true); //default true
   return (
     <div className={mainBg}>
       {/* Main Content */}

@@ -15,6 +15,7 @@ import { cardStyleClass } from '~/components/constants/styles';
 import { motion } from 'framer-motion';
 
 import { FaArrowCircleDown } from 'react-icons/fa/index.js';
+import { HistoryData } from '~/models/History';
 
 const splitedName = (name: string) => {
   let nameArray; 
@@ -43,7 +44,7 @@ export async function loader({
     location = sessionLocations[sessionLocations.length-1 ];
   }
 
-  // const loadForecast : any = await getWeatherForecast(location.name, request);
+  // const loadForecast : any = await getWeatherRecentHistory(location.name, request);
   const loadForecast = defaultHistory;
   return loadForecast;
 };
@@ -51,8 +52,8 @@ export async function loader({
 
 const RecentHistory = () => {
   const loadForecast: any = useLoaderData<typeof loader>();
-  const forecast: RealTimeData = loadForecast as RealTimeData;
-  const dailyItems: DailyItem[] = loadForecast.timelines.daily as DailyItem[];
+  // const forecast: RealTimeData = loadForecast as HistoryData;
+  // const dailyItems: DailyItem[] = forecast.timelines.daily as DailyItem[];
 
   const [via, setVia] = useState<number>(10);
 
@@ -95,11 +96,11 @@ const RecentHistory = () => {
           font-semibold mb-4 text-blue/80 dark:text-iceBlue/80 border-b border-blue/40
           dark:border-iceBlue/40 pb-2 text-sm uppercase">Last days were... </h3>
         <ul className='flex flex-col align-center justify-start'>
-            {
+            {/* {
             dailyItems.slice(0,7).map((dailyItem, indx)=> 
               <ForecastDailyCard dailyItem={dailyItem} minTempWeek={0} maxTempWeek={10} indx={indx}/>
             )
-            }
+            } */}
         </ul>
       </div>
       </motion.div>

@@ -1,9 +1,9 @@
-import { WeatherLocation } from "./WeatherLocation";
+import { TomorrowLocation, SessionLocation, isTomorrowLocation } from "./WeatherLocation";
 import { MinutelyItem, isMinutelyItem } from "./WeatherMinutely";
-import {isWeatherLocation} from "./WeatherLocation";
+import {isSessionLocation} from "./WeatherLocation";
 export interface RealTimeData {
     data: MinutelyItem;
-    location: WeatherLocation;
+    location: TomorrowLocation;
 }
 
 export function isRealTimeData(obj: any): obj is RealTimeData {
@@ -11,6 +11,6 @@ export function isRealTimeData(obj: any): obj is RealTimeData {
         'data' in obj &&
         isMinutelyItem(obj.data) && // Check if 'data' is of type MinutelyItem
         'location' in obj &&
-        isWeatherLocation(obj.location) // Check if 'location' is of type WeatherLocation
+        isTomorrowLocation(obj.location) // Check if 'location' is of type WeatherLocation
     );
 }

@@ -1,70 +1,117 @@
-import { Link, useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData, useNavigate } from '@remix-run/react';
 import {  type LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { getSession } from '~/session';
-import { WeatherLocation } from '~/models/WeatherLocation';
-import { RealTimeData } from '~/models/RealTime';
-import { isTomorrowError } from '~/models/tomorrow/TomorrowError';
+import { SessionLocation } from '~/models/tomorrow/WeatherLocation';
+import { RealTimeData } from '~/models/tomorrow/RealTime';
+import { isTomorrowError } from '~/models/errors/TomorrowError';
 import ErrorView from '~/components/widgets/error';
-import { defaultForecast, defaultHistory, defaultLocation, defaultRealTime } from '~/components/constants/defaults';
+import { defaultForecast, defaultHistory, defaultLocation, defaultRealTime, defaultSessionLocation } from '~/components/constants/defaults';
 import { getRealTimeWeather } from '~/services/nimbusWeatherAPIService';
-import { DailyItem } from '~/models/WeatherDaily';
+import { DailyItem } from '~/models/tomorrow/WeatherDaily';
 import ForecastDailyCard from '~/components/widgets/dashboard/weatherCards/forecastDailyCard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { cardStyleClass } from '~/components/constants/styles';
 import { motion } from 'framer-motion';
 
 import { FaArrowCircleDown } from 'react-icons/fa/index.js';
-
-const splitedName = (name: string) => {
-  let nameArray; 
-  try{
-    nameArray = name.split(",");
-  }
-  catch(error){
-    return name
-  }
-  return nameArray[0]
-}
+import { HistoryData, isHistoryData } from '~/models/tomorrow/History';
+import { SingleHistorySynchronizedCookie, isSingleHistorySynchronizedCookie } from '~/models/cookies/historyCookies';
+import {StorageManager} from '~/services/LocalStorageManager';
+import { CookieStorageManager } from '~/services/CookieStorageManager';
+import { isSingleForcastSynchronizedCookie } from '~/models/cookies/forecastCookies';
 
 export async function loader({
   request,
 }: LoaderFunctionArgs) {
-    // const cityName: string = useOutletContext();
 
   const session = await getSession(request.headers.get("Cookie"));
-  if (!session.has("userId")) {
-    return redirect("/acces/login");
-  }
+  // if (!session.has("userId")) {
+  //   return redirect("/acces/login");
+  // }
   
-  let location: WeatherLocation = defaultLocation;
+  let location: SessionLocation = defaultSessionLocation;
   if(session.has("location")){
     const sessionLocations = session.get("location")!;
     location = sessionLocations[sessionLocations.length-1 ];
   }
 
-  // const loadForecast : any = await getWeatherForecast(location.name, request);
-  const loadForecast = defaultHistory;
-  return loadForecast;
+  let updateStorage = false;
+  let loadHistory : HistoryData | SingleHistorySynchronizedCookie | boolean = await CookieStorageManager.getHistory(location, request);
+  console.info("loadHistory: ", loadHistory)
+
+  if(!loadHistory){
+    console.info("HISTORY: MAKING API CALL")
+    //SYNC COOKIES WITH LOCAL STORAGE
+    updateStorage = true;
+    const coords : string = `${location.lat},${location.lon}`;
+    // loadHistory = await getWeatherRecentHistory(coords, request);
+    loadHistory  = defaultHistory!;
+  }
+  else{
+    console.log("HISTORY: API CALL AVOIDED")
+  }
+  return {history: loadHistory, updateStorage: updateStorage};
+  // const loadForecast : any = await getWeatherRecentHistory(coords, request);
+  // const loadForecast = defaultHistory;
+  // return loadForecast;
 };
 
 
 const RecentHistory = () => {
-  const loadForecast: any = useLoaderData<typeof loader>();
-  const forecast: RealTimeData = loadForecast as RealTimeData;
-  const dailyItems: DailyItem[] = loadForecast.timelines.daily as DailyItem[];
+  const navigate = useNavigate();
+  const [loadHistory, setLoadHistory]= useState<any | HistoryData | undefined>(useLoaderData<typeof loader>());
+  const [parsedHistory, setParsedHistory] =useState<HistoryData | null>(null);
+  const [loadedFromLocalStorage, setLoadedFromLocalStorage] = useState<boolean>(false);
 
-  const [via, setVia] = useState<number>(10);
+  useEffect(() => {
+    console.log("loadHistory: ", loadHistory)
+    const readedData = loadHistory?.history;
+    if(!readedData){
+      navigate("/dashboard");
+      return;
+    };
 
+    if (isSingleHistorySynchronizedCookie(readedData) && !loadedFromLocalStorage){
+      console.log("HISTORY: LOAD FROM LOCAL")
+      const setData = async()=>{
+        setLoadHistory(
+          {...loadHistory,
+            history: await StorageManager.getHistoryFromLocalStorage(readedData.location)  
+          }
+        )  
+        setLoadedFromLocalStorage(true);
+      }
+      setData();
+      return;
+    }
+
+    if(isHistoryData(readedData)){
+      setParsedHistory(readedData);
+      console.log("IS HISTORY DATA")
+      return;
+    }
+
+  },[loadHistory]);
+
+  useEffect( () => {
+    const localStorageFlag = loadHistory?.updateStorage;
+    if(!parsedHistory || loadedFromLocalStorage) return;
+    if (isHistoryData(parsedHistory)){
+      console.log("HISTORY: SAVE IN LOCAL")
+      const saveData = async()=>{
+        await StorageManager.setHistoryDataInLocalStorage(parsedHistory, localStorageFlag);
+      }
+      saveData();
+    }
+  },[parsedHistory]);
   
   return (
-    isTomorrowError(loadForecast)
+    loadHistory && isTomorrowError(loadHistory)
     ?
       <ErrorView/>
     :
-
     <>
-
       <motion.div
         initial={{ scale: 0.8 , height: 0, opacity: 0}}
         animate={{ scale: 1 , height: "min-content", opacity:1}}
@@ -95,11 +142,11 @@ const RecentHistory = () => {
           font-semibold mb-4 text-blue/80 dark:text-iceBlue/80 border-b border-blue/40
           dark:border-iceBlue/40 pb-2 text-sm uppercase">Last days were... </h3>
         <ul className='flex flex-col align-center justify-start'>
-            {
+            {/* {
             dailyItems.slice(0,7).map((dailyItem, indx)=> 
               <ForecastDailyCard dailyItem={dailyItem} minTempWeek={0} maxTempWeek={10} indx={indx}/>
             )
-            }
+            } */}
         </ul>
       </div>
       </motion.div>

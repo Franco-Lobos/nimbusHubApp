@@ -1,8 +1,8 @@
-import { HourlyItem } from "~/models/WeatherHourly";
+import { HourlyItem } from "~/models/tomorrow/WeatherHourly";
 import { SunIcon, CloudIcon,CloudSunIcon,  SnowIcon, RainIcon  } from "~/components/images/status/icons";
 import { addZeroToNumber } from "~/library/stringManagement";
 
-const ForecastHourlyCard : React.FC<{ hourlyItem: HourlyItem, now?:boolean }> = ({ hourlyItem, now=false }) => {
+const ForecastHourlyCard : React.FC<{ hourlyItem: HourlyItem, indx: number }> = ({ hourlyItem, indx }) => {
     const code = hourlyItem.values.weatherCode;
     let selectedComponent;
 
@@ -41,7 +41,7 @@ const ForecastHourlyCard : React.FC<{ hourlyItem: HourlyItem, now?:boolean }> = 
 
     return(
         <li key={hourlyItem.time} className="mb-4 p-2 flex flex-col justify-center items-center">
-            <p className="text text-blue dark:text-nimbusGray font-bold ">{now ? "Now" :addZeroToNumber(new Date(hourlyItem.time).getHours())}</p>
+            <p className="text text-blue dark:text-nimbusGray font-bold ">{indx==0 ? "Now" :addZeroToNumber(new Date(hourlyItem.time).getHours())}</p>
             {selectedComponent}
             <p className="text text-blue dark:text-nimbusGray font-bold">{Math.round(hourlyItem.values.temperature)}°</p>
             {/* Add more details as needed */}

@@ -13,8 +13,8 @@ import { loginService } from '~/services/accesAPIService';
 import Swal from 'sweetalert2'
 import tailwindConfig from 'tailwind.config';
 import { commitSession, getSession } from '~/session';
-import { WeatherLocation } from '~/models/WeatherLocation';
-
+import { SessionLocation } from '~/models/tomorrow/WeatherLocation';
+import { defaultLocation } from '~/components/constants/defaults';
 
 
 const colors = tailwindConfig.theme.extend.colors;
@@ -22,7 +22,6 @@ const colors = tailwindConfig.theme.extend.colors;
 export async function action({
   request,
 }: ActionFunctionArgs) {
-
 
   if (request.method === 'POST') {
     const formData = await request.formData();
@@ -59,12 +58,6 @@ export async function action({
         }
       });
 
-      const defaultLocation: WeatherLocation = {
-        "lat": 40.71272659301758,
-        "lon": -74.00601196289062,
-        "name": "City of New York, New York, United States",
-        "type": "administrative"
-      }
       const session = await storage.getSession();
       session.set("userId", responseBody.user._id);
       session.set("userName", responseBody.user.userName);

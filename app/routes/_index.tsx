@@ -1,5 +1,5 @@
 import { json, type LoaderFunctionArgs, type MetaFunction , isSession, createSession, LoaderFunction, createCookieSessionStorage, redirect} from "@remix-run/node";
-import { WeatherSDK } from "~/models/WeatherSDK";
+import { WeatherSDK } from "~/models/tomorrow/WeatherSDK";
 import { useLoaderData } from "@remix-run/react";
 import { getRealTimeWeather, getWeatherForecast, getWeatherRecentHistory } from "~/services/nimbusWeatherAPIService";
 import { getSession } from "~/session";

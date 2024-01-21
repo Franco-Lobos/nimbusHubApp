@@ -2,7 +2,7 @@ import { type LoaderFunctionArgs, type MetaFunction, redirect, TypedResponse} fr
 import { Outlet } from 'react-router-dom';
 import Navigator from "~/components/widgets/dashboard/navigator";
 import { allForecastsCookie } from "~/cookies.server";
-import { TomorrowLocation, SessionLocation, isWeatherLocation } from "~/models/tomorrow/WeatherLocation";
+import { TomorrowLocation, SessionLocation, isSessionLocation } from "~/models/tomorrow/WeatherLocation";
 import { locationService } from "~/services/userLocationAPIService";
 import { commitSession, getSession } from "~/session";
 
@@ -24,10 +24,10 @@ export async function loader({
 
   if(session.has("ip")){
     const sessionIp: string = session.get("ip")!;
-    const sessionNewLocation: TomorrowLocation  = await locationService(sessionIp)!;
+    const sessionNewLocation: SessionLocation  = await locationService(sessionIp)!;
     console.log("DASHBOARD: ", sessionNewLocation)
 
-    if(isWeatherLocation(sessionNewLocation)){
+    if(isSessionLocation(sessionNewLocation)){
       if(session.has("location")){
         const allLocations: SessionLocation[] = session.get("location")!;
         let flag = false;
@@ -64,7 +64,7 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col h-screen">
         {/* Rest of your content */}
-        <Outlet />
+        <Outlet/>
       </div>
   );
 }

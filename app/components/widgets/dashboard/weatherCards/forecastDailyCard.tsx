@@ -49,8 +49,9 @@ const ForecastDailyCard : React.FC<{ dailyItem: DailyItem,  minTempWeek:number, 
           initial={{ height: 0, opacity: 0}}
           animate={{ height: "min-content", opacity: 1}}
           transition ={{duration: 0.05, delay: 0.4 + indx * 0.05 }}
+          key={dailyItem.time}
         >
-        <li key={dailyItem.time} className="mb-4 p-2 flex flex-row justify-between items-center">
+        <div  className="mb-4 p-2 flex flex-row justify-between items-center">
             <p className="text-lg text-blue  dark:text-themeWhite/90 font-semibold lex-1 w-24">
             <span className="text-blue/60  dark:text-nimbusGray/90 pr-2">{new Date(dailyItem.time).getDate()}{" "}</span>
               {indx==0 ? "Today" : weekday[new Date(dailyItem.time).getDay()]}
@@ -66,7 +67,7 @@ const ForecastDailyCard : React.FC<{ dailyItem: DailyItem,  minTempWeek:number, 
               <p className="text-lg text-blue dark:text-themeWhite/90 font-semibold flex-1 text-center">{Math.round(dailyItem.values.temperatureMax)}°</p>
             </div>
             {/* Add more details as needed */}
-        </li>
+        </div>
         </motion.li>
     )
 }

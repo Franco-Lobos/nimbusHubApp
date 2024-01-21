@@ -10,7 +10,7 @@ export interface TomorrowLocation {
   lon: number;
 }
 
-export function isWeatherLocation(obj: any): obj is SessionLocation {
+export function isSessionLocation(obj: any): obj is SessionLocation {
   return (
       'lat' in obj &&
       'lon' in obj &&

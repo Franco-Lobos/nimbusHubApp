@@ -39,9 +39,7 @@ export function ErrorBoundary() {
   if (isRouteErrorResponse(error)) {
     return (
       <div>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
+        <h1>{error.status} {error.statusText}</h1>
         <p>{error.data}</p>
       </div>
     );
@@ -63,41 +61,38 @@ export function ErrorBoundary() {
 function App() {
   const { theme, toggleTheme} = useTheme();
   const outlet = useOutlet();
-
+{/*aria-hidden="true"*/}
   return (
-    <html lang="en" className={clsx(theme) } aria-hidden="true"  >
+    <html lang="en" className={clsx(theme)} suppressHydrationWarning={true}> 
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
+        <meta charSet="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <Meta/>
+        <Links/>
       </head>
-      <body suppressHydrationWarning={true} >
-        <AnimatePresence  initial={false}>
-          <motion.main
-            key={"main"}
+      <body>
+        <AnimatePresence initial={false}>
+          <motion.main key={"main"}
             initial={{ x: "-10%", opacity: 0 }}
             animate={{ x: "0", opacity: 1 }}
             exit={{ y: "-10%", opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
+            transition={{ duration: 0.3 }}>
             {outlet}
           </motion.main>
         </AnimatePresence>
         <ToggelButton></ToggelButton>
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
+        <ScrollRestoration/>
+        <Scripts/>
+        <LiveReload/>
       </body>
     </html>
   );
 }
 
 function Root() {
-
   return (
     <ThemeProvider>
-        <App></App>
+      <App></App>
     </ThemeProvider>
   );
 }

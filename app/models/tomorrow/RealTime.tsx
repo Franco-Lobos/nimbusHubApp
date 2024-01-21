@@ -1,6 +1,6 @@
 import { TomorrowLocation, SessionLocation, isTomorrowLocation } from "./WeatherLocation";
 import { MinutelyItem, isMinutelyItem } from "./WeatherMinutely";
-import {isWeatherLocation} from "./WeatherLocation";
+import {isSessionLocation} from "./WeatherLocation";
 export interface RealTimeData {
     data: MinutelyItem;
     location: TomorrowLocation;

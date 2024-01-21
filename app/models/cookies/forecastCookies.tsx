@@ -1,5 +1,7 @@
 import { SessionLocation, TomorrowLocation } from "../tomorrow/WeatherLocation";
 
+
+// FORECAST COOKIES
 export type SingleForcastSynchronizedCookie = {
     location: TomorrowLocation;
     time: string;
@@ -23,3 +25,4 @@ export const isSingleForcastSynchronizedCookie = (obj: any): obj is SingleForcas
       // Add any other type checks you need for additional properties
     );
   };
+

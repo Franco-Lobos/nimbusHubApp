@@ -17,21 +17,9 @@ import { motion } from 'framer-motion';
 import { FaArrowCircleDown } from 'react-icons/fa/index.js';
 import { HistoryData } from '~/models/tomorrow/History';
 
-const splitedName = (name: string) => {
-  let nameArray; 
-  try{
-    nameArray = name.split(",");
-  }
-  catch(error){
-    return name
-  }
-  return nameArray[0]
-}
-
 export async function loader({
   request,
 }: LoaderFunctionArgs) {
-    // const cityName: string = useOutletContext();
 
   const session = await getSession(request.headers.get("Cookie"));
   if (!session.has("userId")) {

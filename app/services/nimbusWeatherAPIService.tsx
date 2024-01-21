@@ -5,7 +5,6 @@ dotenvConfig();
 
 export const getWeatherForecast = async (location: string, request: Request) => {
     console.log("LOCATION", location)
-
     const tomorrowUrl = `${process.env.WHEATER_URL}/forecast/${location}`; // TODO SAVE IN CONSTANTS
 
     const data = await fetch(tomorrowUrl, {
@@ -25,9 +24,8 @@ export const getWeatherForecast = async (location: string, request: Request) => 
     return data.json()
 }
 
-
 export const getRealTimeWeather = async (location: string, request: Request) => {
-    location = convertToURLfriendly(location);
+    console.log("LOCATION", location)
     const tomorrowUrl = `${process.env.WHEATER_URL}/realtime/${location}`; // TODO SAVE IN CONSTANTS
 
     const data = await fetch(tomorrowUrl, {

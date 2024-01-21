@@ -1,5 +1,5 @@
 import { type LoaderFunctionArgs, type MetaFunction, redirect, ActionFunctionArgs} from "@remix-run/node";
-import { SessionLocation, areLocationsEqual, isWeatherLocation } from "~/models/tomorrow/WeatherLocation";
+import { SessionLocation, areLocationsEqual, isSessionLocation } from "~/models/tomorrow/WeatherLocation";
 import { locationService } from "~/services/userLocationAPIService";
 import { commitSession, getSession } from "~/session";
 
@@ -75,7 +75,7 @@ export async function loader({
     const sessionIp: string = session.get("ip")!;
     const sessionNewLocation: any = await locationService(sessionIp);
 
-    if(isWeatherLocation(sessionNewLocation)){
+    if(isSessionLocation(sessionNewLocation)){
       if(session.has("location")){
         const allLocations: SessionLocation[] = session.get("location")!;
         let flag = false;
@@ -120,15 +120,8 @@ export default function DashboardIndex() {
             initial={{opacity: 0, scale: 0.8}}
             animate={{opacity: 1, scale:1}}
             exit={{opacity: 0, scale: 0, y:-200}}
-            transition={{ duration: 0.3, delay:0 }}
-            // initial={{ x: 0, opacity: 0, scale: 0.8}}
-            // animate={{y:0, x:0, opacity: 1, scale:1}}
-            // exit={{ y: -400 , opacity: 0}}
-            // transition={{ duration: 0.3, delay:0 }}
-            >
-        <div className={`
-        flex-1 flex flex-col overflow-hidden px-6 items-start`
-        }>
+            transition={{ duration: 0.3, delay:0 }}>
+        <div className={`flex-1 flex flex-col overflow-hidden px-6 items-start`}>
           <div className="flex items-center justify-start py-12 flex-col w-full ">
             <LogoIcon numbProps={{className:"fill-blue/60 w-2/3 dark:fill-themeWhite", style:{height: "20vh"} }}></LogoIcon>
             <div className="text-center">  
@@ -136,15 +129,12 @@ export default function DashboardIndex() {
               <p className="text-lg text-blue/60  dark:text-nimbusGray font-semibold">Unveil the Atmosphere</p>
             </div>
           </div>
-
-          
           <div className={clsx(`
             w-full flex flex-col`, 
             selectedModal
               ? "pb-24"
               : "pb-0" 
             )}>
-  
             <Link to={selectedModal ? `#` :`/dashboard/realtime/forecast`} onClick={() => selectedModal ? setSelectedModal(false) : setRedirecitoned(false)}>
                 <div className={`cursor-pointer bg-snowGray/0
                 ${cardStyleClass}
@@ -176,13 +166,9 @@ export default function DashboardIndex() {
                   }</AnimatePresence>
               </div>
             </Link>
-        
-
-            <motion.div
-                initial={{ scale:0 }}
+            <motion.div initial={{ scale:0 }}
                 animate={{ scale: 1 }}
-                exit={{ scale: 0 }}
-                > 
+                exit={{ scale: 0 }}> 
                 <div className={`bg-snowGray/0
                 ${cardStyleClass}
                 `}>
@@ -211,23 +197,18 @@ export default function DashboardIndex() {
                     }
                     `}
                     >
-                    <LocationSelector />
-
+                    <LocationSelector/>
                     </div>
                     </motion.div>
                     : null
                   }</AnimatePresence>
                 </div>
-            </motion.div>
-            
-
-                  
+            </motion.div>       
           </div>
         </div>
-        </motion.div>
+      </motion.div>
       )}
       </AnimatePresence>
-
     </div>
   );
 }

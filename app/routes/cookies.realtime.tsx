@@ -1,6 +1,7 @@
 import { ActionFunction, ActionFunctionArgs, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { allForecastsCookie } from "~/cookies.server";
 import { SingleForcastSynchronizedCookie } from "~/models/cookies/forecastCookies";
+import { SingleRealTimeSynchronizedCookie } from "~/models/cookies/realTimeCookies";
 import { CookieError, isCookieError } from "~/models/errors/CookieError";
 import { CookieStorageManager } from "~/services/CookieStorageManager";
 
@@ -8,7 +9,7 @@ export async function action({
     request,
   }: ActionFunctionArgs) {
 
-    const resposne : SingleForcastSynchronizedCookie | CookieError  = await request.json()!;
+    const resposne : SingleRealTimeSynchronizedCookie | CookieError  = await request.json()!;
     if(isCookieError(resposne)){
       const pastDate = new Date(0).toUTCString();
       let cookieName;
@@ -16,10 +17,10 @@ export async function action({
       // Define the name of the cookie you want to remove
       switch(resposne.code){
         case 400: //DELETE COOKIE
-          cookieName = "all-forecasts-cookie";
+          cookieName = "all-real-times-cookie";
           break;
         default:
-          cookieName ="all-forecasts-cookie"
+          cookieName ="all-real-times-cookie";
           break;
       }
       
@@ -35,7 +36,7 @@ export async function action({
 
     }
 
-    const serializedCookie : string | any = await CookieStorageManager.setForecastWeather(resposne,request);
+    const serializedCookie : string | any = await CookieStorageManager.setRealTimeWeather(resposne,request);
     
     return new Response(JSON.stringify(serializedCookie), {
         headers: {
@@ -58,8 +59,8 @@ export async function load({
   });
 }
 
-
-// export default function Forecast() {
+// export default function RealTime() {
 //   return <h2>Loading cookies...</h2>;
 // }
+
 

@@ -19,10 +19,10 @@ import { cardStyleClass } from '~/components/constants/styles';
 import { motion } from 'framer-motion';
 import { FaArrowCircleUp } from 'react-icons/fa/index.js';
 import { ForecastWeatherData, isForecastWeatherData } from '~/models/tomorrow/Forecast';
-import { SingleForcastSynchronizedCookie } from "../models/cookies/cookies"
+import { SingleForcastSynchronizedCookie } from "../models/cookies/forecastCookies"
 import { StorageManager } from '~/services/LocalStorageManager';
 import { CookieStorageManager } from '~/services/CookieStorageManager';
-import { isSingleForcastSynchronizedCookie } from '../models/cookies/cookies';
+import { isSingleForcastSynchronizedCookie } from '../models/cookies/forecastCookies';
 import { allForecastsCookie } from '~/cookies.server';
 import { CookieError } from '~/models/errors/CookieError';
 
@@ -46,20 +46,16 @@ export async function loader({
 
   let updateStorage = false;
   let loadForecast : ForecastWeatherData | SingleForcastSynchronizedCookie | boolean = await CookieStorageManager.getForecastWeather(location, request);
-  console.info("LOAD FORECAST" ,loadForecast)
   if(!loadForecast){
-    console.info("MAKING API CALL")
+    console.info("FORECAST: MAKING API CALL")
     loadForecast  = defaultForecast!;
+    //SYNC COOKIES WITH LOCAL STORAGE
     updateStorage = true;
     // const coords : string = `${location.lat},${location.lon}`;
     // loadForecast = await getWeatherForecast(coords, request)
-
-    //SYNC COOKIES WITH LOCAL STORAGE
-    
-    
   }
   else{
-    console.log("API CALL AVOIDED")
+    console.log("FORECAST: API CALL AVOIDED")
   }
   return {forecast: loadForecast, updateStorage: updateStorage};
 };
@@ -87,9 +83,13 @@ export default function DashboardForecast() {
       };
 
       if (isSingleForcastSynchronizedCookie(readedData) && !loadedFromLocalStorage){
-        console.log("LOAD FROM LOCAL")
+        console.log("FORECAST: LOAD FROM LOCAL")
         const setData = async()=>{
-          setForecastData( await StorageManager.getForecastWeatherDataFromLocalStorage(readedData.location));  
+
+          setForecastData(
+            {...forecastData,
+              forecast: await StorageManager.getForecastWeatherDataFromLocalStorage(readedData.location),
+            })  
           setLoadedFromLocalStorage(true);
         }
         setData();
@@ -100,8 +100,8 @@ export default function DashboardForecast() {
         setParsedForecastData(readedData);
         setHourlyItems(readedData.timelines.hourly);
         setDailyItems(readedData.timelines.daily);
+        return;
       }
-
     },[forecastData]);
 
     useEffect( () => {
@@ -109,7 +109,7 @@ export default function DashboardForecast() {
 
       if(!parsedForecastData || loadedFromLocalStorage) return;
       if (isForecastWeatherData(parsedForecastData)){
-        console.log("SAVE IN LOCAL")
+        console.log("FORECAST: SAVE IN LOCAL")
         const saveData = async()=>{
           await StorageManager.setForecastWeatherDataInLocalStorage(parsedForecastData, localStorageFlag);
         }
@@ -162,9 +162,12 @@ export default function DashboardForecast() {
                 dark:text-iceBlue/80 dark:border-iceBlue/40">Next hours forecast</h3>
                 <ul className='flex flex-row overflow-scroll align-center justify-start'>
                     {
-                    hourlyItems.slice(0,24).map((hourlyItem, indx)=> 
-                      <ForecastHourlyCard hourlyItem={hourlyItem}  now={indx==0}/>
-                    )
+                    hourlyItems
+                      ?
+                      hourlyItems.slice(0,24).map((hourlyItem, indx)=> 
+                      <ForecastHourlyCard key={hourlyItem.time} hourlyItem={hourlyItem}  indx={indx}/>
+                      )
+                      :""
                     }
                 </ul>
             </div>
@@ -192,9 +195,11 @@ export default function DashboardForecast() {
             ></motion.ul>
             <ul className='flex flex-col align-center justify-start'>
                   {
+                  dailyItems?
                   dailyItems.slice(0,7).map((dailyItem, indx)=> 
-                    <ForecastDailyCard dailyItem={dailyItem} minTempWeek={minTempWeek} maxTempWeek={maxTempWeek} indx={indx}/>
+                    <ForecastDailyCard key={dailyItem.time} dailyItem={dailyItem} minTempWeek={minTempWeek} maxTempWeek={maxTempWeek} indx={indx}/>
                   )
+                  : ""
                   }
             </ul>
           </div>

@@ -33,9 +33,9 @@ export async function loader({
   const cookieHeader = request.headers.get("Cookie");
 
   const session = await getSession(cookieHeader);
-  if (!session.has("userId")) {
-    return redirect("/acces/login");
-  }
+  // if (!session.has("userId")) {
+  //   return redirect("/acces/login");
+  // }
   
   let location: SessionLocation = defaultSessionLocation;
 

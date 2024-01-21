@@ -4,10 +4,13 @@ import { SingleForcastSynchronizedCookie } from "../models/cookies/forecastCooki
 import { CookieError } from "~/models/errors/CookieError";
 import { RealTimeData } from "~/models/tomorrow/RealTime";
 import { SingleRealTimeSynchronizedCookie } from "~/models/cookies/realTimeCookies";
+import { HistoryData } from "~/models/tomorrow/History";
+import { SingleHistorySynchronizedCookie } from "~/models/cookies/historyCookies";
 
 export class StorageManager {
     static allForecastsKey: string  = "all-forecasts-in-local-storage";
     static allRealTimes: string  = "all-real-times-cookie";
+    static allHistories: string  = "all-histories-cookie";
 
     constructor() {
         // Your class constructor logic here
@@ -234,5 +237,123 @@ export class StorageManager {
         }
         return foundRealTime;
     }
+    // REALTIME LOCAL STORAGE END
+
+    // HISTORY LOCAL STORAGE
+
+    public static setHistoryDataInLocalStorage = async (data: HistoryData, forceUpdate: boolean) => { 
+        // Check if data with the same identifiers exists in localStorage
+        let parsedHistory = JSON.parse(localStorage.getItem(this.allHistories)!) as HistoryData[];
+        let foundHistory :  boolean = parsedHistory?.length > 0;
+        let changesComited :boolean = false;
+
+        if (!parsedHistory || parsedHistory == null) {
+            console.log("parsedHistory not found in localStorage. Saving data in localStorage.");
+            // Save the data in localStorage
+            localStorage.setItem(this.allHistories, JSON.stringify([data]));
+            parsedHistory = JSON.parse(localStorage.getItem(this.allHistories)!) as HistoryData[];
+            foundHistory = false;
+            changesComited = true;
+        }
+
+        console.log("parsedHistory found in localStorage: ", parsedHistory)
+
+        if( parsedHistory?.length > 0){
+            let index: number = 0;
+            while(index<parsedHistory.length){
+                if(areLocationsEqual(data.location, parsedHistory[index].location)){
+                    const savedDate = new Date(parsedHistory[index].timelines.hourly[0].time);
+                    const now = new Date();
+                    const diff = now.getTime() - savedDate.getTime();
+                    const diffHours = Math.floor(diff / (1000 * 60 * 60 )); //1 min
+                    console.log("diffHours: ", diffHours);
+
+                    if(diffHours > 1){
+                        console.log("Local Storage was expired, data removed: ", parsedHistory );
+                        parsedHistory.splice(index, 1); // 2nd parameter means remove one item only  
+                        foundHistory = false;
+                        parsedHistory.push(data);
+                        changesComited = true;
+                    }
+                    else{
+                        console.log("Local Storage was updated, no changes comited: ", parsedHistory)
+                    }  
+                    break;
+                }
+                index++;
+            };
+        }
+
+        if(changesComited || forceUpdate){
+            // Save the data in localStorage
+            localStorage.setItem(this.allHistories, JSON.stringify(parsedHistory));
+            //SET COOKIE
+            const cookiesUrl = `http://localhost:3000/cookies/history`;
+
+            const realTimeAsCookie : SingleHistorySynchronizedCookie = {
+                location: data.location,
+                time: data.timelines.hourly[0].time,
+            }
+        
+            const response = await fetch(cookiesUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify( realTimeAsCookie)
+            });
+            
+            if(response.ok){
+                return false  //cookie has been properlty synchronized
+            }  
+        }
+        return;
+    }
+
+    
+    public static getHistoryFromLocalStorage = async(location: TomorrowLocation): Promise<boolean | HistoryData> => {
+        const parsedHistories = JSON.parse(localStorage.getItem(this.allHistories)!) as HistoryData[];
+        let foundHistory : HistoryData | boolean = parsedHistories?.length > 0;
+
+        console.log("foundHistory found in localStorage: ", foundHistory)
+        if (foundHistory) {
+            let i = 0;
+            while(i < parsedHistories.length ){
+                if(areLocationsEqual(location, parsedHistories[i].location)){
+                    foundHistory = parsedHistories[i];
+                    break;
+                }
+                i++;
+            };
+        }
+        if(!foundHistory){
+            //SET COOKIE
+            const cookiesUrl = `http://localhost:3000/cookies/history`;
+
+            const message : CookieError={
+                code: 400,
+                type:"UNSYNCRONIZED",
+                message: "DELET-ALL",
+            }
+            const response = await fetch(cookiesUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify(message)
+            });
+            
+            if(response.ok){
+                return false  //cookie has been properlty synchronized
+            }  
+        }
+        return foundHistory;
+    }
+
+    
+
+    // HISTORY LOCAL STORAGE END
 
 }

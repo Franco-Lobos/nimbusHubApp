@@ -4,7 +4,7 @@ import { locationService } from "~/services/userLocationAPIService";
 import { commitSession, getSession } from "~/session";
 
 import { Link } from 'react-router-dom';
-import { useLoaderData } from "@remix-run/react";
+import {  useLoaderData } from "@remix-run/react";
 import LogoIcon from "~/components/icons/LogoIcon";
 import { cardStyleClass, mainBg } from "~/components/constants/styles";
 import { AnimatePresence, motion } from "framer-motion";
@@ -103,6 +103,7 @@ export async function loader({
   return{}
 };
 
+const isClient = typeof window !== "undefined";
 
 export default function DashboardIndex() {
   const data =  useLoaderData<typeof loader>();
@@ -114,103 +115,113 @@ export default function DashboardIndex() {
   return (
     <div className={mainBg}>
       {/* Main Content */}
-      <AnimatePresence>
-      {redirectioned && (
-        <motion.div
-            initial={{opacity: 0, scale: 0.8}}
-            animate={{opacity: 1, scale:1}}
-            exit={{opacity: 0, scale: 0, y:-200}}
-            transition={{ duration: 0.3, delay:0 }}>
-        <div className={`flex-1 flex flex-col overflow-hidden px-6 items-start`}>
-          <div className="flex items-center justify-start py-12 flex-col w-full ">
-            <LogoIcon numbProps={{className:"fill-blue/60 w-2/3 dark:fill-themeWhite", style:{height: "20vh"} }}></LogoIcon>
-            <div className="text-center">  
-              <h1 className="text-4xl font-bold text-themeBlack dark:text-iceLightblue">Welcome</h1>
-              <p className="text-lg text-blue/60  dark:text-nimbusGray font-semibold">Unveil the Atmosphere</p>
-            </div>
-          </div>
-          <div className={clsx(`
-            w-full flex flex-col`, 
-            selectedModal
-              ? "pb-24"
-              : "pb-0" 
-            )}>
-            <Link to={selectedModal ? `#` :`/dashboard/realtime/forecast`} onClick={() => selectedModal ? setSelectedModal(false) : setRedirecitoned(false)}>
-                <div className={`cursor-pointer bg-snowGray/0
-                ${cardStyleClass}
-                `}>
-                  <h2 className={
-                    clsx(
-                    `
-                    ${
-                      selectedModal
-                      ? "text-blue/75 dark:text-iceLightblue/60 "
-                      : "text-themeBlack dark:text-themeWhite/90"
-                    }
-                    font-bold uppercase`
-                    )}
-                  >Current Location</h2>
-                  <AnimatePresence>{
-                    !selectedModal
-                    ?
-                      <motion.div
-                        initial={{ height: 0, opacity: 0}}
-                        animate={{ height: "min-content", opacity: 1}}
-                        exit={{ height: 0 , opacity: 0}}
-                      >
-                    <p className={
-                      `text-blue/90 dark:text-iceLightblue border-t font-semibold border-gold w-fit pr-2 py-6 mt-2`
-                      }>{lastLocation.name}</p>
-                  </motion.div>
-                  : null
-                  }</AnimatePresence>
-              </div>
-            </Link>
-            <motion.div initial={{ scale:0 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0 }}> 
-                <div className={`bg-snowGray/0
-                ${cardStyleClass}
-                `}>
-                  <h2
-                    onClick={() => setSelectedModal(!selectedModal)}
-                    className={`
-                      font-bold uppercase cursor-pointer
-                      ${
-                        selectedModal
-                        ? "text-themeBlack dark:text-themeWhite/90"
-                        : "text-blue/75 dark:text-iceLightblue/60 "
-                      }
-                  `}>Choose another location</h2>
-                  <AnimatePresence>{
-                      selectedModal ?
-                      <motion.div
-                        initial={{ height: 0, opacity: 0}}
-                        animate={{ height: "min-content", opacity: 1}}
-                        exit={{ height: 0 , opacity: 0}}
-                      ><div className={`
-                    text-themeWhite border-t  w-full pr-2 py-6 mt-2
-                    ${
-                      selectedModal
-                      ? "border-gold"
-                      : "border-iceLightblue"
-                    }
-                    `}
-                    >
-                    <LocationSelector/>
-                    </div>
-                    </motion.div>
-                    : null
-                  }</AnimatePresence>
-                </div>
-            </motion.div>       
-          </div>
-        </div>
-      </motion.div>
-      )}
-      </AnimatePresence>
+      {isClient ? (
+        <AnimatePresence> 
+          {redirectioned  && ( 
+            <motion.div
+                initial={{opacity: 0, scale: 0.8}}
+                animate={{opacity: 1, scale:1}}
+                exit={{opacity: 0, scale: 0, y:-200}}
+                transition={{ duration: 0.3, delay:0 }}> 
+              <ServerView selectedModal={selectedModal} lastLocation={lastLocation} setSelectedModal={setSelectedModal} setRedirecitoned={setRedirecitoned}/>
+        </motion.div>
+          )}
+        </AnimatePresence>
+        ) : (
+          <ServerView selectedModal={selectedModal} lastLocation={lastLocation} setSelectedModal={setSelectedModal} setRedirecitoned={setRedirecitoned}/>
+          )}
     </div>
   );
+}
+
+const ServerView :  React.FC<{selectedModal:Boolean,lastLocation: any, setSelectedModal: (selected: Boolean) => void; setRedirecitoned: (redirected: Boolean) => void;} >= ({selectedModal,lastLocation, setSelectedModal, setRedirecitoned})=>{
+  return(
+    <div className={`flex-1 flex flex-col overflow-hidden px-6 items-start`}>
+            <div className="flex items-center justify-start py-12 flex-col w-full ">
+              <LogoIcon numbProps={{className:"fill-blue/60 w-2/3 dark:fill-themeWhite", style:{height: "20vh"} }}></LogoIcon>
+              <div className="text-center">  
+                <h1 className="text-4xl font-bold text-themeBlack dark:text-iceLightblue">Welcome</h1>
+                <p className="text-lg text-blue/60  dark:text-nimbusGray font-semibold">Unveil the Atmosphere</p>
+              </div>
+            </div>
+            <div className={clsx(`
+              w-full flex flex-col`, 
+              selectedModal
+                ? "pb-24"
+                : "pb-0" 
+              )}>
+              <Link to={selectedModal ? `#` :`/dashboard/realtime/forecast`} onClick={() => selectedModal ? setSelectedModal(false) : setRedirecitoned(false)}>
+                  <div className={`cursor-pointer bg-snowGray/0
+                  ${cardStyleClass}
+                  `}>
+                    <h2 className={
+                      clsx(
+                      `
+                      ${
+                        selectedModal
+                        ? "text-blue/75 dark:text-iceLightblue/60 "
+                        : "text-themeBlack dark:text-themeWhite/90"
+                      }
+                      font-bold uppercase`
+                      )}
+                    >Current Location</h2>
+                    <AnimatePresence>{
+                      !selectedModal
+                      ?
+                        <motion.div
+                          initial={{ height: 0, opacity: 0}}
+                          animate={{ height: "min-content", opacity: 1}}
+                          exit={{ height: 0 , opacity: 0}}
+                        >
+                      <p className={
+                        `text-blue/90 dark:text-iceLightblue border-t font-semibold border-gold w-fit pr-2 py-6 mt-2`
+                        }>{lastLocation.name}</p>
+                    </motion.div>
+                    : null
+                    }</AnimatePresence>
+                </div>
+              </Link>
+              <motion.div initial={{ scale:0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}> 
+                  <div className={`bg-snowGray/0
+                  ${cardStyleClass}
+                  `}>
+                    <h2
+                      onClick={() => setSelectedModal(!selectedModal)}
+                      className={`
+                        font-bold uppercase cursor-pointer
+                        ${
+                          selectedModal
+                          ? "text-themeBlack dark:text-themeWhite/90"
+                          : "text-blue/75 dark:text-iceLightblue/60 "
+                        }
+                    `}>Choose another location</h2>
+                    <AnimatePresence>{
+                        selectedModal ?
+                        <motion.div
+                          initial={{ height: 0, opacity: 0}}
+                          animate={{ height: "min-content", opacity: 1}}
+                          exit={{ height: 0 , opacity: 0}}
+                        ><div className={`
+                      text-themeWhite border-t  w-full pr-2 py-6 mt-2
+                      ${
+                        selectedModal
+                        ? "border-gold"
+                        : "border-iceLightblue"
+                      }
+                      `}
+                      >
+                      <LocationSelector/>
+                      </div>
+                      </motion.div>
+                      : null
+                    }</AnimatePresence>
+                  </div>
+              </motion.div>       
+            </div>
+    </div>
+  )
 }
 
 

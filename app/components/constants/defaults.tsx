@@ -17,10 +17,10 @@ export const defaultLocation: TomorrowLocation = {
   
 export const defaultRealTime : RealTimeData= {
     "data": {
-        "time": "2024-01-21T20:08:00Z",
+        "time": "2024-01-21T23:24:00Z",
         "values": {
-            "temperature": -0.31,
-            "temperatureApparent": -0.31,
+            "temperature": 0.63,
+            "temperatureApparent": 0.63,
             "weatherCode": 1000
         }
     },
@@ -29,170 +29,9 @@ export const defaultRealTime : RealTimeData= {
         "lon": 1.5243
     }
 }
-
 export const defaultHistory: HistoryData = {
     "timelines": {
         "hourly": [
-            {
-                "time": "2024-01-20T04:00:00Z",
-                "values": {
-                    "temperature": -8.38,
-                    "temperatureApparent": -13.43,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T05:00:00Z",
-                "values": {
-                    "temperature": -8.63,
-                    "temperatureApparent": -13.65,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T06:00:00Z",
-                "values": {
-                    "temperature": -9.19,
-                    "temperatureApparent": -13.92,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T07:00:00Z",
-                "values": {
-                    "temperature": -8.5,
-                    "temperatureApparent": -12.94,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T08:00:00Z",
-                "values": {
-                    "temperature": -8,
-                    "temperatureApparent": -10.89,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T09:00:00Z",
-                "values": {
-                    "temperature": -3.31,
-                    "temperatureApparent": -3.31,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T10:00:00Z",
-                "values": {
-                    "temperature": 1.13,
-                    "temperatureApparent": 1.13,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T11:00:00Z",
-                "values": {
-                    "temperature": -0.63,
-                    "temperatureApparent": -0.63,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T12:00:00Z",
-                "values": {
-                    "temperature": -0.31,
-                    "temperatureApparent": -0.31,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T13:00:00Z",
-                "values": {
-                    "temperature": -0.5,
-                    "temperatureApparent": -0.5,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T14:00:00Z",
-                "values": {
-                    "temperature": -0.88,
-                    "temperatureApparent": -0.88,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T15:00:00Z",
-                "values": {
-                    "temperature": -1.31,
-                    "temperatureApparent": -1.31,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T16:00:00Z",
-                "values": {
-                    "temperature": -1.88,
-                    "temperatureApparent": -1.88,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T17:00:00Z",
-                "values": {
-                    "temperature": -2.81,
-                    "temperatureApparent": -2.81,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T18:00:00Z",
-                "values": {
-                    "temperature": -2.88,
-                    "temperatureApparent": -2.88,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T19:00:00Z",
-                "values": {
-                    "temperature": -4.31,
-                    "temperatureApparent": -4.31,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T20:00:00Z",
-                "values": {
-                    "temperature": -4.19,
-                    "temperatureApparent": -4.19,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T21:00:00Z",
-                "values": {
-                    "temperature": -4.19,
-                    "temperatureApparent": -4.19,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T22:00:00Z",
-                "values": {
-                    "temperature": -3.88,
-                    "temperatureApparent": -3.88,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-20T23:00:00Z",
-                "values": {
-                    "temperature": -4,
-                    "temperatureApparent": -4,
-                    "weatherCode": 1000
-                }
-            },
             {
                 "time": "2024-01-21T00:00:00Z",
                 "values": {
@@ -220,532 +59,139 @@ export const defaultHistory: HistoryData = {
             {
                 "time": "2024-01-21T03:00:00Z",
                 "values": {
-                    "temperature": -4.63,
-                    "temperatureApparent": -4.63,
-                    "weatherCode": 1000
-                }
-            }
-        ],
-        "daily": [
-            {
-                "time": "2024-01-19T05:00:00Z",
-                "values": {
-                    "temperatureApparentAvg": -5.4,
-                    "temperatureApparentMax": 0,
-                    "temperatureApparentMin": -13.71,
-                    "temperatureAvg": -3.05,
-                    "temperatureMax": 0,
-                    "temperatureMin": -8.38,
-                    "weatherCodeMax": 5001,
-                    "weatherCodeMin": 5001
-                }
-            },
-            {
-                "time": "2024-01-20T05:00:00Z",
-                "values": {
-                    "temperatureApparentAvg": -3.99,
-                    "temperatureApparentMax": 1.13,
-                    "temperatureApparentMin": -13.92,
-                    "temperatureAvg": -3.45,
-                    "temperatureMax": 1.13,
-                    "temperatureMin": -9.19,
-                    "weatherCodeMax": 1000,
-                    "weatherCodeMin": 1000
-                }
-            }
-        ]
-    },
-    "location": {
-        "lat": 42.5055,
-        "lon": 1.5243
-    }
-}
-
-export const defaultForecast : ForecastWeatherData={
-    "timelines": {
-        "minutely": [
-            {
-                "time": "2024-01-21T20:08:00Z",
-                "values": {
-                    "temperature": -0.31,
-                    "temperatureApparent": -0.31,
+                    "temperature": -4.81,
+                    "temperatureApparent": -7.02,
                     "weatherCode": 1000
                 }
             },
             {
-                "time": "2024-01-21T20:09:00Z",
+                "time": "2024-01-21T04:00:00Z",
                 "values": {
-                    "temperature": -0.31,
-                    "temperatureApparent": -0.31,
+                    "temperature": -5.81,
+                    "temperatureApparent": -8.63,
+                    "weatherCode": 1101
+                }
+            },
+            {
+                "time": "2024-01-21T05:00:00Z",
+                "values": {
+                    "temperature": -5.38,
+                    "temperatureApparent": -8.44,
+                    "weatherCode": 1001
+                }
+            },
+            {
+                "time": "2024-01-21T06:00:00Z",
+                "values": {
+                    "temperature": -4.88,
+                    "temperatureApparent": -8.15,
                     "weatherCode": 1000
                 }
             },
             {
-                "time": "2024-01-21T20:10:00Z",
+                "time": "2024-01-21T07:00:00Z",
                 "values": {
-                    "temperature": -0.3,
-                    "temperatureApparent": -0.3,
+                    "temperature": -5.19,
+                    "temperatureApparent": -8.51,
+                    "weatherCode": 1001
+                }
+            },
+            {
+                "time": "2024-01-21T08:00:00Z",
+                "values": {
+                    "temperature": -3.81,
+                    "temperatureApparent": -7.09,
+                    "weatherCode": 1100
+                }
+            },
+            {
+                "time": "2024-01-21T09:00:00Z",
+                "values": {
+                    "temperature": -1.31,
+                    "temperatureApparent": -4,
                     "weatherCode": 1000
                 }
             },
             {
-                "time": "2024-01-21T20:11:00Z",
+                "time": "2024-01-21T10:00:00Z",
                 "values": {
-                    "temperature": -0.3,
-                    "temperatureApparent": -0.3,
+                    "temperature": 1.19,
+                    "temperatureApparent": -0.69,
                     "weatherCode": 1000
                 }
             },
             {
-                "time": "2024-01-21T20:12:00Z",
+                "time": "2024-01-21T11:00:00Z",
                 "values": {
-                    "temperature": -0.3,
-                    "temperatureApparent": -0.3,
+                    "temperature": 2.5,
+                    "temperatureApparent": 1.08,
                     "weatherCode": 1000
                 }
             },
             {
-                "time": "2024-01-21T20:13:00Z",
+                "time": "2024-01-21T12:00:00Z",
                 "values": {
-                    "temperature": -0.29,
-                    "temperatureApparent": -0.29,
+                    "temperature": 2.69,
+                    "temperatureApparent": 2.69,
                     "weatherCode": 1000
                 }
             },
             {
-                "time": "2024-01-21T20:14:00Z",
+                "time": "2024-01-21T13:00:00Z",
                 "values": {
-                    "temperature": -0.29,
-                    "temperatureApparent": -0.29,
+                    "temperature": 3,
+                    "temperatureApparent": 3,
                     "weatherCode": 1000
                 }
             },
             {
-                "time": "2024-01-21T20:15:00Z",
+                "time": "2024-01-21T14:00:00Z",
                 "values": {
-                    "temperature": -0.28,
-                    "temperatureApparent": -0.28,
+                    "temperature": 3.13,
+                    "temperatureApparent": 3.13,
                     "weatherCode": 1000
                 }
             },
             {
-                "time": "2024-01-21T20:16:00Z",
+                "time": "2024-01-21T15:00:00Z",
                 "values": {
-                    "temperature": -0.28,
-                    "temperatureApparent": -0.28,
+                    "temperature": 4.5,
+                    "temperatureApparent": 4.5,
                     "weatherCode": 1000
                 }
             },
             {
-                "time": "2024-01-21T20:17:00Z",
+                "time": "2024-01-21T16:00:00Z",
                 "values": {
-                    "temperature": -0.27,
-                    "temperatureApparent": -0.27,
+                    "temperature": 3.5,
+                    "temperatureApparent": 3.5,
                     "weatherCode": 1000
                 }
             },
             {
-                "time": "2024-01-21T20:18:00Z",
+                "time": "2024-01-21T17:00:00Z",
                 "values": {
-                    "temperature": -0.27,
-                    "temperatureApparent": -0.27,
+                    "temperature": -0.63,
+                    "temperatureApparent": -0.63,
                     "weatherCode": 1000
                 }
             },
             {
-                "time": "2024-01-21T20:19:00Z",
+                "time": "2024-01-21T18:00:00Z",
                 "values": {
-                    "temperature": -0.27,
-                    "temperatureApparent": -0.27,
+                    "temperature": -3.31,
+                    "temperatureApparent": -3.31,
                     "weatherCode": 1000
                 }
             },
             {
-                "time": "2024-01-21T20:20:00Z",
+                "time": "2024-01-21T19:00:00Z",
                 "values": {
-                    "temperature": -0.26,
-                    "temperatureApparent": -0.26,
+                    "temperature": -1.69,
+                    "temperatureApparent": -1.69,
                     "weatherCode": 1000
                 }
             },
-            {
-                "time": "2024-01-21T20:21:00Z",
-                "values": {
-                    "temperature": -0.26,
-                    "temperatureApparent": -0.26,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:22:00Z",
-                "values": {
-                    "temperature": -0.25,
-                    "temperatureApparent": -0.25,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:23:00Z",
-                "values": {
-                    "temperature": -0.25,
-                    "temperatureApparent": -0.25,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:24:00Z",
-                "values": {
-                    "temperature": -0.24,
-                    "temperatureApparent": -0.24,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:25:00Z",
-                "values": {
-                    "temperature": -0.24,
-                    "temperatureApparent": -0.24,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:26:00Z",
-                "values": {
-                    "temperature": -0.24,
-                    "temperatureApparent": -0.24,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:27:00Z",
-                "values": {
-                    "temperature": -0.23,
-                    "temperatureApparent": -0.23,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:28:00Z",
-                "values": {
-                    "temperature": -0.23,
-                    "temperatureApparent": -0.23,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:29:00Z",
-                "values": {
-                    "temperature": -0.22,
-                    "temperatureApparent": -0.22,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:30:00Z",
-                "values": {
-                    "temperature": -0.22,
-                    "temperatureApparent": -0.22,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:31:00Z",
-                "values": {
-                    "temperature": -0.21,
-                    "temperatureApparent": -0.21,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:32:00Z",
-                "values": {
-                    "temperature": -0.21,
-                    "temperatureApparent": -0.21,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:33:00Z",
-                "values": {
-                    "temperature": -0.21,
-                    "temperatureApparent": -0.21,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:34:00Z",
-                "values": {
-                    "temperature": -0.2,
-                    "temperatureApparent": -0.2,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:35:00Z",
-                "values": {
-                    "temperature": -0.2,
-                    "temperatureApparent": -0.2,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:36:00Z",
-                "values": {
-                    "temperature": -0.19,
-                    "temperatureApparent": -0.19,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:37:00Z",
-                "values": {
-                    "temperature": -0.19,
-                    "temperatureApparent": -0.19,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:38:00Z",
-                "values": {
-                    "temperature": -0.18,
-                    "temperatureApparent": -0.18,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:39:00Z",
-                "values": {
-                    "temperature": -0.18,
-                    "temperatureApparent": -0.18,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:40:00Z",
-                "values": {
-                    "temperature": -0.18,
-                    "temperatureApparent": -0.18,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:41:00Z",
-                "values": {
-                    "temperature": -0.17,
-                    "temperatureApparent": -0.17,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:42:00Z",
-                "values": {
-                    "temperature": -0.17,
-                    "temperatureApparent": -0.17,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:43:00Z",
-                "values": {
-                    "temperature": -0.16,
-                    "temperatureApparent": -0.16,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:44:00Z",
-                "values": {
-                    "temperature": -0.16,
-                    "temperatureApparent": -0.16,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:45:00Z",
-                "values": {
-                    "temperature": -0.15,
-                    "temperatureApparent": -0.15,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:46:00Z",
-                "values": {
-                    "temperature": -0.15,
-                    "temperatureApparent": -0.15,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:47:00Z",
-                "values": {
-                    "temperature": -0.15,
-                    "temperatureApparent": -0.15,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:48:00Z",
-                "values": {
-                    "temperature": -0.14,
-                    "temperatureApparent": -0.14,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:49:00Z",
-                "values": {
-                    "temperature": -0.14,
-                    "temperatureApparent": -0.14,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:50:00Z",
-                "values": {
-                    "temperature": -0.13,
-                    "temperatureApparent": -0.13,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:51:00Z",
-                "values": {
-                    "temperature": -0.13,
-                    "temperatureApparent": -0.13,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:52:00Z",
-                "values": {
-                    "temperature": -0.12,
-                    "temperatureApparent": -0.12,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:53:00Z",
-                "values": {
-                    "temperature": -0.12,
-                    "temperatureApparent": -0.12,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:54:00Z",
-                "values": {
-                    "temperature": -0.12,
-                    "temperatureApparent": -0.12,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:55:00Z",
-                "values": {
-                    "temperature": -0.11,
-                    "temperatureApparent": -0.11,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:56:00Z",
-                "values": {
-                    "temperature": -0.11,
-                    "temperatureApparent": -0.11,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:57:00Z",
-                "values": {
-                    "temperature": -0.1,
-                    "temperatureApparent": -0.1,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:58:00Z",
-                "values": {
-                    "temperature": -0.1,
-                    "temperatureApparent": -0.1,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T20:59:00Z",
-                "values": {
-                    "temperature": -0.09,
-                    "temperatureApparent": -0.09,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T21:00:00Z",
-                "values": {
-                    "temperature": -0.09,
-                    "temperatureApparent": -0.09,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T21:01:00Z",
-                "values": {
-                    "temperature": -0.08,
-                    "temperatureApparent": -0.08,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T21:02:00Z",
-                "values": {
-                    "temperature": -0.08,
-                    "temperatureApparent": -0.08,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T21:03:00Z",
-                "values": {
-                    "temperature": -0.07,
-                    "temperatureApparent": -0.07,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T21:04:00Z",
-                "values": {
-                    "temperature": -0.07,
-                    "temperatureApparent": -0.07,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T21:05:00Z",
-                "values": {
-                    "temperature": -0.06,
-                    "temperatureApparent": -0.06,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T21:06:00Z",
-                "values": {
-                    "temperature": -0.06,
-                    "temperatureApparent": -0.06,
-                    "weatherCode": 1000
-                }
-            },
-            {
-                "time": "2024-01-21T21:07:00Z",
-                "values": {
-                    "temperature": -0.05,
-                    "temperatureApparent": -0.05,
-                    "weatherCode": 1000
-                }
-            }
-        ],
-        "hourly": [
             {
                 "time": "2024-01-21T20:00:00Z",
                 "values": {
@@ -757,19 +203,547 @@ export const defaultForecast : ForecastWeatherData={
             {
                 "time": "2024-01-21T21:00:00Z",
                 "values": {
-                    "temperature": -0.09,
-                    "temperatureApparent": -0.09,
+                    "temperature": 0,
+                    "temperatureApparent": 0,
                     "weatherCode": 1000
                 }
             },
             {
                 "time": "2024-01-21T22:00:00Z",
                 "values": {
-                    "temperature": 0.22,
-                    "temperatureApparent": 0.22,
+                    "temperature": 0.31,
+                    "temperatureApparent": 0.31,
                     "weatherCode": 1000
                 }
             },
+            {
+                "time": "2024-01-21T23:00:00Z",
+                "values": {
+                    "temperature": 0.5,
+                    "temperatureApparent": 0.5,
+                    "weatherCode": 1000
+                }
+            }
+        ],
+        "daily": [
+            {
+                "time": "2024-01-20T05:00:00Z",
+                "values": {
+                    "temperatureApparentAvg": -4.3,
+                    "temperatureApparentMax": 1.13,
+                    "temperatureApparentMin": -13.92,
+                    "temperatureAvg": -3.56,
+                    "temperatureMax": 1.13,
+                    "temperatureMin": -9.19,
+                    "weatherCodeMax": 1000,
+                    "weatherCodeMin": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T05:00:00Z",
+                "values": {
+                    "temperatureApparentAvg": -0.87,
+                    "temperatureApparentMax": 4.5,
+                    "temperatureApparentMin": -8.51,
+                    "temperatureAvg": 0.01,
+                    "temperatureMax": 4.5,
+                    "temperatureMin": -5.19,
+                    "weatherCodeMax": 1000,
+                    "weatherCodeMin": 1000
+                }
+            }
+        ]
+    },
+    "location": {
+        "lat": 42.5055,
+        "lon": 1.5243
+    }
+}
+export const defaultForecast : ForecastWeatherData={
+    "timelines": {
+        "minutely": [
+            {
+                "time": "2024-01-21T23:26:00Z",
+                "values": {
+                    "temperature": 0.63,
+                    "temperatureApparent": 0.63,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:27:00Z",
+                "values": {
+                    "temperature": 0.63,
+                    "temperatureApparent": 0.63,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:28:00Z",
+                "values": {
+                    "temperature": 0.64,
+                    "temperatureApparent": 0.64,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:29:00Z",
+                "values": {
+                    "temperature": 0.64,
+                    "temperatureApparent": 0.64,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:30:00Z",
+                "values": {
+                    "temperature": 0.65,
+                    "temperatureApparent": 0.65,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:31:00Z",
+                "values": {
+                    "temperature": 0.65,
+                    "temperatureApparent": 0.65,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:32:00Z",
+                "values": {
+                    "temperature": 0.66,
+                    "temperatureApparent": 0.66,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:33:00Z",
+                "values": {
+                    "temperature": 0.67,
+                    "temperatureApparent": 0.67,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:34:00Z",
+                "values": {
+                    "temperature": 0.67,
+                    "temperatureApparent": 0.67,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:35:00Z",
+                "values": {
+                    "temperature": 0.68,
+                    "temperatureApparent": 0.68,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:36:00Z",
+                "values": {
+                    "temperature": 0.68,
+                    "temperatureApparent": 0.68,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:37:00Z",
+                "values": {
+                    "temperature": 0.69,
+                    "temperatureApparent": 0.69,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:38:00Z",
+                "values": {
+                    "temperature": 0.7,
+                    "temperatureApparent": 0.7,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:39:00Z",
+                "values": {
+                    "temperature": 0.7,
+                    "temperatureApparent": 0.7,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:40:00Z",
+                "values": {
+                    "temperature": 0.71,
+                    "temperatureApparent": 0.71,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:41:00Z",
+                "values": {
+                    "temperature": 0.71,
+                    "temperatureApparent": 0.71,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:42:00Z",
+                "values": {
+                    "temperature": 0.72,
+                    "temperatureApparent": 0.72,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:43:00Z",
+                "values": {
+                    "temperature": 0.72,
+                    "temperatureApparent": 0.72,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:44:00Z",
+                "values": {
+                    "temperature": 0.73,
+                    "temperatureApparent": 0.73,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:45:00Z",
+                "values": {
+                    "temperature": 0.74,
+                    "temperatureApparent": 0.74,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:46:00Z",
+                "values": {
+                    "temperature": 0.74,
+                    "temperatureApparent": 0.74,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:47:00Z",
+                "values": {
+                    "temperature": 0.75,
+                    "temperatureApparent": 0.75,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:48:00Z",
+                "values": {
+                    "temperature": 0.75,
+                    "temperatureApparent": 0.75,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:49:00Z",
+                "values": {
+                    "temperature": 0.76,
+                    "temperatureApparent": 0.76,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:50:00Z",
+                "values": {
+                    "temperature": 0.77,
+                    "temperatureApparent": 0.77,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:51:00Z",
+                "values": {
+                    "temperature": 0.77,
+                    "temperatureApparent": 0.77,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:52:00Z",
+                "values": {
+                    "temperature": 0.78,
+                    "temperatureApparent": 0.78,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:53:00Z",
+                "values": {
+                    "temperature": 0.78,
+                    "temperatureApparent": 0.78,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:54:00Z",
+                "values": {
+                    "temperature": 0.79,
+                    "temperatureApparent": 0.79,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:55:00Z",
+                "values": {
+                    "temperature": 0.79,
+                    "temperatureApparent": 0.79,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:56:00Z",
+                "values": {
+                    "temperature": 0.8,
+                    "temperatureApparent": 0.8,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:57:00Z",
+                "values": {
+                    "temperature": 0.81,
+                    "temperatureApparent": 0.81,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:58:00Z",
+                "values": {
+                    "temperature": 0.81,
+                    "temperatureApparent": 0.81,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-21T23:59:00Z",
+                "values": {
+                    "temperature": 0.82,
+                    "temperatureApparent": 0.82,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:00:00Z",
+                "values": {
+                    "temperature": 0.82,
+                    "temperatureApparent": 0.82,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:01:00Z",
+                "values": {
+                    "temperature": 0.83,
+                    "temperatureApparent": 0.83,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:02:00Z",
+                "values": {
+                    "temperature": 0.83,
+                    "temperatureApparent": 0.83,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:03:00Z",
+                "values": {
+                    "temperature": 0.83,
+                    "temperatureApparent": 0.83,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:04:00Z",
+                "values": {
+                    "temperature": 0.83,
+                    "temperatureApparent": 0.83,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:05:00Z",
+                "values": {
+                    "temperature": 0.83,
+                    "temperatureApparent": 0.83,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:06:00Z",
+                "values": {
+                    "temperature": 0.84,
+                    "temperatureApparent": 0.84,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:07:00Z",
+                "values": {
+                    "temperature": 0.84,
+                    "temperatureApparent": 0.84,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:08:00Z",
+                "values": {
+                    "temperature": 0.84,
+                    "temperatureApparent": 0.84,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:09:00Z",
+                "values": {
+                    "temperature": 0.84,
+                    "temperatureApparent": 0.84,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:10:00Z",
+                "values": {
+                    "temperature": 0.85,
+                    "temperatureApparent": 0.85,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:11:00Z",
+                "values": {
+                    "temperature": 0.85,
+                    "temperatureApparent": 0.85,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:12:00Z",
+                "values": {
+                    "temperature": 0.85,
+                    "temperatureApparent": 0.85,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:13:00Z",
+                "values": {
+                    "temperature": 0.85,
+                    "temperatureApparent": 0.85,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:14:00Z",
+                "values": {
+                    "temperature": 0.85,
+                    "temperatureApparent": 0.85,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:15:00Z",
+                "values": {
+                    "temperature": 0.86,
+                    "temperatureApparent": 0.86,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:16:00Z",
+                "values": {
+                    "temperature": 0.86,
+                    "temperatureApparent": 0.86,
+                    "weatherCode": 1000
+                }
+            },
+            {
+                "time": "2024-01-22T00:17:00Z",
+                "values": {
+                    "temperature": 0.86,
+                    "temperatureApparent": 0.86,
+                    "weatherCode": 1100
+                }
+            },
+            {
+                "time": "2024-01-22T00:18:00Z",
+                "values": {
+                    "temperature": 0.86,
+                    "temperatureApparent": 0.86,
+                    "weatherCode": 1100
+                }
+            },
+            {
+                "time": "2024-01-22T00:19:00Z",
+                "values": {
+                    "temperature": 0.86,
+                    "temperatureApparent": 0.86,
+                    "weatherCode": 1100
+                }
+            },
+            {
+                "time": "2024-01-22T00:20:00Z",
+                "values": {
+                    "temperature": 0.87,
+                    "temperatureApparent": 0.87,
+                    "weatherCode": 1100
+                }
+            },
+            {
+                "time": "2024-01-22T00:21:00Z",
+                "values": {
+                    "temperature": 0.87,
+                    "temperatureApparent": 0.87,
+                    "weatherCode": 1100
+                }
+            },
+            {
+                "time": "2024-01-22T00:22:00Z",
+                "values": {
+                    "temperature": 0.87,
+                    "temperatureApparent": 0.87,
+                    "weatherCode": 1100
+                }
+            },
+            {
+                "time": "2024-01-22T00:23:00Z",
+                "values": {
+                    "temperature": 0.87,
+                    "temperatureApparent": 0.87,
+                    "weatherCode": 1100
+                }
+            },
+            {
+                "time": "2024-01-22T00:24:00Z",
+                "values": {
+                    "temperature": 0.88,
+                    "temperatureApparent": 0.88,
+                    "weatherCode": 1100
+                }
+            },
+            {
+                "time": "2024-01-22T00:25:00Z",
+                "values": {
+                    "temperature": 0.88,
+                    "temperatureApparent": 0.88,
+                    "weatherCode": 1100
+                }
+            }
+        ],
+        "hourly": [
             {
                 "time": "2024-01-21T23:00:00Z",
                 "values": {
@@ -1461,37 +1435,69 @@ export const defaultForecast : ForecastWeatherData={
             {
                 "time": "2024-01-25T13:00:00Z",
                 "values": {
-                    "temperature": 14.71,
-                    "temperatureApparent": 14.71,
-                    "weatherCode": 1000
+                    "temperature": 13.87,
+                    "temperatureApparent": 13.87,
+                    "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-25T14:00:00Z",
                 "values": {
-                    "temperature": 14.23,
-                    "temperatureApparent": 14.23,
-                    "weatherCode": 1101
+                    "temperature": 13.63,
+                    "temperatureApparent": 13.63,
+                    "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-25T15:00:00Z",
                 "values": {
-                    "temperature": 12.4,
-                    "temperatureApparent": 12.4,
-                    "weatherCode": 1102
+                    "temperature": 12.02,
+                    "temperatureApparent": 12.02,
+                    "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-25T16:00:00Z",
                 "values": {
-                    "temperature": 9.43,
-                    "temperatureApparent": 9.43,
-                    "weatherCode": 1102
+                    "temperature": 9.18,
+                    "temperatureApparent": 9.18,
+                    "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-25T17:00:00Z",
+                "values": {
+                    "temperature": 6.58,
+                    "temperatureApparent": 6.58,
+                    "weatherCode": 1001
+                }
+            },
+            {
+                "time": "2024-01-25T18:00:00Z",
+                "values": {
+                    "temperature": 6.36,
+                    "temperatureApparent": 6.36,
+                    "weatherCode": 1001
+                }
+            },
+            {
+                "time": "2024-01-25T19:00:00Z",
+                "values": {
+                    "temperature": 6.59,
+                    "temperatureApparent": 6.59,
+                    "weatherCode": 1001
+                }
+            },
+            {
+                "time": "2024-01-25T20:00:00Z",
+                "values": {
+                    "temperature": 6.64,
+                    "temperatureApparent": 6.64,
+                    "weatherCode": 1001
+                }
+            },
+            {
+                "time": "2024-01-25T21:00:00Z",
                 "values": {
                     "temperature": 6.39,
                     "temperatureApparent": 6.39,
@@ -1499,211 +1505,203 @@ export const defaultForecast : ForecastWeatherData={
                 }
             },
             {
-                "time": "2024-01-25T18:00:00Z",
-                "values": {
-                    "temperature": 5.66,
-                    "temperatureApparent": 5.66,
-                    "weatherCode": 1001
-                }
-            },
-            {
-                "time": "2024-01-25T19:00:00Z",
-                "values": {
-                    "temperature": 5.58,
-                    "temperatureApparent": 5.58,
-                    "weatherCode": 1001
-                }
-            },
-            {
-                "time": "2024-01-25T20:00:00Z",
-                "values": {
-                    "temperature": 5.67,
-                    "temperatureApparent": 5.67,
-                    "weatherCode": 1001
-                }
-            },
-            {
-                "time": "2024-01-25T21:00:00Z",
-                "values": {
-                    "temperature": 5.88,
-                    "temperatureApparent": 5.88,
-                    "weatherCode": 1001
-                }
-            },
-            {
                 "time": "2024-01-25T22:00:00Z",
                 "values": {
-                    "temperature": 5.82,
-                    "temperatureApparent": 5.82,
+                    "temperature": 6.25,
+                    "temperatureApparent": 6.25,
                     "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-25T23:00:00Z",
                 "values": {
-                    "temperature": 5.75,
-                    "temperatureApparent": 5.75,
+                    "temperature": 6.44,
+                    "temperatureApparent": 6.44,
                     "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T00:00:00Z",
                 "values": {
-                    "temperature": 5.64,
-                    "temperatureApparent": 5.64,
+                    "temperature": 6.32,
+                    "temperatureApparent": 6.32,
                     "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T01:00:00Z",
                 "values": {
-                    "temperature": 5.44,
-                    "temperatureApparent": 5.44,
+                    "temperature": 6,
+                    "temperatureApparent": 6,
                     "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T02:00:00Z",
                 "values": {
-                    "temperature": 5.31,
-                    "temperatureApparent": 5.31,
-                    "weatherCode": 1001
+                    "temperature": 5.72,
+                    "temperatureApparent": 5.72,
+                    "weatherCode": 1102
                 }
             },
             {
                 "time": "2024-01-26T03:00:00Z",
                 "values": {
-                    "temperature": 4.89,
-                    "temperatureApparent": 4.89,
-                    "weatherCode": 1001
+                    "temperature": 5.41,
+                    "temperatureApparent": 5.41,
+                    "weatherCode": 1102
                 }
             },
             {
                 "time": "2024-01-26T04:00:00Z",
                 "values": {
-                    "temperature": 4.65,
-                    "temperatureApparent": 4.65,
+                    "temperature": 5.16,
+                    "temperatureApparent": 5.16,
                     "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T05:00:00Z",
                 "values": {
-                    "temperature": 4.33,
-                    "temperatureApparent": 1.43,
+                    "temperature": 4.76,
+                    "temperatureApparent": 4.76,
                     "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T06:00:00Z",
                 "values": {
-                    "temperature": 3.99,
-                    "temperatureApparent": 0.94,
+                    "temperature": 4.05,
+                    "temperatureApparent": 0.84,
                     "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T07:00:00Z",
                 "values": {
-                    "temperature": 3.45,
-                    "temperatureApparent": 0.23,
-                    "weatherCode": 1100
+                    "temperature": 4.15,
+                    "temperatureApparent": 1,
+                    "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T08:00:00Z",
                 "values": {
-                    "temperature": 4.02,
-                    "temperatureApparent": 1.02,
-                    "weatherCode": 1100
+                    "temperature": 4.87,
+                    "temperatureApparent": 4.87,
+                    "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T09:00:00Z",
                 "values": {
-                    "temperature": 6.87,
-                    "temperatureApparent": 6.87,
-                    "weatherCode": 1100
+                    "temperature": 6.58,
+                    "temperatureApparent": 6.58,
+                    "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T10:00:00Z",
                 "values": {
-                    "temperature": 9.42,
-                    "temperatureApparent": 9.42,
-                    "weatherCode": 1100
+                    "temperature": 8.59,
+                    "temperatureApparent": 8.59,
+                    "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T11:00:00Z",
                 "values": {
-                    "temperature": 10.8,
-                    "temperatureApparent": 10.8,
-                    "weatherCode": 1100
+                    "temperature": 10.1,
+                    "temperatureApparent": 10.1,
+                    "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T12:00:00Z",
                 "values": {
-                    "temperature": 11.52,
-                    "temperatureApparent": 11.52,
-                    "weatherCode": 1101
+                    "temperature": 10.79,
+                    "temperatureApparent": 10.79,
+                    "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T13:00:00Z",
                 "values": {
-                    "temperature": 11.15,
-                    "temperatureApparent": 11.15,
-                    "weatherCode": 1101
+                    "temperature": 10.74,
+                    "temperatureApparent": 10.74,
+                    "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T14:00:00Z",
                 "values": {
-                    "temperature": 10.79,
-                    "temperatureApparent": 10.79,
-                    "weatherCode": 1102
+                    "temperature": 10.15,
+                    "temperatureApparent": 10.15,
+                    "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T15:00:00Z",
                 "values": {
-                    "temperature": 10.43,
-                    "temperatureApparent": 10.43,
-                    "weatherCode": 1102
+                    "temperature": 9.19,
+                    "temperatureApparent": 9.19,
+                    "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T16:00:00Z",
                 "values": {
-                    "temperature": 8.17,
-                    "temperatureApparent": 8.17,
+                    "temperature": 7.03,
+                    "temperatureApparent": 7.03,
                     "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T17:00:00Z",
                 "values": {
-                    "temperature": 5.92,
-                    "temperatureApparent": 5.92,
+                    "temperature": 3.66,
+                    "temperatureApparent": 0.53,
                     "weatherCode": 1001
                 }
             },
             {
                 "time": "2024-01-26T18:00:00Z",
                 "values": {
-                    "temperature": 3.66,
-                    "temperatureApparent": 0.79,
-                    "weatherCode": 1001
+                    "temperature": 2.88,
+                    "temperatureApparent": -0.4,
+                    "weatherCode": 1102
                 }
             },
             {
                 "time": "2024-01-26T19:00:00Z",
                 "values": {
-                    "temperature": 3.54,
-                    "temperatureApparent": 0.9,
-                    "weatherCode": 1001
+                    "temperature": 2.77,
+                    "temperatureApparent": -0.37,
+                    "weatherCode": 1101
+                }
+            },
+            {
+                "time": "2024-01-26T20:00:00Z",
+                "values": {
+                    "temperature": 2.66,
+                    "temperatureApparent": -0.33,
+                    "weatherCode": 1101
+                }
+            },
+            {
+                "time": "2024-01-26T21:00:00Z",
+                "values": {
+                    "temperature": 2.55,
+                    "temperatureApparent": -0.27,
+                    "weatherCode": 1100
+                }
+            },
+            {
+                "time": "2024-01-26T22:00:00Z",
+                "values": {
+                    "temperature": 2.61,
+                    "temperatureApparent": 0.08,
+                    "weatherCode": 1100
                 }
             }
         ],
@@ -1711,10 +1709,10 @@ export const defaultForecast : ForecastWeatherData={
             {
                 "time": "2024-01-21T05:00:00Z",
                 "values": {
-                    "temperatureApparentAvg": -0.41,
+                    "temperatureApparentAvg": -0.4,
                     "temperatureApparentMax": 4.5,
                     "temperatureApparentMin": -8.51,
-                    "temperatureAvg": 0.28,
+                    "temperatureAvg": 0.29,
                     "temperatureMax": 4.5,
                     "temperatureMin": -5.19,
                     "weatherCodeMax": 1000,
@@ -1763,12 +1761,12 @@ export const defaultForecast : ForecastWeatherData={
             {
                 "time": "2024-01-25T05:00:00Z",
                 "values": {
-                    "temperatureApparentAvg": 7.99,
-                    "temperatureApparentMax": 14.71,
-                    "temperatureApparentMin": 4.65,
-                    "temperatureAvg": 7.99,
-                    "temperatureMax": 14.71,
-                    "temperatureMin": 4.65,
+                    "temperatureApparentAvg": 8.21,
+                    "temperatureApparentMax": 14.54,
+                    "temperatureApparentMin": 5.16,
+                    "temperatureAvg": 8.21,
+                    "temperatureMax": 14.54,
+                    "temperatureMin": 5.16,
                     "weatherCodeMax": 1001,
                     "weatherCodeMin": 1001
                 }
@@ -1776,14 +1774,14 @@ export const defaultForecast : ForecastWeatherData={
             {
                 "time": "2024-01-26T05:00:00Z",
                 "values": {
-                    "temperatureApparentAvg": 5.81,
-                    "temperatureApparentMax": 11.52,
-                    "temperatureApparentMin": 0.23,
-                    "temperatureAvg": 7.14,
-                    "temperatureMax": 11.52,
-                    "temperatureMin": 3.28,
-                    "weatherCodeMax": 1100,
-                    "weatherCodeMin": 1100
+                    "temperatureApparentAvg": 4.43,
+                    "temperatureApparentMax": 10.79,
+                    "temperatureApparentMin": -0.4,
+                    "temperatureAvg": 5.89,
+                    "temperatureMax": 10.79,
+                    "temperatureMin": 2.55,
+                    "weatherCodeMax": 1001,
+                    "weatherCodeMin": 1001
                 }
             }
         ]

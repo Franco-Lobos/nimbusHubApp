@@ -1,8 +1,9 @@
-import {  allForecastsCookie, allRealTimesCookie} from "~/cookies.server";
+import {  allForecastsCookie, allHistoriesCookie, allRealTimesCookie} from "~/cookies.server";
 import { CookieAllForecastsInLocalStorage, SingleForcastSynchronizedCookie, isSingleForcastSynchronizedCookie } from "~/models/cookies/forecastCookies";
 import { SessionLocation, TomorrowLocation, areLocationsEqual, isSessionLocation } from "~/models/tomorrow/WeatherLocation";
 import { getWeatherForecast } from "./nimbusWeatherAPIService";
 import { CookieAllRealTimesInLocalStorage, SingleRealTimeSynchronizedCookie, isSingleRealTimeSynchronizedCookie } from "~/models/cookies/realTimeCookies";
+import { CookieAllHistoriesInLocalStorage, SingleHistorySynchronizedCookie, isSingleHistorySynchronizedCookie } from "~/models/cookies/historyCookies";
 
 export class CookieStorageManager {
     constructor(){
@@ -11,8 +12,8 @@ export class CookieStorageManager {
     // FORECAST COOKIES
     public static getForecastWeather =  async (location: SessionLocation, request: Request) => {
         const cookieHeader = request.headers.get("Cookie");
-        const storedForecasts = (await allForecastsCookie.parse(cookieHeader)) || {};
-        if(storedForecasts ===null){
+        const storedForecasts = (await allForecastsCookie.parse(cookieHeader)) || false;
+        if(!storedForecasts || storedForecasts ===null){
             return false;
         }
 
@@ -100,8 +101,8 @@ export class CookieStorageManager {
     //REAL TIME COOKIES
     public static getRealTime =  async (location: SessionLocation, request: Request) => {
         const cookieHeader = request.headers.get("Cookie");
-        const storedRealTimes = (await allRealTimesCookie.parse(cookieHeader)) || {};
-        if(storedRealTimes ===null){
+        const storedRealTimes = (await allRealTimesCookie.parse(cookieHeader)) || false;
+        if(!storedRealTimes || storedRealTimes ===null){
             return false;
         }
 
@@ -183,21 +184,93 @@ export class CookieStorageManager {
         return isSingleRealTimeSynchronizedCookie(returner) ? returner : false;
     }
 
+    //REAL TIME COOKIES ENDS
 
+    public static getHistory =  async (location: SessionLocation, request: Request) => {
+        const cookieHeader = request.headers.get("Cookie");
+        const storedHistories = (await allHistoriesCookie.parse(cookieHeader)) || false;
+        console.log("storedHistories: ", storedHistories)
 
+        if(!storedHistories || storedHistories ===null){
+            return false;
+        }
+        const parsedHistories = storedHistories as CookieAllHistoriesInLocalStorage;
+        let foundHistory : SingleHistorySynchronizedCookie | boolean= parsedHistories?.histories?.length > 0;
+        if(foundHistory){
+            console.log("GET HISTORY")
+            foundHistory = this.deleteHistoryIfExpired(parsedHistories, location)!;
+        }
+      
+        if(foundHistory){
+            console.log("get: Cookies were updated, API call avoided")
+            return foundHistory;
+        }
+      
+        //else
+        console.log("data save -> Data not found in cookies");
+        return false;
+    }
 
+    public static setHistory = async (
+        data: SingleHistorySynchronizedCookie,
+        request: Request
+    ): Promise<any | string>=> {
+        const cookieHeader = request.headers.get("Cookie");
+        const storedHistories = (await allHistoriesCookie.parse(cookieHeader)) || {};
+        const parsedHistories = storedHistories as CookieAllHistoriesInLocalStorage;
+        let foundHistories : SingleHistorySynchronizedCookie | boolean= parsedHistories?.histories?.length > 0;
+      
+        if(foundHistories){
+            console.log("SET HISTORIES")
+            foundHistories = this.deleteHistoryIfExpired(parsedHistories, data.location)!;
+        }
 
+        if(foundHistories){
+            console.log("set: Cookies were updated")
+            return {message: "Cookies was updated"}; //Cookies were updated, no action has been made
+        }
+ 
+        if(parsedHistories?.histories){
+            parsedHistories.histories.push(data);
+        }else{
+            parsedHistories.histories = [data];
+        }
+        const serializedCookie = await allHistoriesCookie.serialize(parsedHistories);
+        return serializedCookie; //all the cookies updated with the new forecast
+    }
 
+    private static deleteHistoryIfExpired = (
+        parsedHistories: CookieAllHistoriesInLocalStorage,
+        location: TomorrowLocation
+        ): SingleHistorySynchronizedCookie | boolean => {
+            let returner :SingleHistorySynchronizedCookie | boolean = false;
+            let i =0;
+            while(i < parsedHistories.histories.length && !returner){
+                if(areLocationsEqual(location, parsedHistories.histories[i].location)){
+                    const savedDate = new Date(parsedHistories.histories[i].time);
+                    const now = new Date();
+                    // const localTimezoneOffset = now.getTimezoneOffset();
+                    const diff = now.getTime() - savedDate.getTime();
+                    // const positiveDiff = Math.abs(now.getTime() - savedDate.getTime() ); 
+                    // const diff =  positiveDiff + localTimezoneOffset * 60 * 1000
+                    const diffHours = Math.floor(diff / (1000 * 60 * 60 *24)); // 24 hours
+            
+                    console.log("diffHours history cookie: ", diffHours);
+                    if(diffHours > 24){
+                        parsedHistories.histories.splice(i, 1); // 2nd parameter means remove one item only  
+                        returner = true;
+                        break;
+                    }
+                    
+                    console.log("found", parsedHistories.histories[i])
+                    returner =  parsedHistories.histories[i];
+                    break;
+                }
+                i++
+            }
 
-
-
-
-
-
-
-
-
-
+        return isSingleHistorySynchronizedCookie(returner) ? returner : false;
+    }
 
     public static deleteExpiredCookies =()=>{
         const cookies = document.cookie.split('; ');
@@ -211,5 +284,21 @@ export class CookieStorageManager {
             document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
           }
         }
-      }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

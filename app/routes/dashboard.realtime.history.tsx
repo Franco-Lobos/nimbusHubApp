@@ -1,4 +1,4 @@
-import { Link, useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData, useNavigate } from '@remix-run/react';
 import {  type LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { getSession } from '~/session';
 import { SessionLocation } from '~/models/tomorrow/WeatherLocation';
@@ -9,22 +9,26 @@ import { defaultForecast, defaultHistory, defaultLocation, defaultRealTime, defa
 import { getRealTimeWeather } from '~/services/nimbusWeatherAPIService';
 import { DailyItem } from '~/models/tomorrow/WeatherDaily';
 import ForecastDailyCard from '~/components/widgets/dashboard/weatherCards/forecastDailyCard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { cardStyleClass } from '~/components/constants/styles';
 import { motion } from 'framer-motion';
 
 import { FaArrowCircleDown } from 'react-icons/fa/index.js';
-import { HistoryData } from '~/models/tomorrow/History';
+import { HistoryData, isHistoryData } from '~/models/tomorrow/History';
+import { SingleHistorySynchronizedCookie, isSingleHistorySynchronizedCookie } from '~/models/cookies/historyCookies';
+import {StorageManager} from '~/services/LocalStorageManager';
+import { CookieStorageManager } from '~/services/CookieStorageManager';
+import { isSingleForcastSynchronizedCookie } from '~/models/cookies/forecastCookies';
 
 export async function loader({
   request,
 }: LoaderFunctionArgs) {
 
   const session = await getSession(request.headers.get("Cookie"));
-  if (!session.has("userId")) {
-    return redirect("/acces/login");
-  }
+  // if (!session.has("userId")) {
+  //   return redirect("/acces/login");
+  // }
   
   let location: SessionLocation = defaultSessionLocation;
   if(session.has("location")){
@@ -32,28 +36,82 @@ export async function loader({
     location = sessionLocations[sessionLocations.length-1 ];
   }
 
-  // const loadForecast : any = await getWeatherRecentHistory(location.name, request);
-  const loadForecast = defaultHistory;
-  return loadForecast;
+  let updateStorage = false;
+  let loadHistory : HistoryData | SingleHistorySynchronizedCookie | boolean = await CookieStorageManager.getHistory(location, request);
+  console.info("loadHistory: ", loadHistory)
+
+  if(!loadHistory){
+    console.info("HISTORY: MAKING API CALL")
+    //SYNC COOKIES WITH LOCAL STORAGE
+    updateStorage = true;
+    const coords : string = `${location.lat},${location.lon}`;
+    // loadHistory = await getWeatherRecentHistory(coords, request);
+    loadHistory  = defaultHistory!;
+  }
+  else{
+    console.log("HISTORY: API CALL AVOIDED")
+  }
+  return {history: loadHistory, updateStorage: updateStorage};
+  // const loadForecast : any = await getWeatherRecentHistory(coords, request);
+  // const loadForecast = defaultHistory;
+  // return loadForecast;
 };
 
 
 const RecentHistory = () => {
-  const loadForecast: any = useLoaderData<typeof loader>();
-  // const forecast: RealTimeData = loadForecast as HistoryData;
-  // const dailyItems: DailyItem[] = forecast.timelines.daily as DailyItem[];
+  const navigate = useNavigate();
+  const [loadHistory, setLoadHistory]= useState<any | HistoryData | undefined>(useLoaderData<typeof loader>());
+  const [parsedHistory, setParsedHistory] =useState<HistoryData | null>(null);
+  const [loadedFromLocalStorage, setLoadedFromLocalStorage] = useState<boolean>(false);
 
-  const [via, setVia] = useState<number>(10);
+  useEffect(() => {
+    console.log("loadHistory: ", loadHistory)
+    const readedData = loadHistory?.history;
+    if(!readedData){
+      navigate("/dashboard");
+      return;
+    };
 
+    if (isSingleHistorySynchronizedCookie(readedData) && !loadedFromLocalStorage){
+      console.log("HISTORY: LOAD FROM LOCAL")
+      const setData = async()=>{
+        setLoadHistory(
+          {...loadHistory,
+            history: await StorageManager.getHistoryFromLocalStorage(readedData.location)  
+          }
+        )  
+        setLoadedFromLocalStorage(true);
+      }
+      setData();
+      return;
+    }
+
+    if(isHistoryData(readedData)){
+      setParsedHistory(readedData);
+      console.log("IS HISTORY DATA")
+      return;
+    }
+
+  },[loadHistory]);
+
+  useEffect( () => {
+    const localStorageFlag = loadHistory?.updateStorage;
+    if(!parsedHistory || loadedFromLocalStorage) return;
+    if (isHistoryData(parsedHistory)){
+      console.log("HISTORY: SAVE IN LOCAL")
+      const saveData = async()=>{
+        await StorageManager.setHistoryDataInLocalStorage(parsedHistory, localStorageFlag);
+      }
+      saveData();
+    }
+  },[parsedHistory]);
   
   return (
-    isTomorrowError(loadForecast)
+    loadHistory && isTomorrowError(loadHistory)
     ?
       <ErrorView/>
     :
-
     <>
-
       <motion.div
         initial={{ scale: 0.8 , height: 0, opacity: 0}}
         animate={{ scale: 1 , height: "min-content", opacity:1}}

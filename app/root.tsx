@@ -32,6 +32,8 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+const isClient = typeof window !== 'undefined';
+
 
 export function ErrorBoundary() {
   const error = useRouteError();

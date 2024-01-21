@@ -1,5 +1,5 @@
 import { type LoaderFunctionArgs, type MetaFunction, redirect, ActionFunctionArgs} from "@remix-run/node";
-import { WeatherLocation, isWeatherLocation } from "~/models/WeatherLocation";
+import { SessionLocation, areLocationsEqual, isWeatherLocation } from "~/models/tomorrow/WeatherLocation";
 import { locationService } from "~/services/userLocationAPIService";
 import { commitSession, getSession } from "~/session";
 
@@ -12,6 +12,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import LocationSelector from "~/components/widgets/dashboard/location/locationSelector";
 import { ICity } from "country-state-city";
+import { allForecastsCookie } from "~/cookies.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -29,24 +30,27 @@ export async function action({
 
   if(rawLocation.latitude == "0" || rawLocation.longitude == "0"){
     return {}
-  }
-  
-  const locationToPush: WeatherLocation = {
-    "lat": parseFloat(String(rawLocation.latitude)),
-    "lon": parseFloat(String(rawLocation.latitude)),
+  }  
+
+  const locationToPush: SessionLocation = {
+    "lat": parseFloat(parseFloat(rawLocation.latitude!).toFixed(4)),
+    "lon": parseFloat(parseFloat(rawLocation.longitude!).toFixed(4)),
     "name": String(rawLocation.name +", " +rawLocation.stateCode + ", "+ rawLocation.countryCode),
     "type": "administrative"
   }
 
   if(session.has("location")){
-    const allLocations: WeatherLocation[] = session.get("location")!;
+    const allLocations: SessionLocation[] = session.get("location")!;
 
-    allLocations.forEach((loc, index) => {
-      if(locationToPush.name == loc.name){ // if i use lat and long may be different for a rounded location error
-        allLocations.splice(index, 1); // 2nd parameter means remove one item only  
-        return;
+    let index = 0;
+    while (index < allLocations.length) {
+      if (areLocationsEqual(allLocations[index], locationToPush)) {
+        allLocations.splice(index, 1);
+        break;
       }
-    });
+      index++;
+    }
+
     allLocations.push(locationToPush);
     session.set("location", allLocations);
     return redirect('/dashboard/realTime/forecast', { headers: { 'set-cookie': await commitSession(session) } })
@@ -73,20 +77,21 @@ export async function loader({
 
     if(isWeatherLocation(sessionNewLocation)){
       if(session.has("location")){
-        const allLocations: WeatherLocation[] = session.get("location")!;
+        const allLocations: SessionLocation[] = session.get("location")!;
         let flag = false;
-
-        allLocations.forEach(loc => {
-          if(sessionNewLocation.name == loc.name){ // if i use lat and long may be different for a rounded location error
-              flag=true;
-              return;
-            }
+        let index = 0;
+        while(index < allLocations.length){
+          if(sessionNewLocation.name == allLocations[index].name){ // if i use lat and long may be different for a rounded location error
+            flag=true;
+            break;
           }
-        );
+          index++;
+        }
+
         if(!flag){
           allLocations.push(sessionNewLocation);
           session.set("location", allLocations);
-          return redirect('/dashboard/forecast/realTime', { headers: { 'set-cookie': await commitSession(session) } })
+          return redirect('/dashboard/', { headers: { 'set-cookie': await commitSession(session) } })
         }
         return allLocations;
       }
@@ -101,7 +106,7 @@ export async function loader({
 
 export default function DashboardIndex() {
   const data =  useLoaderData<typeof loader>();
-  const location = data as WeatherLocation[];
+  const location = data as SessionLocation[];
   const lastLocation = location[location.length-1] ?? {name: "No location"};
 
   const [selectedModal, setSelectedModal] = useState<Boolean>(false); //default false

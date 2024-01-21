@@ -11,6 +11,10 @@ export class CookieStorageManager {
     public static getForecastWeather =  async (location: SessionLocation, request: Request) => {
         const cookieHeader = request.headers.get("Cookie");
         const storedForecasts = (await allForecastsCookie.parse(cookieHeader)) || {};
+        if(storedForecasts ===null){
+            return false;
+        }
+
         const parsedForecasts = storedForecasts as CookieAllForecastsInLocalStorage;
         let foundForecast : SingleForcastSynchronizedCookie | boolean= parsedForecasts?.forecasts?.length > 0;
         if(foundForecast){
@@ -67,9 +71,10 @@ export class CookieStorageManager {
                 if(areLocationsEqual(location, parsedForecasts.forecasts[i].location)){
                     const savedDate = new Date(parsedForecasts.forecasts[i].time);
                     const now = new Date();
-                    const localTimezoneOffset = now.getTimezoneOffset();
-                    const positiveDiff = Math.abs(now.getTime() - savedDate.getTime() ); 
-                    const diff =  positiveDiff + localTimezoneOffset * 60 * 1000
+                    // const localTimezoneOffset = now.getTimezoneOffset();
+                    const diff = now.getTime() - savedDate.getTime();
+                    // const positiveDiff = Math.abs(now.getTime() - savedDate.getTime() ); 
+                    // const diff =  positiveDiff + localTimezoneOffset * 60 * 1000
                     const diffHours = Math.floor(diff / (1000 * 60 * 60));
             
                     console.log("diffHours: ", diffHours);

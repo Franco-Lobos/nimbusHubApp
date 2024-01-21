@@ -1,12 +1,12 @@
 // app/sessions.ts
 import { createCookieSessionStorage } from '@remix-run/node';
-import {WeatherLocation} from './models/WeatherLocation';
+import {SessionLocation} from './models/tomorrow/WeatherLocation';
 
 
 type SessionData = {
   userId: string;
   userName: string;
-  location: WeatherLocation[];
+  location: SessionLocation[];
   ip:string;
   // Add any other session data you need
 };

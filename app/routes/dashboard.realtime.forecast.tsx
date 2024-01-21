@@ -1,124 +1,125 @@
-import { Link, useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData, useNavigate } from '@remix-run/react';
 import {  type LoaderFunctionArgs,  redirect, json } from '@remix-run/node';
 import { getSession } from '~/session';
 import { Outlet } from 'react-router-dom';
 import { useOutletContext } from "@remix-run/react";
-import {  isTomorrowError } from '~/models/tomorrow/TomorrowError';
+import {  isTomorrowError } from '~/models/errors/TomorrowError';
 import ErrorView from '~/components/widgets/error';
-import { HourlyItem } from '~/models/WeatherHourly';
-import { defaultForecast, defaultLocation } from '~/components/constants/defaults';
+import { HourlyItem } from '~/models/tomorrow/WeatherHourly';
+import { defaultForecast, defaultLocation, defaultSessionLocation } from '~/components/constants/defaults';
 
 import ForecastHourlyCard from '~/components/widgets/dashboard/weatherCards/forecastHourlyCard';
 import ForecastDailyCard from '~/components/widgets/dashboard/weatherCards/forecastDailyCard';
-import { DailyItem } from '~/models/WeatherDaily';
+import { DailyItem } from '~/models/tomorrow/WeatherDaily';
 import { useEffect, useState } from 'react';
 import { getWeatherForecast } from '~/services/nimbusWeatherAPIService';
-import { WeatherLocation, areLocationsEqual } from '~/models/WeatherLocation';
+import { SessionLocation, areLocationsEqual } from '~/models/tomorrow/WeatherLocation';
 
 import { cardStyleClass } from '~/components/constants/styles';
 import { motion } from 'framer-motion';
 import { FaArrowCircleUp } from 'react-icons/fa/index.js';
-import { ForecastWeatherData } from '~/models/Forecast';
-import { CookieAllForecastsInLocalStorage, SingleForcastSynchronizedCookie, allForecastsCookie } from "~/cookies.server";
-
-const cookieStorageManager = async (location:WeatherLocation, request: Request) => {
-  const cookieHeader = request.headers.get("Cookie");
-  const storedForecasts = (await allForecastsCookie.parse(cookieHeader)) || {};
-  const parsedForecasts = storedForecasts as CookieAllForecastsInLocalStorage;
-  let foundForecast : SingleForcastSynchronizedCookie | boolean= parsedForecasts?.forecasts?.length > 0;
-
-  if(foundForecast){
-    parsedForecasts.forecasts.forEach((forecast, index) => {
-      if(areLocationsEqual(location, forecast.location)){
-        const savedDate = new Date(forecast.time);
-        const now = new Date();
-        const diff = now.getTime() - savedDate.getTime();
-        const diffHours = Math.floor(diff / (1000 * 60 * 60));
-
-        console.log("diffHours: ", diffHours);
-        if(diffHours > 1){
-          parsedForecasts.forecasts.splice(index, 1); // 2nd parameter means remove one item only  
-          foundForecast = false;
-        }
-        else{
-          console.log("Cookies were updated, API call avoided: ", parsedForecasts)
-          foundForecast = forecast;
-        }  
-        return;
-      }
-    })
-    foundForecast = false;
-  }
-
-  if(foundForecast){
-    return foundForecast;
-  }
-
-  //else
-  console.log("Data not found in cookies. Making a new request to the API.");
-  return  await getWeatherForecast(location.name, request);
-  // Save the data in cookies
-  // if(parsedForecasts?.forecasts){
-  //   parsedForecasts.forecasts.push(loadForecast);
-  // }else{
-  //   parsedForecasts.forecasts = [loadForecast];
-  // }
-  // const serializedCookie = await allForecastsCookie.serialize(parsedForecasts);
-  // // Use the newly fetched data
-  // console.log("Data fetched from API:", loadForecast);
-  // //RELOAD ROUT  WITH THE NEW HEADER (SET-COOKIES:serializedCookie )
-
-  // const response = await fetch(request.url, {
-  //   method: 'GET',
-  //   headers: {
-  //     'Set-Cookie': serializedCookie,
-  //     'Content-Type': 'application/json',
-  //   },
-  // });
-
-  // console.log(response)
-
-  // return response.json();
-
-  
-};
+import { ForecastWeatherData, isForecastWeatherData } from '~/models/tomorrow/Forecast';
+import { SingleForcastSynchronizedCookie } from "../models/cookies/cookies"
+import { StorageManager } from '~/services/LocalStorageManager';
+import { CookieStorageManager } from '~/services/CookieStorageManager';
+import { isSingleForcastSynchronizedCookie } from '../models/cookies/cookies';
+import { allForecastsCookie } from '~/cookies.server';
+import { CookieError } from '~/models/errors/CookieError';
 
 
 export async function loader({
   request,
 }: LoaderFunctionArgs) {
+  const cookieHeader = request.headers.get("Cookie");
 
-  const session = await getSession(request.headers.get("Cookie"));
+  const session = await getSession(cookieHeader);
   if (!session.has("userId")) {
     return redirect("/acces/login");
   }
   
-  let location: WeatherLocation = defaultLocation;
+  let location: SessionLocation = defaultSessionLocation;
+
   if(session.has("location")){
     const sessionLocations = session.get("location")!;
-    location = sessionLocations[sessionLocations.length-1 ];
+    location = sessionLocations[sessionLocations.length-1];
   }
 
-  // const loadForecast : any = await cookieStorageManager(location, request);
-  const loadForecast = defaultForecast;
-  return loadForecast;
+  let updateStorage = false;
+  let loadForecast : ForecastWeatherData | SingleForcastSynchronizedCookie | boolean = await CookieStorageManager.getForecastWeather(location, request);
+  console.info("LOAD FORECAST" ,loadForecast)
+  if(!loadForecast){
+    console.info("MAKING API CALL")
+    loadForecast  = defaultForecast!;
+    updateStorage = true;
+    // const coords : string = `${location.lat},${location.lon}`;
+    // loadForecast = await getWeatherForecast(coords, request)
+
+    //SYNC COOKIES WITH LOCAL STORAGE
+    
+    
+  }
+  else{
+    console.log("API CALL AVOIDED")
+  }
+  return {forecast: loadForecast, updateStorage: updateStorage};
 };
 
 
 export default function DashboardForecast() {
-    const foreceastData = useLoaderData<typeof loader>();
-    console.log("foreceastData: ", foreceastData)
-    const parsedForecastData : ForecastWeatherData = foreceastData as ForecastWeatherData;
-    const hourlyItems: HourlyItem[] = parsedForecastData?.timelines?.hourly as HourlyItem[];
-    const dailyItems: DailyItem[] = parsedForecastData?.timelines?.daily as DailyItem[];
+    const navigate = useNavigate();
+    const [forecastData, setForecastData] = useState<any |ForecastWeatherData | undefined>( useLoaderData<typeof loader>());
+    // let foreceastData : any = useLoaderData<typeof loader>();
+    const [parsedForecastData, setParsedForecastData] = useState<ForecastWeatherData | null>(null);
+    const [hourlyItems, setHourlyItems] = useState<HourlyItem[]>([]);
+    const [dailyItems, setDailyItems] = useState<DailyItem[]>([]);
 
+    const [loadedFromLocalStorage, setLoadedFromLocalStorage] = useState<boolean>(false);
     const [minTempWeek, setMinTempWeek] = useState<number>(0); 
     const [maxTempWeek, setMaxTempWeek] = useState<number>(0); 
 
     const [via, setVia] = useState<number>(10);
 
     useEffect(() => {
-      if(!dailyItems) return;
+      const readedData = forecastData?.forecast;
+      if(!readedData){
+        navigate("/dashboard");
+        return;
+      };
+
+      if (isSingleForcastSynchronizedCookie(readedData) && !loadedFromLocalStorage){
+        console.log("LOAD FROM LOCAL")
+        const setData = async()=>{
+          setForecastData( await StorageManager.getForecastWeatherDataFromLocalStorage(readedData.location));  
+          setLoadedFromLocalStorage(true);
+        }
+        setData();
+        return;
+      }
+
+      if(isForecastWeatherData(readedData)){
+        setParsedForecastData(readedData);
+        setHourlyItems(readedData.timelines.hourly);
+        setDailyItems(readedData.timelines.daily);
+      }
+
+    },[forecastData]);
+
+    useEffect( () => {
+      const localStorageFlag = forecastData?.updateStorage;
+
+      if(!parsedForecastData || loadedFromLocalStorage) return;
+      if (isForecastWeatherData(parsedForecastData)){
+        console.log("SAVE IN LOCAL")
+        const saveData = async()=>{
+          await StorageManager.setForecastWeatherDataInLocalStorage(parsedForecastData, localStorageFlag);
+        }
+        saveData();
+      }
+    },[parsedForecastData]);
+
+
+    useEffect(() => {
+      if(!dailyItems || dailyItems.length == 0) return;
       let smaller = Math.round(dailyItems[0].values.temperatureMin);
       let bigger  = Math.round(dailyItems[0].values.temperatureMax);
       dailyItems.slice(1,7).forEach((dailyItem, indx)=>{
@@ -134,7 +135,7 @@ export default function DashboardForecast() {
 
     // Example: Displaying hourly data
     return (
-        isTomorrowError(foreceastData)
+        forecastData && isTomorrowError(forecastData)
         ?
           <ErrorView/>
         :

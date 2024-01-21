@@ -1,11 +1,11 @@
 import { Link, Outlet, useLoaderData } from '@remix-run/react';
 import {  type LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { getSession } from '~/session';
-import { WeatherLocation } from '~/models/WeatherLocation';
-import { RealTimeData } from '~/models/RealTime';
-import { isTomorrowError } from '~/models/tomorrow/TomorrowError';
+import { SessionLocation } from '~/models/tomorrow/WeatherLocation';
+import { RealTimeData } from '~/models/tomorrow/RealTime';
+import { isTomorrowError } from '~/models/errors/TomorrowError';
 import ErrorView from '~/components/widgets/error';
-import { defaultLocation, defaultRealTime } from '~/components/constants/defaults';
+import { defaultLocation, defaultRealTime, defaultSessionLocation } from '~/components/constants/defaults';
 import { getRealTimeWeather } from '~/services/nimbusWeatherAPIService';
 import { mainBg } from '~/components/constants/styles';
 import { FaMap } from 'react-icons/fa/index.js';
@@ -30,7 +30,7 @@ export async function loader({
         return redirect("/acces/login");
       }
 
-      let location: WeatherLocation = defaultLocation;
+      let location: SessionLocation = defaultSessionLocation;
       if(session.has("location")){
         const sessionLocations = session.get("location")!;
         location = sessionLocations[sessionLocations.length-1 ];
@@ -46,7 +46,8 @@ export async function loader({
 const ReaLtimeLocation = () => {
   const loadForecast: any = useLoaderData<typeof loader>();
   const forecast: RealTimeData = loadForecast as RealTimeData;
-  const cityName: string = splitedName(forecast?.location?.name);
+  // const cityName: string = splitedName(forecast?.location?.name);
+  const cityName: string = "PLACEHOLDER";
   const currentWiwather: number = forecast?.data?.values?.temperature;
 
   return (

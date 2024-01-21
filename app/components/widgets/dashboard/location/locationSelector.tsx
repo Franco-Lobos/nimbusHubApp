@@ -5,7 +5,7 @@ import { Country, State, City }  from 'country-state-city';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { selectorStyleClass } from '~/components/constants/styles';
-import { WeatherLocation } from '~/models/WeatherLocation';
+import { SessionLocation } from '~/models/tomorrow/WeatherLocation';
 import { getSession } from '~/session';
 
 

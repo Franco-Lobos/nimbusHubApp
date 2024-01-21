@@ -1,4 +1,4 @@
-import { DailyItem } from "~/models/WeatherDaily";
+import { DailyItem } from "~/models/tomorrow/WeatherDaily";
 import { SunIcon, CloudIcon,CloudSunIcon,  SnowIcon, RainIcon  } from "~/components/images/status/icons";
 import { useEffect, useState } from "react";
 import clsx from 'clsx';

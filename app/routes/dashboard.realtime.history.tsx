@@ -1,13 +1,13 @@
 import { Link, useLoaderData } from '@remix-run/react';
 import {  type LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { getSession } from '~/session';
-import { WeatherLocation } from '~/models/WeatherLocation';
-import { RealTimeData } from '~/models/RealTime';
-import { isTomorrowError } from '~/models/tomorrow/TomorrowError';
+import { SessionLocation } from '~/models/tomorrow/WeatherLocation';
+import { RealTimeData } from '~/models/tomorrow/RealTime';
+import { isTomorrowError } from '~/models/errors/TomorrowError';
 import ErrorView from '~/components/widgets/error';
-import { defaultForecast, defaultHistory, defaultLocation, defaultRealTime } from '~/components/constants/defaults';
+import { defaultForecast, defaultHistory, defaultLocation, defaultRealTime, defaultSessionLocation } from '~/components/constants/defaults';
 import { getRealTimeWeather } from '~/services/nimbusWeatherAPIService';
-import { DailyItem } from '~/models/WeatherDaily';
+import { DailyItem } from '~/models/tomorrow/WeatherDaily';
 import ForecastDailyCard from '~/components/widgets/dashboard/weatherCards/forecastDailyCard';
 import { useState } from 'react';
 
@@ -15,7 +15,7 @@ import { cardStyleClass } from '~/components/constants/styles';
 import { motion } from 'framer-motion';
 
 import { FaArrowCircleDown } from 'react-icons/fa/index.js';
-import { HistoryData } from '~/models/History';
+import { HistoryData } from '~/models/tomorrow/History';
 
 const splitedName = (name: string) => {
   let nameArray; 
@@ -38,7 +38,7 @@ export async function loader({
     return redirect("/acces/login");
   }
   
-  let location: WeatherLocation = defaultLocation;
+  let location: SessionLocation = defaultSessionLocation;
   if(session.has("location")){
     const sessionLocations = session.get("location")!;
     location = sessionLocations[sessionLocations.length-1 ];

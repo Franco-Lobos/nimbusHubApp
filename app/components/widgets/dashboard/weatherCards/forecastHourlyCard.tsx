@@ -1,4 +1,4 @@
-import { HourlyItem } from "~/models/WeatherHourly";
+import { HourlyItem } from "~/models/tomorrow/WeatherHourly";
 import { SunIcon, CloudIcon,CloudSunIcon,  SnowIcon, RainIcon  } from "~/components/images/status/icons";
 import { addZeroToNumber } from "~/library/stringManagement";
 

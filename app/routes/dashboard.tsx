@@ -1,7 +1,8 @@
-import { type LoaderFunctionArgs, type MetaFunction, redirect} from "@remix-run/node";
+import { type LoaderFunctionArgs, type MetaFunction, redirect, TypedResponse} from "@remix-run/node";
 import { Outlet } from 'react-router-dom';
 import Navigator from "~/components/widgets/dashboard/navigator";
-import { WeatherLocation, isWeatherLocation } from "~/models/WeatherLocation";
+import { allForecastsCookie } from "~/cookies.server";
+import { TomorrowLocation, SessionLocation, isWeatherLocation } from "~/models/tomorrow/WeatherLocation";
 import { locationService } from "~/services/userLocationAPIService";
 import { commitSession, getSession } from "~/session";
 
@@ -23,24 +24,32 @@ export async function loader({
 
   if(session.has("ip")){
     const sessionIp: string = session.get("ip")!;
-    const sessionNewLocation: any = await locationService(sessionIp);
+    const sessionNewLocation: TomorrowLocation  = await locationService(sessionIp)!;
+    console.log("DASHBOARD: ", sessionNewLocation)
 
     if(isWeatherLocation(sessionNewLocation)){
       if(session.has("location")){
-        const allLocations: WeatherLocation[] = session.get("location")!;
+        const allLocations: SessionLocation[] = session.get("location")!;
         let flag = false;
-        allLocations.forEach(loc => {
-          if(sessionNewLocation.name == loc.name){ // if i use lat and long may be different for a rounded location error
-              flag=true;
-              return;
-            }
+
+        let index = 0;
+        while(index < allLocations.length){
+          if(sessionNewLocation.name == allLocations[index].name){ // if i use lat and long may be different for a rounded location error
+            flag=true;
+            break;
           }
-        );
+          index++;
+        }
+
         if(!flag){
           allLocations.push(sessionNewLocation);
           session.set("location", allLocations);
           return redirect('/dashboard', { headers: { 'set-cookie': await commitSession(session) } })
         }
+      }
+      else{
+        session.set("location", [sessionNewLocation]);
+        return redirect('/dashboard', { headers: { 'set-cookie': await commitSession(session) } })
       }
     }
     else{

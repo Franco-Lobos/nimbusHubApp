@@ -16,24 +16,13 @@ import { StorageManager } from '~/services/LocalStorageManager';
 import { useEffect, useState } from 'react';
 
 
-const splitedName = (name: string) => {
-  let nameArray; 
-  try{
-    nameArray = name.split(",");
-  }
-  catch(error){
-    return name
-  }
-  return nameArray[0]
-}
-
 export async function loader({
     request,
   }: LoaderFunctionArgs) {
       const session = await getSession(request.headers.get("Cookie"));
-      if (!session.has("userId")) {
-        return redirect("/acces/login");
-      }
+      // if (!session.has("userId")) {
+      //   return redirect("/acces/login");
+      // }
 
       let location: SessionLocation = defaultSessionLocation;
       if(session.has("location")){
@@ -55,7 +44,6 @@ export async function loader({
       else{
         console.log("REALTIME: API CALL AVOIDED")
       }
-      console.log("REALTIME: ", loadRealTime)
       return {realTime: loadRealTime, updateStorage: updateStorage};
     
   };
@@ -72,7 +60,6 @@ const ReaLtimeLocation = () => {
   const cityName: string = "PLACEHOLDER";
 
   useEffect(() => {
-
     const readedData = realTimeForecast?.realTime;
     if(!readedData){
       navigate("/dashboard");

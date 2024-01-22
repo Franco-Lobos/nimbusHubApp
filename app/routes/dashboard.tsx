@@ -1,5 +1,6 @@
 import { type LoaderFunctionArgs, type MetaFunction, redirect, TypedResponse} from "@remix-run/node";
 import { Outlet } from 'react-router-dom';
+import LogOutButton from "~/components/widgets/dashboard/logout";
 import Navigator from "~/components/widgets/dashboard/navigator";
 import { allForecastsCookie } from "~/cookies.server";
 import { TomorrowLocation, SessionLocation, isSessionLocation } from "~/models/tomorrow/WeatherLocation";
@@ -64,6 +65,7 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col h-screen">
         {/* Rest of your content */}
+        <LogOutButton/>
         <Outlet/>
       </div>
   );

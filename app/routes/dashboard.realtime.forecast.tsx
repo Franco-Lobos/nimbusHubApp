@@ -51,7 +51,7 @@ export async function loader({
     loadForecast  = defaultForecast!;
     //SYNC COOKIES WITH LOCAL STORAGE
     updateStorage = true;
-    // const coords : string = `${location.lat},${location.lon}`;
+    const coords : string = `${location.lat},${location.lon}`;
     // loadForecast = await getWeatherForecast(coords, request)
   }
   else{

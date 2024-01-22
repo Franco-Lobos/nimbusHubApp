@@ -6,7 +6,7 @@ import { RealTimeData } from '~/models/tomorrow/RealTime';
 import { isTomorrowError } from '~/models/errors/TomorrowError';
 import ErrorView from '~/components/widgets/error';
 import { defaultForecast, defaultHistory, defaultLocation, defaultRealTime, defaultSessionLocation } from '~/components/constants/defaults';
-import { getRealTimeWeather } from '~/services/nimbusWeatherAPIService';
+import { getRealTimeWeather, getWeatherRecentHistory } from '~/services/nimbusWeatherAPIService';
 import { DailyItem } from '~/models/tomorrow/WeatherDaily';
 import ForecastDailyCard from '~/components/widgets/dashboard/weatherCards/forecastDailyCard';
 import { useEffect, useState } from 'react';
@@ -43,7 +43,7 @@ export async function loader({
   if(!loadHistory){
     console.info("HISTORY: MAKING API CALL")
     //SYNC COOKIES WITH LOCAL STORAGE
-    updateStorage = true;
+    // updateStorage = true;
     const coords : string = `${location.lat},${location.lon}`;
     // loadHistory = await getWeatherRecentHistory(coords, request);
     loadHistory  = defaultHistory!;
@@ -52,8 +52,7 @@ export async function loader({
     console.log("HISTORY: API CALL AVOIDED")
   }
   return {history: loadHistory, updateStorage: updateStorage};
-  // const loadForecast : any = await getWeatherRecentHistory(coords, request);
-  // const loadForecast = defaultHistory;
+
   // return loadForecast;
 };
 

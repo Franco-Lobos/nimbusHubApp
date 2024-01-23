@@ -5,7 +5,7 @@ import { Country, State, City }  from 'country-state-city';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { selectorStyleClass } from '~/components/constants/styles';
-import { WeatherLocation } from '~/models/WeatherLocation';
+import { SessionLocation } from '~/models/tomorrow/WeatherLocation';
 import { getSession } from '~/session';
 
 
@@ -51,13 +51,6 @@ const LocationSelector = () => {
         if(selectedCountry && selectedRegion){
             const cities = City.getCitiesOfState(selectedCountry, selectedRegion);
             setTransformedCities(cities);
-            // setTransformedCities(
-            //     cities.map((city) => ({
-            //         value: city.name,
-            //         label: city.name,
-            //     })
-            //     )
-            // )
         }
     }, [selectedRegion]);
 
@@ -128,9 +121,9 @@ const LocationSelector = () => {
                     animate={{ height: "min-content", opacity: 1}}
                     exit={{ height: 0 , opacity: 0}}
                 >
-                <Form method="post" className='flex justify-center'>
+                <Form method="post" className='flex justify-center'> {/*w-full*/}
                     <input type="hidden" name="location" value={JSON.stringify(location)} />
-                    <button type="submit">
+                    <button type="submit" className={`w-full`}>
                         <p className={`
                         w-full
                         text-blue dark:ttext-themeWhite font-semibold
@@ -139,7 +132,7 @@ const LocationSelector = () => {
                         `}>Observe {location.name}</p>
                         <p className={`
                             text-right text-sm text-blue/60 dark:text-themeWhite/80 italic pt-2
-                        `}>{"location.stateCode"}, {"location.countryCode"}</p>
+                        `}>{location.stateCode}, {location.countryCode}</p>
                     </button>
                 </Form>
                 </motion.div>

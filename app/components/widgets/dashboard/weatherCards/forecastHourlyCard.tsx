@@ -1,7 +1,7 @@
-import { HourlyItem } from "~/models/WeatherHourly";
+import { HourlyItem } from "~/models/tomorrow/WeatherHourly";
 import { SunIcon, CloudIcon,CloudSunIcon,  SnowIcon, RainIcon  } from "~/components/images/status/icons";
-import { addZeroToNumber } from "~/library/stringManagement";
-import clsx from "clsx";
+import { addZeroToNumber } from "~/library/stringManagement"; // "~/utils/stringManagement";
+import clsx from "clsx"; 
 
 const ForecastHourlyCard : React.FC<{ hourlyItem: HourlyItem, index:number }> = ({ hourlyItem, index }) => {
     const code = hourlyItem.values.weatherCode;

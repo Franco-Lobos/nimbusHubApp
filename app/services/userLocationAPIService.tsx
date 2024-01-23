@@ -1,12 +1,13 @@
 import { SessionData, json } from "@remix-run/node";
 import { config as dotenvConfig } from 'dotenv';
-import { WeatherLocation } from "~/models/WeatherLocation";
+import { defaultLocation, defaultSessionLocation } from "~/components/constants/defaults";
+import { SessionLocation } from "~/models/tomorrow/WeatherLocation";
 
 dotenvConfig();
 
 export const locationService = async (ip: string) => {
     const tomorrowUrl = `${process.env.LOCATION_URL}/${ip}/json/`; 
-    let returnter: WeatherLocation;
+    let returner: SessionLocation;
 
     const data = await fetch(tomorrowUrl, {
         method: 'POST', 
@@ -18,7 +19,7 @@ export const locationService = async (ip: string) => {
     const dataJson = await data.json();
 
     if(data.status !== 200){
-        return json({error: "error"});
+        return defaultSessionLocation;
     }
 
     let name: string = dataJson.city;
@@ -29,12 +30,12 @@ export const locationService = async (ip: string) => {
         name += ", " + dataJson.country_name;
     }
 
-    returnter = {
-        lat: dataJson.latitude,
-        lon: dataJson.longitude,
+    returner = {
+        lat: parseFloat(dataJson.latitude.toFixed(4)),
+        lon: parseFloat(dataJson.longitude.toFixed(4)),
         name: name,
         type: "administrative"
     }
 
-    return returnter;
+    return returner;
 }

@@ -16,3 +16,23 @@ export const mainBg =
   focus:text-blue dark:focus:text-themeWhite/80
   my-8 pr-12
   `
+
+  export const buttonClass= `
+  bg-iceLightblue/0 p-1
+  bg-gradient-to-br from-iceLightblue/20 via-iceLightblue/60 via-${10}% to-iceLightblue/0
+  dark:bg-gradient-to-br dark:from-iceLightblue/10 dark:via-iceLightblue/20 dark:via-${10}% dark:to-iceLightblue/0
+  w-fit h-fit rounded-full
+  `
+  export const buttonClass2= `
+  w-full
+  p-4 flex flex-row items-center justify-center rounded-md py-2 px-4 font-bold
+  bg-blue/70 text-themeWhite 
+  dark:bg-iceLightblue/80 dark:text-blue 
+  `
+
+  export const buttonClass3= `
+    w-full
+    p-4 flex flex-row items-center justify-center rounded-md py-2 px-4 font-bold
+    bg-themeWhite/80  text-blue/80 
+    dark:bg-blue/50  dark:text-iceLightblue/80 
+  `

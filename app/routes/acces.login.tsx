@@ -13,8 +13,9 @@ import { loginService } from '~/services/accesAPIService';
 import Swal from 'sweetalert2'
 import tailwindConfig from 'tailwind.config';
 import { commitSession, getSession } from '~/session';
-import { WeatherLocation } from '~/models/WeatherLocation';
-
+import { SessionLocation } from '~/models/tomorrow/WeatherLocation';
+import { defaultLocation } from '~/components/constants/defaults';
+import { validateEmail, validatePassword } from '~/utils/inputValidations';
 
 
 const colors = tailwindConfig.theme.extend.colors;
@@ -23,7 +24,6 @@ export async function action({
   request,
 }: ActionFunctionArgs) {
 
-
   if (request.method === 'POST') {
     const formData = await request.formData();
     const email = String(formData.get("email"));
@@ -31,13 +31,14 @@ export async function action({
 
     const errors: FormErrors = {};
 
-    if (!email.includes("@")) {
-      errors.email = "Invalid email address";
+    const emailValidation:string | undefined = validateEmail(email)
+    
+    if (emailValidation) {
+      errors.email = emailValidation!;
     }
-
-    if (password.length < 6) {
-      errors.password =
-        "Password should be at least 6 characters";
+    const passWordValidation = validatePassword(password)
+    if (passWordValidation) {
+      errors.password = passWordValidation!;
     }
 
     if (Object.keys(errors).length > 0) {
@@ -49,31 +50,14 @@ export async function action({
     if (response.status === 202) {
       ("LOADING...")
     } 
-    if (response.status==200) { //response?._id && response?.authentication?.sessionToken
-      const storage =createCookieSessionStorage({
-        cookie:{
-          name: process.env.NIMBUS_HUB_SESSION,
-          expires: new Date(Date.now() + 12 * 60 * 60 * 1000), // also 12 hours
-          httpOnly: true,
-          secure: true,
-        }
-      });
-
-      const defaultLocation: WeatherLocation = {
-        "lat": 40.71272659301758,
-        "lon": -74.00601196289062,
-        "name": "City of New York, New York, United States",
-        "type": "administrative"
-      }
-      const session = await storage.getSession();
+    if (response.status==200) {
+      const session = await getSession(request.headers.get("Cookie"));
       session.set("userId", responseBody.user._id);
       session.set("userName", responseBody.user.userName);
-      session.set("location", [defaultLocation]);
-      session.set("ip", [responseBody.ipAddress == '::ffff:127.0.0.1' ? "46.172.250.35" : responseBody.ipAddress]);
+      session.set("location", [defaultLocation as SessionLocation]);
+      session.set("ip", responseBody.ipAddress == '::ffff:127.0.0.1' ? "46.172.250.35" : responseBody.ipAddress);
 
-      // Commit the session with an expiration time and signing
-      const sessionOptions = { expires: new Date(Date.now() + 12 * 60 * 60 * 1000), signed: true };
-      const commitedSession:string = await commitSession(session, sessionOptions); // await storage.commitSession(session, { expires: new Date(Date.now() + 12 * 60 * 60 * 1000 ) }); // Expires in 12 hour
+      const commitedSession:string = await commitSession(session);
 
       const newHeaders = new Headers();
       newHeaders.append("Set-Cookie", response.headers.get("Set-Cookie")!);

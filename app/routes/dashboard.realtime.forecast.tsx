@@ -1,58 +1,128 @@
-import { Link, useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData, useNavigate } from '@remix-run/react';
 import {  type LoaderFunctionArgs,  redirect, json } from '@remix-run/node';
 import { getSession } from '~/session';
 import { Outlet } from 'react-router-dom';
 import { useOutletContext } from "@remix-run/react";
-import {  isTomorrowError } from '~/models/tomorrow/TomorrowError';
+import {  isTomorrowError } from '~/models/errors/TomorrowError';
 import ErrorView from '~/components/widgets/error';
-import { HourlyItem } from '~/models/WeatherHourly';
-import { defaultForecast, defaultLocation } from '~/components/constants/defaults';
+import { HourlyItem } from '~/models/tomorrow/WeatherHourly';
+import { defaultForecast, defaultLocation, defaultSessionLocation } from '~/components/constants/defaults';
 
 import ForecastHourlyCard from '~/components/widgets/dashboard/weatherCards/forecastHourlyCard';
 import ForecastDailyCard from '~/components/widgets/dashboard/weatherCards/forecastDailyCard';
-import { DailyItem } from '~/models/WeatherDaily';
+import { DailyItem } from '~/models/tomorrow/WeatherDaily';
 import { useEffect, useState } from 'react';
 import { getWeatherForecast } from '~/services/nimbusWeatherAPIService';
-import { WeatherLocation } from '~/models/WeatherLocation';
+import { SessionLocation, areLocationsEqual } from '~/models/tomorrow/WeatherLocation';
 
 import { cardStyleClass } from '~/components/constants/styles';
 import { motion } from 'framer-motion';
 import { FaArrowCircleUp } from 'react-icons/fa/index.js';
+import { ForecastWeatherData, isForecastWeatherData } from '~/models/tomorrow/Forecast';
+import { SingleForcastSynchronizedCookie } from "../models/cookies/forecastCookies"
+import { StorageManager } from '~/services/LocalStorageManager';
+import { CookieStorageManager } from '~/services/CookieStorageManager';
+import { isSingleForcastSynchronizedCookie } from '../models/cookies/forecastCookies';
+import { allForecastsCookie } from '~/cookies.server';
+import { sessionVerificator } from '~/utils/SessionVerificator';
+
 
 export async function loader({
   request,
 }: LoaderFunctionArgs) {
-    // const cityName: string = useOutletContext();
+  const cookies = request.headers.get("Cookie")
+  const session = await getSession(cookies);
 
-  const session = await getSession(request.headers.get("Cookie"));
-  if (!session.has("userId")) {
-    return redirect("/acces/login");
+  //VERIFICATION
+  const verificationResponse = await sessionVerificator(session, cookies!);
+  if(verificationResponse){
+    return verificationResponse;
   }
-  
-  let location: WeatherLocation = defaultLocation;
+  //VERIFICATION END
+
+  let location: SessionLocation = defaultSessionLocation;
+
   if(session.has("location")){
     const sessionLocations = session.get("location")!;
-    location = sessionLocations[sessionLocations.length-1 ];
+    location = sessionLocations[sessionLocations.length-1];
   }
 
-  // const loadForecast : any = await getWeatherForecast(location.name, request);
-  const loadForecast = defaultForecast;
-  return loadForecast;
+  let updateStorage = false;
+  let loadForecast : ForecastWeatherData | SingleForcastSynchronizedCookie | boolean = await CookieStorageManager.getForecastWeather(location, request);
+  if(!loadForecast){
+    console.info("FORECAST: MAKING API CALL")
+    loadForecast  = defaultForecast!;
+    //SYNC COOKIES WITH LOCAL STORAGE
+    updateStorage = true;
+    const coords : string = `${location.lat},${location.lon}`;
+    // loadForecast = await getWeatherForecast(coords, request)
+  }
+  else{
+    console.log("FORECAST: API CALL AVOIDED")
+  }
+  return {forecast: loadForecast, updateStorage: updateStorage};
 };
 
 
 export default function DashboardForecast() {
-    const foreceastData = useLoaderData<typeof loader>();
-    const cityName: string = useOutletContext();
-    const hourlyItems: HourlyItem[] = foreceastData.timelines.hourly as HourlyItem[];
-    const dailyItems: DailyItem[] = foreceastData.timelines.daily as DailyItem[];
+    const navigate = useNavigate();
+    const [forecastData, setForecastData] = useState<any |ForecastWeatherData | undefined>( useLoaderData<typeof loader>());
+    // let foreceastData : any = useLoaderData<typeof loader>();
+    const [parsedForecastData, setParsedForecastData] = useState<ForecastWeatherData | null>(null);
+    const [hourlyItems, setHourlyItems] = useState<HourlyItem[]>([]);
+    const [dailyItems, setDailyItems] = useState<DailyItem[]>([]);
 
+    const [loadedFromLocalStorage, setLoadedFromLocalStorage] = useState<boolean>(false);
     const [minTempWeek, setMinTempWeek] = useState<number>(0); 
     const [maxTempWeek, setMaxTempWeek] = useState<number>(0); 
 
     const [via, setVia] = useState<number>(10);
 
     useEffect(() => {
+      const readedData = forecastData?.forecast;
+      if(!readedData){
+        navigate("/dashboard");
+        return;
+      };
+
+      if (isSingleForcastSynchronizedCookie(readedData) && !loadedFromLocalStorage){
+        console.log("FORECAST: LOAD FROM LOCAL")
+        const setData = async()=>{
+
+          setForecastData(
+            {...forecastData,
+              forecast: await StorageManager.getForecastWeatherDataFromLocalStorage(readedData.location),
+            })  
+          setLoadedFromLocalStorage(true);
+        }
+        setData();
+        return;
+      }
+
+      if(isForecastWeatherData(readedData)){
+        setParsedForecastData(readedData);
+        setHourlyItems(readedData.timelines.hourly);
+        setDailyItems(readedData.timelines.daily);
+        return;
+      }
+    },[forecastData]);
+
+    useEffect( () => {
+      const localStorageFlag = forecastData?.updateStorage;
+
+      if(!parsedForecastData || loadedFromLocalStorage) return;
+      if (isForecastWeatherData(parsedForecastData)){
+        console.log("FORECAST: SAVE IN LOCAL")
+        const saveData = async()=>{
+          await StorageManager.setForecastWeatherDataInLocalStorage(parsedForecastData, localStorageFlag);
+        }
+        saveData();
+      }
+    },[parsedForecastData]);
+
+
+    useEffect(() => {
+      if(!dailyItems || dailyItems.length == 0) return;
       let smaller = Math.round(dailyItems[0].values.temperatureMin);
       let bigger  = Math.round(dailyItems[0].values.temperatureMax);
       dailyItems.slice(1,7).forEach((dailyItem, indx)=>{
@@ -68,7 +138,7 @@ export default function DashboardForecast() {
 
     // Example: Displaying hourly data
     return (
-        isTomorrowError(foreceastData)
+        forecastData && isTomorrowError(forecastData)
         ?
           <ErrorView/>
         :
@@ -95,9 +165,12 @@ export default function DashboardForecast() {
                 dark:text-iceBlue/80 dark:border-iceBlue/40">Next hours forecast</h3>
                 <ul className='flex flex-row overflow-scroll align-center justify-start'>
                     {
-                    hourlyItems.slice(0,24).map((hourlyItem, indx)=> 
-                      <ForecastHourlyCard hourlyItem={hourlyItem} index={indx}/>
-                    )
+                    hourlyItems
+                      ?
+                      hourlyItems.slice(0,24).map((hourlyItem, indx)=> 
+                      <ForecastHourlyCard key={hourlyItem.time} hourlyItem={hourlyItem}  indx={indx}/>
+                      )
+                      :""
                     }
                 </ul>
             </div>
@@ -126,9 +199,11 @@ export default function DashboardForecast() {
             ></motion.ul>
             <ul className='flex flex-col align-center justify-start lg:flex-row overflow-x-scroll'>
                   {
+                  dailyItems?
                   dailyItems.slice(0,7).map((dailyItem, indx)=> 
-                    <ForecastDailyCard dailyItem={dailyItem} minTempWeek={minTempWeek} maxTempWeek={maxTempWeek} indx={indx}/>
+                    <ForecastDailyCard key={dailyItem.time} dailyItem={dailyItem} minTempWeek={minTempWeek} maxTempWeek={maxTempWeek} indx={indx}/>
                   )
+                  : ""
                   }
             </ul>
           </div>

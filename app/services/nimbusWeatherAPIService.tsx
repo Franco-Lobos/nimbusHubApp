@@ -1,10 +1,10 @@
 import { json } from "@remix-run/node";
-import { convertToURLfriendly } from "~/library/stringManagement";
+import { convertToURLfriendly } from "~/utils/stringManagement";
 import { config as dotenvConfig } from 'dotenv';
 dotenvConfig();
 
 export const getWeatherForecast = async (location: string, request: Request) => {
-    location = convertToURLfriendly(location);
+    console.log("LOCATION", location)
     const tomorrowUrl = `${process.env.WHEATER_URL}/forecast/${location}`; // TODO SAVE IN CONSTANTS
 
     const data = await fetch(tomorrowUrl, {
@@ -24,9 +24,8 @@ export const getWeatherForecast = async (location: string, request: Request) => 
     return data.json()
 }
 
-
 export const getRealTimeWeather = async (location: string, request: Request) => {
-    location = convertToURLfriendly(location);
+    console.log("LOCATION", location)
     const tomorrowUrl = `${process.env.WHEATER_URL}/realtime/${location}`; // TODO SAVE IN CONSTANTS
 
     const data = await fetch(tomorrowUrl, {
@@ -47,8 +46,8 @@ export const getRealTimeWeather = async (location: string, request: Request) => 
 }
 
 export const getWeatherRecentHistory = async (location: string, request: Request) => {
-    location = convertToURLfriendly(location);
-    const tomorrowUrl = `${process.env.WHEATER_URL}/history/recent/${location}`; // TODO SAVE IN CONSTANTS
+  console.log("LOCATION", location)  
+  const tomorrowUrl = `${process.env.WHEATER_URL}/history/${location}`; // TODO SAVE IN CONSTANTS
 
     const data = await fetch(tomorrowUrl, {
       method: 'GET', 
@@ -59,5 +58,10 @@ export const getWeatherRecentHistory = async (location: string, request: Request
         'Cookie': request.headers.get("Cookie")!
       }
     })
-    return json(await data.json())
+
+    if (!data.ok) {
+      // Handle forbidden error
+      throw new Error('Forbidden');
+    }
+    return await data.json();
 }

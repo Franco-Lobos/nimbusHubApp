@@ -7,7 +7,7 @@ export default {
   // publicPath: "/build/",
   // serverBuildPath: "build/index.js",
   // routes:{
-  //   '/': require.resolve('./app/home.tsx'),
+  //   '*': require.resolve('./app/routes/dashboard.tsx'),
   // },
 
   browserNodeBuiltinsPolyfill: {

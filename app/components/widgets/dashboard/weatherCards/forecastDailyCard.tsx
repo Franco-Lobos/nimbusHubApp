@@ -1,4 +1,4 @@
-import { DailyItem } from "~/models/WeatherDaily";
+import { DailyItem } from "~/models/tomorrow/WeatherDaily";
 import { SunIcon, CloudIcon,CloudSunIcon,  SnowIcon, RainIcon  } from "~/components/images/status/icons";
 import { useEffect, useState } from "react";
 import clsx from 'clsx';
@@ -50,6 +50,7 @@ const ForecastDailyCard : React.FC<{ dailyItem: DailyItem,  minTempWeek:number, 
           initial={{ height: 0, opacity: 0}}
           animate={{ height: "min-content", opacity: 1}}
           transition ={{duration: 0.05, delay: 0.4 + indx * 0.05 }}
+          key={dailyItem.time}
         >
         <li key={dailyItem.time} className={clsx(
           indx==0 ? `bg-themeWhite/25 dark:bg-iceLightblue/20 rounded-lg border-b border-gold` : "",
@@ -82,7 +83,7 @@ const ForecastDailyCard : React.FC<{ dailyItem: DailyItem,  minTempWeek:number, 
                 </div>
               </div>
             {/* Add more details as needed */}
-        </li>
+        </div>
         </motion.li>
     )
 }

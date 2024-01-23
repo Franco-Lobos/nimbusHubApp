@@ -41,8 +41,8 @@ export const action = async ({
 
 export default function LogoutRoute() {
   return (
-    <div className={`${mainBg} $flex flex-row items-center justify-start`}>
-      <div className={` ${cardStyleClass} w-full mt-36 py-8 px-10`}>
+    <div className={`${mainBg} $flex flex-row items-center justify-start pt-28 px-6 lg:justify-center lg-py:0`}>
+      <div className={` ${cardStyleClass} w-full mt-36 py-8 px-10 lg:w-1/2 lg:m-0`}>
         <p className='
         text-center font-semibold text-themeBlack dark:text-themeWhite text-xl
         border-b-2 pb-2 border-gold dark:border-gold uppercase

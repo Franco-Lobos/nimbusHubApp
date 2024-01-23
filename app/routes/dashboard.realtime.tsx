@@ -45,11 +45,12 @@ export async function loader({
     
       if(!loadRealTime){
         console.info("REALTIME: MAKING API CALL")
+        loadRealTime  = defaultRealTime!;
+      
         //SYNC COOKIES WITH LOCAL STORAGE
         updateStorage = true;
-        const coords : string = `${location.lat},${location.lon}`;
+        // const coords : string = `${location.lat},${location.lon}`;
         // loadRealTime = await getRealTimeWeather(coords, request);
-        loadRealTime  = defaultRealTime!;
       }
       else{
         console.log("REALTIME: API CALL AVOIDED")

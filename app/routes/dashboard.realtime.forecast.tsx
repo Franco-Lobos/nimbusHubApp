@@ -55,7 +55,7 @@ export async function loader({
     //SYNC COOKIES WITH LOCAL STORAGE
     updateStorage = true;
     const coords : string = `${location.lat},${location.lon}`;
-    loadForecast = await getWeatherForecast(coords, request)
+    // loadForecast = await getWeatherForecast(coords, request)
   }
   else{
     console.log("FORECAST: API CALL AVOIDED")

@@ -154,6 +154,7 @@ export class StorageManager {
 
         if( parsedRealTimes?.length > 0){
             let index: number = 0;
+            let locationFound: boolean = false;
             while(index<parsedRealTimes.length){
                 if(areLocationsEqual(data.location, parsedRealTimes[index].location)){
                     const savedDate = new Date(parsedRealTimes[index].data.time);
@@ -172,10 +173,15 @@ export class StorageManager {
                     else{
                         console.log("Local Storage was updated, no changes comited: ", parsedRealTimes)
                     }  
+                    locationFound=true;
                     break;
                 }
                 index++;
             };
+            if(!locationFound){
+                parsedRealTimes.push(data);
+                changesComited = true;
+            }
         }
 
         if(changesComited || forceUpdate){
@@ -267,6 +273,7 @@ export class StorageManager {
 
         if( parsedHistory?.length > 0){
             let index: number = 0;
+            let locationFound: boolean = false;
             while(index<parsedHistory.length){
                 if(areLocationsEqual(data.location, parsedHistory[index].location)){
                     const savedDate = new Date(parsedHistory[index].timelines.hourly[0].time);
@@ -285,10 +292,15 @@ export class StorageManager {
                     else{
                         console.log("Local Storage was updated, no changes comited: ", parsedHistory)
                     }  
+                    locationFound=true;
                     break;
                 }
                 index++;
             };
+            if(!locationFound){
+                parsedHistory.push(data);
+                changesComited = true;
+            }
         }
 
         if(changesComited || forceUpdate){

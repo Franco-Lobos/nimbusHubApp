@@ -122,9 +122,9 @@ export default function DashboardIndex() {
         flex-1 flex flex-col overflow-hidden px-6 items-start
         lg:justify-between lg:items-center lg:w-full lg:px-12
         `}>
-          <div className="flex items-center justify-start py-12 lg:py-6 flex-col w-full ">
-            <LogoIcon numbProps={{className:"fill-blue/60 w-2/3 dark:fill-themeWhite", style:{height: "20vh"} }}></LogoIcon>
-            <div className="text-center">  
+          <div className="flex items-center justify-start py-12 lg:py-6 flex-col w-full lg:pt-12">
+            <LogoIcon numbProps={{className:"fill-blue/60 w-2/3 h-[20vh] lg:w-1/3 lg:h-[15vh] dark:fill-themeWhite"}}></LogoIcon>
+            <div className="text-center lg:pt-12">  
               <h1 className="text-4xl font-bold text-themeBlack dark:text-iceLightblue">Welcome</h1>
               <p className="text-lg text-blue/60  dark:text-nimbusGray font-semibold">Unveil the Atmosphere</p>
             </div>
@@ -132,7 +132,7 @@ export default function DashboardIndex() {
 
           
           <div className={clsx(`
-            w-full lg:w-max flex flex-col`, 
+            w-full lg:w-[50vw] flex flex-col`, 
             selectedModal
               ? "pb-24"
               : "pb-0", 

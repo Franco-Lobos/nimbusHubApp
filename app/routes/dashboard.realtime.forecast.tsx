@@ -124,7 +124,7 @@ export default function DashboardForecast() {
                 hidden: { opacity: 0 },
               }}
             ></motion.ul>
-            <ul className='flex flex-col align-center justify-start lg:flex-row'>
+            <ul className='flex flex-col align-center justify-start lg:flex-row overflow-x-scroll'>
                   {
                   dailyItems.slice(0,7).map((dailyItem, indx)=> 
                     <ForecastDailyCard dailyItem={dailyItem} minTempWeek={minTempWeek} maxTempWeek={maxTempWeek} indx={indx}/>

@@ -15,15 +15,16 @@ import { StorageManager } from '~/services/LocalStorageManager';
 
 import { useEffect, useState } from 'react';
 import LogOutButton from '~/components/widgets/dashboard/logout';
+import { accesVerification } from '~/utils/AccesVerifiacation';
 
 
 export async function loader({
     request,
   }: LoaderFunctionArgs) {
-      const session = await getSession(request.headers.get("Cookie"));
-      if(!session.has("userId")){
-        return redirect("/acces/login");
-      }
+      const headers = request.headers.get("Cookie")
+      const session = await getSession(headers);
+      accesVerification(session, headers);
+
       
       let location: SessionLocation = defaultSessionLocation;
       if(session.has("location")){

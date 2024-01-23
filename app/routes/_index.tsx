@@ -16,7 +16,7 @@ export async function loader({
 }: LoaderFunctionArgs) {
   
   const session = await getSession(request.headers.get("Cookie"));
-  if(!session.has("userId")){
+  if(!session || !session.has("userId")){
     return redirect("/acces/login");
   }
   else{

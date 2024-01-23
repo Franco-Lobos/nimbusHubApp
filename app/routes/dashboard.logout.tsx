@@ -4,7 +4,7 @@ import { getSession, destroySession } from 'app/session'
 import { buttonClass, buttonClass2, buttonClass3, cardStyleClass, mainBg, selectorStyleClass } from '~/components/constants/styles';
 import { allForecastsCookie, allHistoriesCookie, allRealTimesCookie } from '~/cookies.server';
 
-function deleteAllCookies(cookieHeader: string | null, cookiesToDelete: string[] = []): string[] {
+export function deleteAllCookies(cookieHeader: string | null, cookiesToDelete: string[] = []): string[] {
   const cookies: string[] = [];
   if (cookieHeader) {
     cookieHeader.split(';').forEach((cookie, index) => {
@@ -34,7 +34,7 @@ export const action = async ({
     headers.append('Set-Cookie', cookie)
   })
 
-  return new Response("/", {
+  return redirect("/", {
     headers
   });
 };

@@ -15,7 +15,7 @@ type SessionFlashData = {
   error: string;
 };
 
-const { getSession, commitSession, destroySession } =
+export const { getSession, commitSession, destroySession } =
   createCookieSessionStorage<SessionData, SessionFlashData>({
     cookie: {
       name: process.env.NIMBUS_HUB_SESSION || '__session',
@@ -23,7 +23,8 @@ const { getSession, commitSession, destroySession } =
       secure: true,
       sameSite: 'lax', // Strict
       secrets: ["s3cret1"],
+      maxAge: 5, // 5 minutes
+     // also 12 hours
     },
   });
 
-export { getSession, commitSession, destroySession };

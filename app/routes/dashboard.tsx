@@ -5,7 +5,9 @@ import Navigator from "~/components/widgets/dashboard/navigator";
 import { allForecastsCookie } from "~/cookies.server";
 import { TomorrowLocation, SessionLocation, isSessionLocation } from "~/models/tomorrow/WeatherLocation";
 import { locationService } from "~/services/userLocationAPIService";
-import { commitSession, getSession } from "~/session";
+import { commitSession, destroySession, getSession } from "~/session";
+import { apiCookieFinder } from "~/utils/APICookieFinder";
+import { accesVerification } from "~/utils/AccesVerifiacation";
 
 export const meta: MetaFunction = () => {
   return [
@@ -18,10 +20,10 @@ export async function loader({
   request,
 }: LoaderFunctionArgs) {
   
-  const session = await getSession(request.headers.get("Cookie"));
-  if(!session.has("userId")){
-    return redirect("/acces/login");
-  }
+  const headers = request.headers.get("Cookie");
+  console.log("headeres", headers)
+  const session = await getSession(headers);
+  accesVerification(session, headers);
 
   if(session.has("ip")){
     const sessionIp: string = session.get("ip")!;
@@ -66,7 +68,7 @@ export default function Dashboard() {
     <div className="flex flex-col h-screen">
         {/* Rest of your content */}
         <LogOutButton/>
-        <Outlet/>
+        {/* <Outlet/> */}
       </div>
   );
 }

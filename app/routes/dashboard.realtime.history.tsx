@@ -22,15 +22,15 @@ import { CookieStorageManager } from '~/services/CookieStorageManager';
 import { isSingleForcastSynchronizedCookie } from '~/models/cookies/forecastCookies';
 import { NimbusError, isNimbusError } from '~/models/errors/NimbusError';
 import { manageApiErrors } from '~/services/manageAPIErrors';
+import { accesVerification } from '~/utils/AccesVerifiacation';
 
 export async function loader({
   request,
 }: LoaderFunctionArgs) {
 
-  const session = await getSession(request.headers.get("Cookie"));
-  if (!session.has("userId")) {
-    return redirect("/acces/login");
-  }
+  const headers = request.headers.get("Cookie");
+  const session = await getSession(headers);
+  accesVerification(session, headers);
   
   let location: SessionLocation = defaultSessionLocation;
   if(session.has("location")){
@@ -41,7 +41,7 @@ export async function loader({
   let updateStorage = false;
   let loadHistory : HistoryData | SingleHistorySynchronizedCookie | Boolean | NimbusError = await CookieStorageManager.getHistory(location, request);
   console.info("loadHistory: ", loadHistory)
-
+  //PLACEHOLDER CITY NAME = session.data.location[0].name
   if(!loadHistory){
     console.info("HISTORY: MAKING API CALL")
     //SYNC COOKIES WITH LOCAL STORAGE
@@ -54,7 +54,7 @@ export async function loader({
     // }
     // loadHistory = loadedData;
 
-    // loadHistory  = defaultHistory!;
+    loadHistory  = defaultHistory!;
   }
   else{
     console.log("HISTORY: API CALL AVOIDED")

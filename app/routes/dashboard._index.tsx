@@ -13,6 +13,7 @@ import clsx from "clsx";
 import LocationSelector from "~/components/widgets/dashboard/location/locationSelector";
 import { ICity } from "country-state-city";
 import { allForecastsCookie } from "~/cookies.server";
+import { accesVerification } from "~/utils/AccesVerifiacation";
 
 export const meta: MetaFunction = () => {
   return [
@@ -24,7 +25,10 @@ export const meta: MetaFunction = () => {
 export async function action({
   request,
 }: ActionFunctionArgs) {
-  const session = await getSession( request.headers.get("Cookie") );
+  const headers = request.headers.get("Cookie")
+  const session = await getSession(headers);
+  accesVerification(session, headers);
+  
   const formData = await request.formData();
   const rawLocation: ICity = JSON.parse(String(formData.get("location")));
 

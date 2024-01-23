@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import { convertToURLfriendly } from "~/library/stringManagement";
+import { convertToURLfriendly } from "~/utils/stringManagement";
 import { config as dotenvConfig } from 'dotenv';
 dotenvConfig();
 

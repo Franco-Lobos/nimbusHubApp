@@ -24,17 +24,15 @@ import { StorageManager } from '~/services/LocalStorageManager';
 import { CookieStorageManager } from '~/services/CookieStorageManager';
 import { isSingleForcastSynchronizedCookie } from '../models/cookies/forecastCookies';
 import { allForecastsCookie } from '~/cookies.server';
+import { accesVerification } from '~/utils/AccesVerifiacation';
 
 
 export async function loader({
   request,
 }: LoaderFunctionArgs) {
-  const cookieHeader = request.headers.get("Cookie");
-
-  const session = await getSession(cookieHeader);
-  if (!session.has("userId")) {
-    return redirect("/acces/login");
-  }
+  const headers = request.headers.get("Cookie")
+  const session = await getSession(headers);
+  accesVerification(session, headers);
   
   let location: SessionLocation = defaultSessionLocation;
 

@@ -1,6 +1,6 @@
 import { HourlyItem } from "~/models/tomorrow/WeatherHourly";
 import { SunIcon, CloudIcon,CloudSunIcon,  SnowIcon, RainIcon  } from "~/components/images/status/icons";
-import { addZeroToNumber } from "~/library/stringManagement";
+import { addZeroToNumber } from "~/utils/stringManagement";
 
 const ForecastHourlyCard : React.FC<{ hourlyItem: HourlyItem, indx: number }> = ({ hourlyItem, indx }) => {
     const code = hourlyItem.values.weatherCode;

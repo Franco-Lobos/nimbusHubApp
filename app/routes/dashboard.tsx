@@ -70,7 +70,7 @@ export async function loader({
 
 export default function Dashboard() {
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen lg:w-full">
         {/* Rest of your content */}
         <LogOutButton/>
         <Outlet/>

@@ -118,7 +118,7 @@ const ReaLtimeLocation = () => {
     ?
       <ErrorView/>
     :
-    <div className={mainBg}>
+     <div className={`${mainBg} lg:flex lg:flex-col lg:px-32`}>
       <div className='flex flex-col pb-4 pt-12'>
       <Link to="/dashboard" className={` ${buttonClass} absolute left-6 top-8`}>
         <FaMap className={`
@@ -131,7 +131,6 @@ const ReaLtimeLocation = () => {
             <div className="text-themeBlack dark:text-themeWhite p-2 text-center text-6xl ">
             {Math.round(currentWeather ?? 0.0)}°C <br/>
         </div>
-        
       </div>
       <Outlet/>
     </div>

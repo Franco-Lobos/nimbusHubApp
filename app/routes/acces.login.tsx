@@ -116,13 +116,13 @@ export default function Login() {
   return (
       <>
       <div className='px-8 mt-12 lg:px-36'>
-        <h1 className="text-2xl font-semibold mb-6 text-themeBlack text-center mb-8">Log in to your account</h1>
+        <h1 className="text-2xl font-semibold mb-6 text-themeBlack text-center mb-8 dark:text-themeWhite">Log in to your account</h1>
           <AccesAuth/>
           <div className="mt-4">
             <div className='flex felx-row items-center justify-center gap-2 my-8 '>
-                <hr className='border-2 border-blue  w-full h-0'></hr>
-                <p className="text-sm text-blue text-center font-semibold">Or</p>
-                <hr className='border-2 border-blue  w-full h-0'></hr>
+                <hr className='border-2 border-blue dark:border-nimbusGray w-full h-0'></hr>
+                <p className="text-sm text-blue text-center dark:text-nimbusGray  font-semibold"> Or </p>
+                <hr className='border-2 border-blue dark:border-nimbusGray  w-full h-0'></hr>
             </div>
             <Form method='post'>
                 <p>
@@ -155,9 +155,9 @@ export default function Login() {
           </div>
       </div>
 
-      <p className="mt-4 text-blue text-center font-semibold">
+      <p className="mt-4 text-blue text-center font-semibold dark:text-themeWhite ">
             {"Don't have an account? "}
-            <Link to="/acces/register" prefetch="intent" className="mt-4 underline underline-offset-2 cursor-pointer hover:text-gold">Register here</Link>
+            <Link to="/acces/register" prefetch="intent" className="mt-4 underline underline-offset-2 cursor-pointer hover:text-gold dark:text-iceLightblue duration-0 dark:duration-300">Register here</Link>
         </p>
       </>
   );

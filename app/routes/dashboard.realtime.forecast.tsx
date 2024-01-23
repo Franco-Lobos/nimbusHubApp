@@ -146,14 +146,14 @@ export default function DashboardForecast() {
           initial={{ y: 30 }}
           animate={{ y: 50 }}
           >
-        <div className='overflow-scroll h-dvh rounded-lg pb-72 '>
+        <div className='overflow-scroll h-dvh rounded-lg pb-80 lg:flex lg:flex-col'>
           <motion.div
               initial={{ scale: 0.8 , height: 0, opacity: 0}}
               animate={{ scale: 1 , height: "min-content", opacity: 1}}
               transition={{ duration: 0.3, delay: 0.2 }}
           >
             <div className={`
-              p-4 pb-0 rounded-lg mt-6
+              p-4 pb-0 rounded-lg
               bg-snowGray/0
               bg-gradient-to-br from-iceLightblue/10 via-iceLightblue/20 via-${via}% to-iceLightblue/60
               bg-iceLightblue/0
@@ -175,6 +175,7 @@ export default function DashboardForecast() {
                 </ul>
             </div>
           </motion.div>
+
           <motion.div
               initial={{ scale: 0.8 , height: 0, opacity: 0}}
               animate={{ scale: 1 , height: "min-content", opacity: 1}}
@@ -196,7 +197,7 @@ export default function DashboardForecast() {
                 hidden: { opacity: 0 },
               }}
             ></motion.ul>
-            <ul className='flex flex-col align-center justify-start'>
+            <ul className='flex flex-col align-center justify-start lg:flex-row overflow-x-scroll'>
                   {
                   dailyItems?
                   dailyItems.slice(0,7).map((dailyItem, indx)=> 

@@ -20,7 +20,8 @@ export default {
         pink: '#ffb8b8',
         // Add more custom colors as needed
       },
-    }
+    }, 
+    
   },
   plugins: [],
 } satisfies Config

@@ -9,20 +9,12 @@ export async function action({
     request,
   }: ActionFunctionArgs) {
 
-    const resposne : SingleRealTimeSynchronizedCookie | NimbusError  = await request.json()!;
+    const resposne : SingleRealTimeSynchronizedCookie   = await request.json()!;
     if(isNimbusError(resposne)){
       const pastDate = new Date(0).toUTCString();
-      let cookieName;
+      let cookieName = "all-real-times-cookie";
       let headers;
       // Define the name of the cookie you want to remove
-      switch(resposne.code){
-        case 400: //DELETE COOKIE
-          cookieName = "all-real-times-cookie";
-          break;
-        default:
-          cookieName ="all-real-times-cookie";
-          break;
-      }
       
       headers ={
         "Content-Type": "application/json",
@@ -47,7 +39,7 @@ export async function action({
     });
 
 }
-export async function load({
+export async function loader({
   request,
 }: ActionFunctionArgs) {
 

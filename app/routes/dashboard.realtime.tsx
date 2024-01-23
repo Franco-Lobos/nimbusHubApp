@@ -1,6 +1,6 @@
 import { Link, Outlet, useLoaderData, useNavigate } from '@remix-run/react';
 import {  type LoaderFunctionArgs, redirect } from '@remix-run/node';
-import { getSession } from '~/session';
+import { destroySession, getSession } from '~/session';
 import { SessionLocation } from '~/models/tomorrow/WeatherLocation';
 import { RealTimeData, isRealTimeData } from '~/models/tomorrow/RealTime';
 import { isTomorrowError } from '~/models/errors/TomorrowError';
@@ -15,18 +15,26 @@ import { StorageManager } from '~/services/LocalStorageManager';
 
 import { useEffect, useState } from 'react';
 import LogOutButton from '~/components/widgets/dashboard/logout';
-import { accesVerification } from '~/utils/AccesVerifiacation';
+import { apiCookieFinder } from '~/utils/APICookieFinder';
+import { deleteAllCookies } from './dashboard.logout';
+import { sessionVerificator } from '~/utils/SessionVerificator';
 
 
 export async function loader({
     request,
   }: LoaderFunctionArgs) {
-      const headers = request.headers.get("Cookie")
-      const session = await getSession(headers);
-      accesVerification(session, headers);
-
+      const cookies = request.headers.get("Cookie")
+      const session = await getSession(cookies);
       
       let location: SessionLocation = defaultSessionLocation;
+
+      //VERIFICATION
+      const verificationResponse = await sessionVerificator(session, cookies!);
+      if(verificationResponse){
+        return verificationResponse;
+      }
+      //VERIFICATION END
+
       if(session.has("location")){
         const sessionLocations = session.get("location")!;
         location = sessionLocations[sessionLocations.length-1 ];

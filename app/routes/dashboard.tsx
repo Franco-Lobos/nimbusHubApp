@@ -7,7 +7,8 @@ import { TomorrowLocation, SessionLocation, isSessionLocation } from "~/models/t
 import { locationService } from "~/services/userLocationAPIService";
 import { commitSession, destroySession, getSession } from "~/session";
 import { apiCookieFinder } from "~/utils/APICookieFinder";
-import { accesVerification } from "~/utils/AccesVerifiacation";
+import { deleteAllCookies } from "./dashboard.logout";
+import { sessionVerificator } from "~/utils/SessionVerificator";
 
 export const meta: MetaFunction = () => {
   return [
@@ -20,10 +21,14 @@ export async function loader({
   request,
 }: LoaderFunctionArgs) {
   
-  const headers = request.headers.get("Cookie");
-  console.log("headeres", headers)
-  const session = await getSession(headers);
-  accesVerification(session, headers);
+  const cookies = request.headers.get("Cookie");
+  const session = await getSession(cookies);
+  //VERIFICATION
+  const verificationResponse = await sessionVerificator(session, cookies!);
+  if(verificationResponse){
+    return verificationResponse;
+  }
+  //VERIFICATION END
 
   if(session.has("ip")){
     const sessionIp: string = session.get("ip")!;
@@ -68,7 +73,7 @@ export default function Dashboard() {
     <div className="flex flex-col h-screen">
         {/* Rest of your content */}
         <LogOutButton/>
-        {/* <Outlet/> */}
+        <Outlet/>
       </div>
   );
 }

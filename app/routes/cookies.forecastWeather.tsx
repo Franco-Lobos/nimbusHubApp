@@ -8,20 +8,12 @@ export async function action({
     request,
   }: ActionFunctionArgs) {
 
-    const resposne : SingleForcastSynchronizedCookie | NimbusError  = await request.json()!;
+    const resposne : SingleForcastSynchronizedCookie   = await request.json()!;
     if(isNimbusError(resposne)){
       const pastDate = new Date(0).toUTCString();
-      let cookieName;
+      let cookieName = "all-forecasts-cookie";
       let headers;
       // Define the name of the cookie you want to remove
-      switch(resposne.code){
-        case 400: //DELETE COOKIE
-          cookieName = "all-forecasts-cookie";
-          break;
-        default:
-          cookieName ="all-forecasts-cookie"
-          break;
-      }
       
       headers ={
         "Content-Type": "application/json",
@@ -46,7 +38,7 @@ export async function action({
     });
 
 }
-export async function load({
+export async function loader({
   request,
 }: ActionFunctionArgs) {
 

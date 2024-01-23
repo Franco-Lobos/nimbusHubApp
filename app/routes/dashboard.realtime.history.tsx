@@ -22,15 +22,20 @@ import { CookieStorageManager } from '~/services/CookieStorageManager';
 import { isSingleForcastSynchronizedCookie } from '~/models/cookies/forecastCookies';
 import { NimbusError, isNimbusError } from '~/models/errors/NimbusError';
 import { manageApiErrors } from '~/services/manageAPIErrors';
-import { accesVerification } from '~/utils/AccesVerifiacation';
+import { sessionVerificator } from '~/utils/SessionVerificator';
 
 export async function loader({
   request,
 }: LoaderFunctionArgs) {
 
-  const headers = request.headers.get("Cookie");
-  const session = await getSession(headers);
-  accesVerification(session, headers);
+  const cookies = request.headers.get("Cookie");
+  const session = await getSession(cookies);
+  //VERIFICATION
+  const verificationResponse = await sessionVerificator(session, cookies!);
+  if(verificationResponse){
+    return verificationResponse;
+  }
+  //VERIFICATION END
   
   let location: SessionLocation = defaultSessionLocation;
   if(session.has("location")){

@@ -9,20 +9,12 @@ export async function action({
     request,
   }: ActionFunctionArgs) {
 
-    const resposne : SingleHistorySynchronizedCookie | NimbusError  = await request.json()!;
-    if(isNimbusError(resposne)){
+    const response : SingleHistorySynchronizedCookie  = await request.json()!;
+    if(isNimbusError(response)){
       const pastDate = new Date(0).toUTCString();
-      let cookieName;
+      let cookieName = "all-histories-cookie";
       let headers;
       // Define the name of the cookie you want to remove
-      switch(resposne.code){
-        case 400: //DELETE COOKIE
-          cookieName = "all-histories-cookie";
-          break;
-        default:
-          cookieName ="all-histories-cookie"
-          break;
-      }
       
       headers ={
         "Content-Type": "application/json",
@@ -36,7 +28,7 @@ export async function action({
 
     }
 
-    const serializedCookie : string | any = await CookieStorageManager.setHistory(resposne,request);
+    const serializedCookie : string | any = await CookieStorageManager.setHistory(response,request);
     
     return new Response(JSON.stringify(serializedCookie), {
         headers: {
@@ -47,7 +39,7 @@ export async function action({
     });
 
 }
-export async function load({
+export async function loader({
   request,
 }: ActionFunctionArgs) {
 

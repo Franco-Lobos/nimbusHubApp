@@ -15,6 +15,7 @@ import tailwindConfig from 'tailwind.config';
 import { commitSession, getSession } from '~/session';
 import { SessionLocation } from '~/models/tomorrow/WeatherLocation';
 import { defaultLocation } from '~/components/constants/defaults';
+import { validateEmail, validatePassword } from '~/utils/inputValidations';
 
 
 const colors = tailwindConfig.theme.extend.colors;
@@ -30,13 +31,14 @@ export async function action({
 
     const errors: FormErrors = {};
 
-    if (!email.includes("@")) {
-      errors.email = "Invalid email address";
+    const emailValidation:string | undefined = validateEmail(email)
+    
+    if (emailValidation) {
+      errors.email = emailValidation!;
     }
-
-    if (password.length < 6) {
-      errors.password =
-        "Password should be at least 6 characters";
+    const passWordValidation = validatePassword(password)
+    if (passWordValidation) {
+      errors.password = passWordValidation!;
     }
 
     if (Object.keys(errors).length > 0) {
@@ -55,10 +57,6 @@ export async function action({
       session.set("location", [defaultLocation as SessionLocation]);
       session.set("ip", responseBody.ipAddress == '::ffff:127.0.0.1' ? "46.172.250.35" : responseBody.ipAddress);
 
-      // Commit the session with an expiration time and signing
-      // const sessionOptions = {
-      //   signed: true
-      // };
       const commitedSession:string = await commitSession(session);
 
       const newHeaders = new Headers();

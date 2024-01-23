@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import { FormErrors } from '~/components/widgets/formErrorInterface';
 import { registerService } from '~/services/accesAPIService';
 import tailwindConfig from 'tailwind.config';
+import { validateEmail, validatePassword } from '~/utils/inputValidations';
 
 const colors = tailwindConfig.theme.extend.colors;
 
@@ -24,14 +25,15 @@ export async function action({
 
     const errors: FormErrors = {};
 
-    if (!email.includes("@")) {
-      errors.email = "Invalid email address";
+    const emailValidation:string | undefined = validateEmail(email)
+    if (emailValidation) {
+      errors.email = emailValidation!;
+    }
+    const passWordValidation = validatePassword(password)
+    if (passWordValidation) {
+      errors.password = passWordValidation!;
     }
 
-    if (password.length < 6) {
-      errors.password =
-        "Password should be at least 6 characters";
-    }
 
     if(!formData.get("terms")){
       errors.terms =

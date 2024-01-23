@@ -168,7 +168,7 @@ export default function DashboardForecast() {
                     hourlyItems
                       ?
                       hourlyItems.slice(0,24).map((hourlyItem, indx)=> 
-                      <ForecastHourlyCard key={hourlyItem.time} hourlyItem={hourlyItem}  indx={indx}/>
+                      <ForecastHourlyCard key={hourlyItem.time} hourlyItem={hourlyItem}  index={indx}/>
                       )
                       :""
                     }

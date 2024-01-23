@@ -83,7 +83,7 @@ const ForecastDailyCard : React.FC<{ dailyItem: DailyItem,  minTempWeek:number, 
                 </div>
               </div>
             {/* Add more details as needed */}
-        </div>
+        </li>
         </motion.li>
     )
 }

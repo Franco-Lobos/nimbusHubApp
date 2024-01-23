@@ -1,8 +1,9 @@
 import { HourlyItem } from "~/models/WeatherHourly";
 import { SunIcon, CloudIcon,CloudSunIcon,  SnowIcon, RainIcon  } from "~/components/images/status/icons";
 import { addZeroToNumber } from "~/library/stringManagement";
+import clsx from "clsx";
 
-const ForecastHourlyCard : React.FC<{ hourlyItem: HourlyItem, now?:boolean }> = ({ hourlyItem, now=false }) => {
+const ForecastHourlyCard : React.FC<{ hourlyItem: HourlyItem, index:number }> = ({ hourlyItem, index }) => {
     const code = hourlyItem.values.weatherCode;
     let selectedComponent;
 
@@ -40,8 +41,14 @@ const ForecastHourlyCard : React.FC<{ hourlyItem: HourlyItem, now?:boolean }> = 
 
 
     return(
-        <li key={hourlyItem.time} className="mb-4 p-2 flex flex-col justify-center items-center">
-            <p className="text text-blue dark:text-nimbusGray font-bold ">{now ? "Now" :addZeroToNumber(new Date(hourlyItem.time).getHours())}</p>
+        <li key={hourlyItem.time} className={clsx(
+          index==0 ? `bg-themeWhite/25 dark:bg-iceLightblue/20 rounded-lg border-b border-gold dark:border-gold` : "",
+          `
+        mb-4 p-2 flex flex-col justify-center items-center lg:w-[4vw]
+        `)}>
+            <p className={clsx(
+              `text text-blue dark:text-nimbusGray font-bold `,
+              index==0 ? ` text-themeBlack dark:text-themeWhite` : `text-themeBlack/70`)}>{index==0 ? "Now" :addZeroToNumber(new Date(hourlyItem.time).getHours())}</p>
             {selectedComponent}
             <p className="text text-blue dark:text-nimbusGray font-bold">{Math.round(hourlyItem.values.temperature)}°</p>
             {/* Add more details as needed */}

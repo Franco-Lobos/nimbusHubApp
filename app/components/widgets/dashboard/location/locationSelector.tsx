@@ -122,20 +122,20 @@ const LocationSelector = () => {
         </select>
         {
             <AnimatePresence>{
-            true ? //enableSubmit
+            enableSubmit ?
                 <motion.div
                     initial={{ height: 0, opacity: 0}}
                     animate={{ height: "min-content", opacity: 1}}
                     exit={{ height: 0 , opacity: 0}}
                 >
-                <Form method="post">
+                <Form method="post" className='flex justify-center'>
                     <input type="hidden" name="location" value={JSON.stringify(location)} />
                     <button type="submit">
                         <p className={`
                         w-full
                         text-blue dark:ttext-themeWhite font-semibold
                         bg-gold w-fit px-4 py-2 mt-2 rounded-md
-                        dark:bg-gold    
+                        dark:bg-gold   
                         `}>Observe {location.name}</p>
                         <p className={`
                             text-right text-sm text-blue/60 dark:text-themeWhite/80 italic pt-2

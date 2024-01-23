@@ -82,7 +82,7 @@ export async function loader({
         if(!flag){
           allLocations.push(sessionNewLocation);
           session.set("location", allLocations);
-          return redirect('/dashboard/forecast/realTime', { headers: { 'set-cookie': await commitSession(session) } })
+          return redirect('/dashboard', { headers: { 'set-cookie': await commitSession(session) } })
         }
         return allLocations;
       }
@@ -100,14 +100,15 @@ export default function DashboardIndex() {
   const location = data as WeatherLocation[];
   const lastLocation = location[location.length-1] ?? {name: "No location"};
 
-  const [selectedModal, setSelectedModal] = useState<Boolean>(true); //default false
+  const [selectedModal, setSelectedModal] = useState<Boolean>(false); //default false
   const [redirectioned, setRedirecitoned] = useState<Boolean>(true); //default false
   return (
-    <div className={mainBg}>
+    <div className={`${mainBg} lg:w-full`}>
       {/* Main Content */}
       <AnimatePresence>
       {redirectioned && (
         <motion.div
+        className="lg:w-full"
             initial={{opacity: 0, scale: 0.8}}
             animate={{opacity: 1, scale:1}}
             exit={{opacity: 0, scale: 0, y:-200}}
@@ -118,9 +119,10 @@ export default function DashboardIndex() {
             // transition={{ duration: 0.3, delay:0 }}
             >
         <div className={`
-        flex-1 flex flex-col overflow-hidden px-6 items-start`
-        }>
-          <div className="flex items-center justify-start py-12 flex-col w-full ">
+        flex-1 flex flex-col overflow-hidden px-6 items-start
+        lg:justify-between lg:items-center lg:w-full lg:px-12
+        `}>
+          <div className="flex items-center justify-start py-12 lg:py-6 flex-col w-full ">
             <LogoIcon numbProps={{className:"fill-blue/60 w-2/3 dark:fill-themeWhite", style:{height: "20vh"} }}></LogoIcon>
             <div className="text-center">  
               <h1 className="text-4xl font-bold text-themeBlack dark:text-iceLightblue">Welcome</h1>
@@ -130,14 +132,18 @@ export default function DashboardIndex() {
 
           
           <div className={clsx(`
-            w-full flex flex-col`, 
+            w-full lg:w-max flex flex-col`, 
             selectedModal
               ? "pb-24"
-              : "pb-0" 
+              : "pb-0", 
+              // `lg:flex-row lg:items-start lg:justify-between lg:pb-0 w-full lg:px-12 lg:gap-48` 
             )}>
   
-            <Link to={selectedModal ? `#` :`/dashboard/realtime/forecast`} onClick={() => selectedModal ? setSelectedModal(false) : setRedirecitoned(false)}>
-                <div className={`cursor-pointer bg-snowGray/0
+            <Link
+            to={selectedModal ? `#` :`/dashboard/realtime/forecast`}
+            onClick={() => selectedModal ? setSelectedModal(false) : setRedirecitoned(false)}
+            >
+                <div className={`cursor-pointer bg-snowGray/0 
                 ${cardStyleClass}
                 `}>
                   <h2 className={
@@ -174,7 +180,7 @@ export default function DashboardIndex() {
                 animate={{ scale: 1 }}
                 exit={{ scale: 0 }}
                 > 
-                <div className={`bg-snowGray/0
+                <div className={`bg-snowGray/0 
                 ${cardStyleClass}
                 `}>
                   <h2

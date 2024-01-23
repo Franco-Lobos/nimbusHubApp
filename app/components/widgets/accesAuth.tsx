@@ -6,18 +6,24 @@ export default function AccesAuth(){
         {/* Google login button */}
         <button
           type="button"
-          className="w-full flex justify-start items-center bg-white text-gold px-12 py-2 rounded-md hover:bg-gold hover:text-white focus:outline-none "
+          className={`
+          w-full flex justify-start items-center  text-gold px-8 py-2 rounded-md hover:bg-gold hover:text-white focus:outline-none
+          bg-themeBlack text-themeWhite hover:bg-themeBlack/60
+          `}
         >
-          <FaGoogle className="mr-4" />
-          <span>Continue whit Google</span>
+          <FaGoogle className="mr-4 fill-gold"  style={{ fontSize: '20px' }}/>
+          <span className='text-themeWhite/80'>Continue whit Google</span>
         </button>
         {/* Facebook login button */}
         <button
           type="button"
-          className="w-full flex justify-start items-center bg-white text-blue px-12 py-2 rounded-md hover:bg-blue hover:text-white focus:outline-none"
+          className={`
+            w-full flex justify-start items-center  text-blue px-8 py-2 rounded-md hover:bg-blue hover:text-white focus:outline-none
+            bg-themeBlack text-themeWhite hover:bg-themeBlack/60
+            `}
         >
-          <FaFacebook className="mr-4" />
-          <span>Continue whit Facebook</span>
+          <FaFacebook className="mr-4 fill-iceBlue"  style={{ fontSize: '20px' }}/>
+          <span className='text-themeWhite/80'>Continue whit Facebook</span>
         </button>
       </div>
     )

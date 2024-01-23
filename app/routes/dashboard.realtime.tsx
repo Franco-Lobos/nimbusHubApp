@@ -54,25 +54,24 @@ const ReaLtimeLocation = () => {
     ?
       <ErrorView/>
     :
-    <div className={mainBg}>
-      <div className='flex flex-col py-6'>
-      <Link to="/dashboard" className={`
-        bg-iceLightblue/0
-        bg-gradient-to-br from-iceLightblue/20 via-iceLightblue/60 via-${10}% to-iceLightblue/0
-        dark:bg-gradient-to-br dark:from-iceLightblue/10 dark:via-iceLightblue/20 dark:via-${10}% dark:to-iceLightblue/0
-        w-fit h-fit rounded-full
-        `}>
-        <FaMap className={`
-          text-blue/80 dark:text-themeWhite/80 w-10 h-10  opacity-60 p-2`}
-        ></FaMap>
-      </Link>
+    <div className={`${mainBg} lg:flex lg:flex-col lg:px-32`}>
+      <div className='flex flex-col pt-6'>
+        <Link to="/dashboard" className={`
+          bg-iceLightblue/0
+          bg-gradient-to-br from-iceLightblue/20 via-iceLightblue/60 via-${10}% to-iceLightblue/0
+          dark:bg-gradient-to-br dark:from-iceLightblue/10 dark:via-iceLightblue/20 dark:via-${10}% dark:to-iceLightblue/0
+          w-fit h-fit rounded-full
+          `}>
+          <FaMap className={`
+            text-blue/80 dark:text-themeWhite/80 w-10 h-10  opacity-60 p-2`}
+          ></FaMap>
+        </Link>
         <div className="text-themeBlack/80 dark:text-themeWhite/80 text-center mt-8 text-2xl font-bold">
             {cityName}
         </div>
-            <div className="text-themeBlack dark:text-themeWhite p-2 text-center text-6xl ">
-            {Math.round(currentWiwather)}°C <br/>
+        <div className="text-themeBlack dark:text-themeWhite p-2 text-center text-6xl ">
+        {Math.round(currentWiwather)}°C <br/>
         </div>
-        
       </div>
       <Outlet/>
     </div>

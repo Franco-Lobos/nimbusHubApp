@@ -3,6 +3,7 @@ import { SunIcon, CloudIcon,CloudSunIcon,  SnowIcon, RainIcon  } from "~/compone
 import { useEffect, useState } from "react";
 import clsx from 'clsx';
 import { motion } from "framer-motion";
+import { mainBg } from "~/components/constants/styles";
 
 
 const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -50,21 +51,36 @@ const ForecastDailyCard : React.FC<{ dailyItem: DailyItem,  minTempWeek:number, 
           animate={{ height: "min-content", opacity: 1}}
           transition ={{duration: 0.05, delay: 0.4 + indx * 0.05 }}
         >
-        <li key={dailyItem.time} className="mb-4 p-2 flex flex-row justify-between items-center">
-            <p className="text-lg text-blue  dark:text-themeWhite/90 font-semibold lex-1 w-24">
-            <span className="text-blue/60  dark:text-nimbusGray/90 pr-2">{new Date(dailyItem.time).getDate()}{" "}</span>
+        <li key={dailyItem.time} className={clsx(
+          indx==0 ? `bg-themeWhite/25 dark:bg-iceLightblue/20 rounded-lg border-b border-gold` : "",
+          `
+          mb-4 p-2 flex flex-row justify-between items-center lg:flex-col lg:items-center
+          lg:w-[15vw]`)}>
+            <p className={clsx(
+              `text-lg text-blue lg:text-center dark:text-themeWhite/90 font-semibold lex-1 w-24`,
+              indx==0 ? `text-themeBlack  dark:text-themeWhite/90` : `text-themeBlack/70  dark:text-nimbusGray/70`
+              )}>
+            <span className={clsx(
+              `text-blue/60  dark:text-nimbusGray/90 pr-2`,
+              )}>{new Date(dailyItem.time).getDate()}{" "}</span>
               {indx==0 ? "Today" : weekday[new Date(dailyItem.time).getDay()]}
             </p>
-            <div className="w-20">
+            <div className="w-20 lg:w-min">
               {selectedComponent}
             </div>
-            <div className="flex felx-row justify-between flex-1 w-20 items-center">
-              <p className="text-lg text-blue/60 dark:text-nimbusGray/90 font-semibold flex-1 text-center">{Math.round(dailyItem.values.temperatureMin)}°</p>
-              <div className="bg-blue/40 w-24 h-1 rounded-md dark:bg-iceLightblue/40 mx-2">
-                <div className={`bg-gold h-1 rounded-md w-auto`} style={{marginLeft: marginLeft + "%", marginRight: marginRight + "%"}}></div>
+            <div className="">
+              <div className="flex felx-row justify-between flex-1 items-center w-full pb-2">
+                <p className="text-lg text-blue/60 dark:text-nimbusGray/90 font-semibold flex-1 text-left text-sm">{Math.round(dailyItem.values.temperatureMin)}°</p>
+                {/* <div className="lg:hidden bg-blue/40 w-24 h-1 rounded-md dark:bg-iceLightblue/40 mx-2">
+                  <div className={`bg-gold h-1 rounded-md w-auto`} style={{marginLeft: marginLeft + "%", marginRight: marginRight + "%"}}></div>
+                </div> */}
+                <p className="text-lg text-blue dark:text-themeWhite/90 font-semibold flex-1 text-right text-sm">{Math.round(dailyItem.values.temperatureMax)}°</p>
               </div>
-              <p className="text-lg text-blue dark:text-themeWhite/90 font-semibold flex-1 text-center">{Math.round(dailyItem.values.temperatureMax)}°</p>
-            </div>
+
+              <div className="bg-blue/40 w-24 h-1 rounded-md dark:bg-iceLightblue/40 mx-2">
+                  <div className={`bg-gold h-1 rounded-md w-auto`} style={{marginLeft: marginLeft + "%", marginRight: marginRight + "%"}}></div>
+                </div>
+              </div>
             {/* Add more details as needed */}
         </li>
         </motion.li>

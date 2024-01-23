@@ -169,9 +169,9 @@ export default function Register() {
           </div>
       </div>
     
-        <p className="mt-4 text-blue text-center font-semibold">
+        <p className="mt-4 text-blue text-center font-semibold dark:text-themeWhite">
             {"Already have an account? "}
-            <Link to="/acces/login" prefetch="intent" className="mt-4 underline underline-offset-2 cursor-pointer hover:text-gold">Log in!</Link>
+            <Link to="/acces/login" prefetch="intent" className="mt-4 underline underline-offset-2 cursor-pointer hover:text-gold dark:text-iceLightblue">Log in!</Link>
         </p>
       </>
   );

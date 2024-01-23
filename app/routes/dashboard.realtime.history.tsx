@@ -84,6 +84,7 @@ const RecentHistory = () => {
       return;
     };
 
+
     if (isSingleHistorySynchronizedCookie(readedData) && !loadedFromLocalStorage){
       console.log("HISTORY: LOAD FROM LOCAL")
       const setData = async()=>{

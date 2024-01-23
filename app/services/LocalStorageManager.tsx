@@ -35,6 +35,7 @@ export class StorageManager {
 
         if( parsedForecasts?.length > 0){
             let index: number = 0;
+            let locationFound: boolean = false;
             while(index<parsedForecasts.length){
                 if(areLocationsEqual(data.location, parsedForecasts[index].location)){
                     const savedDate = new Date(parsedForecasts[index].timelines.hourly[0].time);
@@ -53,10 +54,16 @@ export class StorageManager {
                     else{
                         console.log("Local Storage was updated, no changes comited: ", parsedForecasts)
                     }  
+                    locationFound=true;
                     break;
                 }
                 index++;
             };
+
+            if(!locationFound){
+                parsedForecasts.push(data);
+                changesComited = true;
+            }
         }
 
         if(changesComited || forceUpdate){

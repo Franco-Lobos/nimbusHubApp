@@ -26,7 +26,6 @@ export async function loader({
       const cookies = request.headers.get("Cookie")
       const session = await getSession(cookies);
       
-      let location: SessionLocation = defaultSessionLocation;
 
       //VERIFICATION
       const verificationResponse = await sessionVerificator(session, cookies!);
@@ -35,6 +34,7 @@ export async function loader({
       }
       //VERIFICATION END
 
+      let location: SessionLocation = defaultSessionLocation;
       if(session.has("location")){
         const sessionLocations = session.get("location")!;
         location = sessionLocations[sessionLocations.length-1 ];
@@ -54,7 +54,7 @@ export async function loader({
       else{
         console.log("REALTIME: API CALL AVOIDED")
       }
-      return {realTime: loadRealTime, updateStorage: updateStorage};
+      return {realTime: loadRealTime, updateStorage: updateStorage, location: location};
     
   };
 
@@ -65,9 +65,8 @@ const ReaLtimeLocation = () => {
   const [parsedRealTime, setParsedRealTime] =useState<RealTimeData | null>(null); //parsedRealTime = realTimeForecast as RealTimeData;
   const [currentWeather, setCurrentWeather] =useState<number | null>(null); //  const currentWeather: number = parsedRealTime?.data?.values?.temperature;
   const [loadedFromLocalStorage, setLoadedFromLocalStorage] = useState<boolean>(false);
+  const [locationName, setLocationName] = useState<string>("");
 
-  // const cityName: string = splitedName(forecast?.location?.name);
-  const cityName: string = "PLACEHOLDER";
 
   useEffect(() => {
     const readedData = realTimeForecast?.realTime;
@@ -75,6 +74,7 @@ const ReaLtimeLocation = () => {
       navigate("/dashboard");
       return;
     };
+    setLocationName(realTimeForecast?.location ? realTimeForecast?.location?.name : "Unknoun Location") 
 
     if (isSingleRealTimeSynchronizedCookie(readedData) && !loadedFromLocalStorage){
       console.log("REAL TIIME: LOAD FROM LOCAL")
@@ -119,14 +119,14 @@ const ReaLtimeLocation = () => {
       <ErrorView/>
     :
      <div className={`${mainBg} lg:flex lg:flex-col lg:px-32`}>
-      <div className='flex flex-col pb-4 pt-12'>
+      <div className='flex flex-col pb-4 pt-20'>
       <Link to="/dashboard" className={` ${buttonClass} absolute left-6 top-8`}>
         <FaMap className={`
           text-blue/80 dark:text-themeWhite/80 w-11 h-11  opacity-60 p-2`}
         ></FaMap>
       </Link>
         <div className="text-themeBlack/80 dark:text-themeWhite/80 text-center mt-8 text-2xl font-bold">
-            {cityName}
+            {locationName}
         </div>
             <div className="text-themeBlack dark:text-themeWhite p-2 text-center text-6xl ">
             {Math.round(currentWeather ?? 0.0)}°C <br/>

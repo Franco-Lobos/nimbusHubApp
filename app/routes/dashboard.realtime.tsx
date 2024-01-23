@@ -21,10 +21,10 @@ export async function loader({
     request,
   }: LoaderFunctionArgs) {
       const session = await getSession(request.headers.get("Cookie"));
-      // if (!session.has("userId")) {
-      //   return redirect("/acces/login");
-      // }
-
+      if(!session.has("userId")){
+        return redirect("/acces/login");
+      }
+      
       let location: SessionLocation = defaultSessionLocation;
       if(session.has("location")){
         const sessionLocations = session.get("location")!;

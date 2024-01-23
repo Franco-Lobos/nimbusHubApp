@@ -1,7 +1,7 @@
 import { ForecastWeatherData } from "~/models/tomorrow/Forecast";
 import { SessionLocation, TomorrowLocation, areLocationsEqual } from "~/models/tomorrow/WeatherLocation";
 import { SingleForcastSynchronizedCookie } from "../models/cookies/forecastCookies";
-import { CookieError } from "~/models/errors/CookieError";
+import { NimbusError, NimbusErrorType } from "~/models/errors/NimbusError";
 import { RealTimeData } from "~/models/tomorrow/RealTime";
 import { SingleRealTimeSynchronizedCookie } from "~/models/cookies/realTimeCookies";
 import { HistoryData } from "~/models/tomorrow/History";
@@ -106,9 +106,9 @@ export class StorageManager {
             //SET COOKIE
             const cookiesUrl = `http://localhost:3000/cookies/forecastweather`;
 
-            const message : CookieError={
+            const message : NimbusError={
                 code: 400,
-                type:"UNSYNCRONIZED",
+                type: NimbusErrorType.COOKIE,
                 message: "DELET-ALL",
             }
             const response = await fetch(cookiesUrl, {
@@ -217,9 +217,9 @@ export class StorageManager {
             //SET COOKIE
             const cookiesUrl = `http://localhost:3000/cookies/realtime`;
 
-            const message : CookieError={
+            const message : NimbusError={
                 code: 400,
-                type:"UNSYNCRONIZED",
+                type:  NimbusErrorType.COOKIE,
                 message: "DELET-ALL",
             }
             const response = await fetch(cookiesUrl, {
@@ -331,9 +331,9 @@ export class StorageManager {
             //SET COOKIE
             const cookiesUrl = `http://localhost:3000/cookies/history`;
 
-            const message : CookieError={
+            const message : NimbusError={
                 code: 400,
-                type:"UNSYNCRONIZED",
+                type: NimbusErrorType.COOKIE,
                 message: "DELET-ALL",
             }
             const response = await fetch(cookiesUrl, {

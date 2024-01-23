@@ -67,9 +67,7 @@ export async function loader({
 }: LoaderFunctionArgs) {
   
   const session = await getSession(request.headers.get("Cookie"));
-  if(!session.has("userId")){
-    return redirect("/acces/login");
-  }
+
 
   if(session.has("ip")){
     const sessionIp: string = session.get("ip")!;

@@ -1,15 +1,15 @@
 import { ActionFunction, ActionFunctionArgs, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { allForecastsCookie } from "~/cookies.server";
 import { SingleForcastSynchronizedCookie } from "~/models/cookies/forecastCookies";
-import { CookieError, isCookieError } from "~/models/errors/CookieError";
+import { NimbusError, isNimbusError } from "~/models/errors/NimbusError";
 import { CookieStorageManager } from "~/services/CookieStorageManager";
 
 export async function action({
     request,
   }: ActionFunctionArgs) {
 
-    const resposne : SingleForcastSynchronizedCookie | CookieError  = await request.json()!;
-    if(isCookieError(resposne)){
+    const resposne : SingleForcastSynchronizedCookie | NimbusError  = await request.json()!;
+    if(isNimbusError(resposne)){
       const pastDate = new Date(0).toUTCString();
       let cookieName;
       let headers;

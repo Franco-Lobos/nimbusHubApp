@@ -21,7 +21,7 @@ const { getSession, commitSession, destroySession } =
       name: process.env.NIMBUS_HUB_SESSION || '__session',
       httpOnly: true,
       secure: true,
-      sameSite: 'lax', // Adjust as needed
+      sameSite: 'lax', // Strict
       secrets: ["s3cret1"],
     },
   });

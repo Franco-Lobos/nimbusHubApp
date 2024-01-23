@@ -47,7 +47,7 @@ export const getRealTimeWeather = async (location: string, request: Request) => 
 
 export const getWeatherRecentHistory = async (location: string, request: Request) => {
   console.log("LOCATION", location)  
-  const tomorrowUrl = `${process.env.WHEATER_URL}/history/recent/${location}`; // TODO SAVE IN CONSTANTS
+  const tomorrowUrl = `${process.env.WHEATER_URL}/history/${location}`; // TODO SAVE IN CONSTANTS
 
     const data = await fetch(tomorrowUrl, {
       method: 'GET', 

@@ -20,15 +20,17 @@ import { SingleHistorySynchronizedCookie, isSingleHistorySynchronizedCookie } fr
 import {StorageManager} from '~/services/LocalStorageManager';
 import { CookieStorageManager } from '~/services/CookieStorageManager';
 import { isSingleForcastSynchronizedCookie } from '~/models/cookies/forecastCookies';
+import { NimbusError, isNimbusError } from '~/models/errors/NimbusError';
+import { manageApiErrors } from '~/services/manageAPIErrors';
 
 export async function loader({
   request,
 }: LoaderFunctionArgs) {
 
   const session = await getSession(request.headers.get("Cookie"));
-  // if (!session.has("userId")) {
-  //   return redirect("/acces/login");
-  // }
+  if (!session.has("userId")) {
+    return redirect("/acces/login");
+  }
   
   let location: SessionLocation = defaultSessionLocation;
   if(session.has("location")){
@@ -37,16 +39,22 @@ export async function loader({
   }
 
   let updateStorage = false;
-  let loadHistory : HistoryData | SingleHistorySynchronizedCookie | boolean = await CookieStorageManager.getHistory(location, request);
+  let loadHistory : HistoryData | SingleHistorySynchronizedCookie | Boolean | NimbusError = await CookieStorageManager.getHistory(location, request);
   console.info("loadHistory: ", loadHistory)
 
   if(!loadHistory){
     console.info("HISTORY: MAKING API CALL")
     //SYNC COOKIES WITH LOCAL STORAGE
-    // updateStorage = true;
+    updateStorage = true;
     const coords : string = `${location.lat},${location.lon}`;
-    // loadHistory = await getWeatherRecentHistory(coords, request);
-    loadHistory  = defaultHistory!;
+    
+    // const loadedData = await getWeatherRecentHistory(coords, request);
+    // if(loadedData && isNimbusError(loadedData)){
+    //   return manageApiErrors(loadedData);
+    // }
+    // loadHistory = loadedData;
+
+    // loadHistory  = defaultHistory!;
   }
   else{
     console.log("HISTORY: API CALL AVOIDED")

@@ -24,7 +24,6 @@ import { StorageManager } from '~/services/LocalStorageManager';
 import { CookieStorageManager } from '~/services/CookieStorageManager';
 import { isSingleForcastSynchronizedCookie } from '../models/cookies/forecastCookies';
 import { allForecastsCookie } from '~/cookies.server';
-import { CookieError } from '~/models/errors/CookieError';
 
 
 export async function loader({
@@ -33,9 +32,9 @@ export async function loader({
   const cookieHeader = request.headers.get("Cookie");
 
   const session = await getSession(cookieHeader);
-  // if (!session.has("userId")) {
-  //   return redirect("/acces/login");
-  // }
+  if (!session.has("userId")) {
+    return redirect("/acces/login");
+  }
   
   let location: SessionLocation = defaultSessionLocation;
 

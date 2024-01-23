@@ -19,6 +19,7 @@ import {
   useOutlet,
   useRouteError,
 } from "@remix-run/react";
+import { NimbusError, isNimbusError } from "./models/errors/NimbusError";
 
 
 export const links: LinksFunction = () => [
@@ -38,6 +39,18 @@ const isClient = typeof window !== 'undefined';
 export function ErrorBoundary() {
   const error = useRouteError();
 
+  if (isNimbusError(error)){
+    let parsedError = error as NimbusError;
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{parsedError.message}</p>
+        <p>The stack trace is:</p>
+        <pre>{parsedError.code}</pre>
+      </div>
+    );
+  }
+
   if (isRouteErrorResponse(error)) {
     return (
       <div>
@@ -54,7 +67,8 @@ export function ErrorBoundary() {
         <pre>{error.stack}</pre>
       </div>
     );
-  } else {
+  }
+  else {
     return <h1>Unknown Error</h1>;
   }
 }

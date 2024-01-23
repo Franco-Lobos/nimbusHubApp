@@ -2,27 +2,40 @@ import { ActionFunctionArgs, redirect } from '@remix-run/node';
 import { Form, Link } from '@remix-run/react';
 import { getSession, destroySession } from 'app/session'
 import { buttonClass, buttonClass2, buttonClass3, cardStyleClass, mainBg, selectorStyleClass } from '~/components/constants/styles';
+import { allForecastsCookie, allHistoriesCookie, allRealTimesCookie } from '~/cookies.server';
 
+function deleteAllCookies(cookieHeader: string | null, cookiesToDelete: string[] = []): string[] {
+  const cookies: string[] = [];
+  if (cookieHeader) {
+    cookieHeader.split(';').forEach((cookie, index) => {
+      const parts = cookie.split('=');
+      const name = parts[0].trim();
+      if (name) {
+        cookies.push(`${name}=; Path=/; MaxAge=0; HttpOnly; Secure; SameSite=Lax`);
+      }
+    });
+  }
+  return cookies;
+}
 
 export const action = async ({
   request,
 }: ActionFunctionArgs) =>{
-  const session = await getSession(request.headers.get('Cookie'));
-  const cookiesToDelete = ['NzBWWVN6kXt66yG6j7po9eQEGXD3L', 'all-forecasts-cookie', 'all-real-times-cookie', 'all-histories-cookie'];
-  const deleteCookiePromises = cookiesToDelete.map(async (cookieName) => {
-    // Delete cookies on the client side
-    // document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-    // Set a Set-Cookie header for deleting cookies on the server side
-    return `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  });
+  const allCookies = request.headers.get('Cookie')
+  const session = await getSession(allCookies);
+  const destroySessionLogin: string = await destroySession(session);
 
-  // Wait for all promises to complete
-  const deletedCookiesHeaders = await Promise.all(deleteCookiePromises);
+  const updatedCookies = deleteAllCookies(allCookies);
+  console.log(updatedCookies)
+  const headers = new Headers()
+  headers.append('Set-Cookie', destroySessionLogin)
 
-  return redirect('/', {
-    headers: {
-      'Set-Cookie': [...deletedCookiesHeaders, await destroySession(session)].join('; '),
-    },
+  updatedCookies.forEach((cookie) => {
+    headers.append('Set-Cookie', cookie)
+  })
+
+  return new Response("/", {
+    headers
   });
 };
 

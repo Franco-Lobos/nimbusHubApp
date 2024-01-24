@@ -5,7 +5,7 @@ import { destroySession } from "~/session";
 
 export async function sessionVerificator (session: Session, cookies: string){
     if(!session.has("userId")){
-        return redirect("/acces/login");
+        return redirect("/acces");
       }
       const headers = new Headers();
       if(session.has("userId") && !apiCookieFinder(cookies)){

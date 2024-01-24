@@ -1,19 +1,22 @@
+import { Form } from '@remix-run/react';
 import { FaFacebook, FaGoogle } from 'react-icons/fa/index.js';
 
 export default function AccesAuth(){
     return(
         <div className="mt-2 flex flex-col gap-8">
         {/* Google login button */}
-        <button
-          type="button"
-          className={`
-          w-full flex justify-start items-center  text-gold px-8 py-2 rounded-md hover:bg-gold hover:text-white focus:outline-none
-          bg-themeBlack text-themeWhite hover:bg-themeBlack/60
-          `}
-        >
-          <FaGoogle className="mr-4 fill-gold"  style={{ fontSize: '20px' }}/>
-          <span className='text-themeWhite/80'>Continue whit Google</span>
-        </button>
+        <Form action="/acces/google" method="post">
+          <button
+            type="submit"
+            className={`
+            w-full flex justify-start items-center  text-gold px-8 py-2 rounded-md hover:bg-gold hover:text-white focus:outline-none
+            bg-themeBlack text-themeWhite hover:bg-themeBlack/60
+            `}
+          >
+            <FaGoogle className="mr-4 fill-gold"  style={{ fontSize: '20px' }}/>
+            <span className='text-themeWhite/80'>Continue whit Google</span>
+          </button>
+        </Form>
         {/* Facebook login button */}
         <button
           type="button"

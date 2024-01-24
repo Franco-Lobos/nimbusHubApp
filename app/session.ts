@@ -2,7 +2,6 @@
 import { createCookieSessionStorage } from '@remix-run/node';
 import {SessionLocation} from './models/tomorrow/WeatherLocation';
 
-
 type SessionData = {
   userId: string;
   userName: string;
@@ -27,4 +26,3 @@ export const { getSession, commitSession, destroySession } =
      // also 12 hours
     },
   });
-

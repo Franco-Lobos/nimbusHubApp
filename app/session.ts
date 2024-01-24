@@ -5,8 +5,10 @@ import {SessionLocation} from './models/tomorrow/WeatherLocation';
 type SessionData = {
   userId: string;
   userName: string;
+  email: string;
   location: SessionLocation[];
   ip:string;
+  oauth2State: string;
   // Add any other session data you need
 };
 

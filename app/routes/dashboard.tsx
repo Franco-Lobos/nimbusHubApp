@@ -23,6 +23,8 @@ export async function loader({
   
   const cookies = request.headers.get("Cookie");
   const session = await getSession(cookies);
+  console.log("sessionID: ", session.get('userId'));
+  
   //VERIFICATION
   const verificationResponse = await sessionVerificator(session, cookies!);
   if(verificationResponse){

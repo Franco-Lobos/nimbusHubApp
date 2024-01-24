@@ -6,7 +6,7 @@ import { ExternalUser } from "./models/sessions/externalUser";
 // app/sessions.ts
 export let externalUserSessionStorage = createCookieSessionStorage<ExternalUser>({
     cookie: {
-      name: process.env.NIMBUS_HUB_SESSION || "__session",
+      name: "__google_session",
       httpOnly: true,
       secure: true,
       sameSite: "lax", // Strict

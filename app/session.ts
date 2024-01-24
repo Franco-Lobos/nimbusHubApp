@@ -14,15 +14,18 @@ type SessionFlashData = {
   error: string;
 };
 
-export const { getSession, commitSession, destroySession } =
-  createCookieSessionStorage<SessionData, SessionFlashData>({
-    cookie: {
-      name: process.env.NIMBUS_HUB_SESSION || '__session',
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax', // Strict
-      secrets: ["s3cret1"],
-      maxAge: 5 * 60, // 5 minutes
-     // also 12 hours
-    },
-  });
+export let userSessionStorage = createCookieSessionStorage<SessionData, SessionFlashData>({
+  cookie: {
+    name: process.env.NIMBUS_HUB_SESSION || '__session',
+    httpOnly: true,
+    secure: true,
+    sameSite: 'lax', // Strict
+    secrets: ["s3cret1"],
+    maxAge: 5 * 60, // 5 minutes
+    // also 12 hours
+  },
+});
+ 
+    
+export let { getSession, commitSession, destroySession } = userSessionStorage;
+    

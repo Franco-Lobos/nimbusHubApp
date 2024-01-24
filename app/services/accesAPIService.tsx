@@ -1,12 +1,10 @@
-import { SessionData, json } from "@remix-run/node";
 import { config as dotenvConfig } from 'dotenv';
-import { ExternalUser } from "~/models/sessions/externalUser";
 
 dotenvConfig();
 
 
-export const externalUserAcces = async (user: ExternalUser, tokenId: string) => {
-  const tomorrowUrl = `${process.env.AUTH_URL}/auth/google`; 
+export const externalUserAcces = async (accesToken: string, refreshToken: string,  tokenId: string) => {
+  const tomorrowUrl = `${process.env.AUTH_URL}/google`; 
 
   const data = await fetch(tomorrowUrl, {
       method: 'POST', 
@@ -15,7 +13,8 @@ export const externalUserAcces = async (user: ExternalUser, tokenId: string) => 
         'Content-Type': 'application/json',
       }, 
       body: JSON.stringify({
-          "user": user,
+          "accesToken": accesToken,
+          "refreshToken":refreshToken,
           "tokenId":tokenId,
       }),
       credentials: 'include'

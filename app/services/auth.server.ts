@@ -1,18 +1,18 @@
 // app/services/auth.server.ts
 import { Authenticator } from "remix-auth";
-import {  redirect } from "@remix-run/node";
 import { OAuth2Strategy } from "remix-auth-oauth2";
-import { externalUserSessionStorage } from "~/googleSession";
-import {OAuth2Client} from 'google-auth-library';
+import {getSession, commitSession, userSessionStorage} from "../session"
+
 // Create an instance of the authenticator, pass a generic with what
 // strategies will return and will store in the session
-export let authenticator  = new Authenticator(externalUserSessionStorage);
 
 import jwt from 'jsonwebtoken';
-import { ExternalUser } from "~/models/sessions/externalUser";
 import { externalUserAcces } from "./accesAPIService";
+import { defaultLocation } from "~/components/constants/defaults";
+import { SessionLocation } from "~/models/tomorrow/WeatherLocation";
 const { sign, verify } = jwt;
 
+export let authenticator  = new Authenticator(userSessionStorage);
 
 authenticator.use(
     new OAuth2Strategy(
@@ -29,25 +29,33 @@ authenticator.use(
         accessToken, refreshToken, extraParams, profile, context, request,
       }) => {
 
-        const { email, name} = extraParams;
         const signedAccessToken =  sign(accessToken, process.env.API_DECODER!, { algorithm: 'HS256' });
-        const signedRefreshToken =  sign(refreshToken!, process.env.API_DECODER!, { algorithm: 'HS256' });
-        const signedTokenId =  sign(extraParams.tokenId, process.env.API_DECODER!, { algorithm: 'HS256' });
-        
-        const newUserData: ExternalUser = {
-            email: email,
-            name: name,
-            authentication:{
-                accessToken: signedAccessToken,
-                refreshToken: signedRefreshToken,
-                salt: "",
-                sessionToken: "",
-            }
+        const response = await externalUserAcces(signedAccessToken,refreshToken!, extraParams.id_token);
+  
+        const session = await getSession(request.headers.get("Cookie"));
+        const responseBody = await response.json();
+
+        if (response.ok) {
+          session.set("userId", responseBody.user._id);
+          session.set("userName", responseBody.user.userName);
+          session.set("location", [defaultLocation as SessionLocation]);
+          session.set("ip", responseBody.ipAddress == '::ffff:127.0.0.1' ? "46.172.250.35" : responseBody.ipAddress);
+
+          const commitedSession:string = await commitSession(session);
+
+          const newHeaders = new Headers();
+          newHeaders.append("Set-Cookie", response.headers.get("Set-Cookie")!);
+          newHeaders.append("Set-Cookie", commitedSession);
+
+          const newResponse = new Response(responseBody, {
+            status: response.status,
+            headers: newHeaders,
+          });
+
+          return newResponse;
         }
         
-        const response = await externalUserAcces(newUserData, signedTokenId);
-
-        redirect('/acces');
+        return response;
       }
     ),
     // this is optional, but if you setup more than one OAuth2 instance you will

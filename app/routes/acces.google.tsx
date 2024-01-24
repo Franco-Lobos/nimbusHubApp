@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { authenticator } from "~/services/auth.server";
 
 export async function action({
@@ -7,12 +7,12 @@ export async function action({
 
   if (request.method === 'POST') {
     try {
-    const email = 'cachitodesal@gmail.com';
 
-    return authenticator.authenticate('Google', request)
-
-    //   const newUser = await createUser(data);
-      return json({ status: 'success', data: "HI FROM GOOGLE AUTH" });     
+      return authenticator.authenticate('Google', request, {
+        successRedirect: "/dashboard",
+        failureRedirect: "/acces/login",
+      });
+   
     } catch (error) {
       console.error('Error creating user:', error);
       return json({ status: 'error', message: 'Failed to create user' }, { status: 500 });

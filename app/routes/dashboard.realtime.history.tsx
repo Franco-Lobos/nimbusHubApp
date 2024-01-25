@@ -23,6 +23,8 @@ import { isSingleForcastSynchronizedCookie } from '~/models/cookies/forecastCook
 import { NimbusError, isNimbusError } from '~/models/errors/NimbusError';
 import { manageApiErrors } from '~/services/manageAPIErrors';
 import { sessionVerificator } from '~/utils/SessionVerificator';
+import { HourlyItem } from '~/models/tomorrow/WeatherHourly';
+import ForecastHourlyCard from '~/components/widgets/dashboard/weatherCards/forecastHourlyCard';
 
 export async function loader({
   request,
@@ -49,17 +51,16 @@ export async function loader({
   //PLACEHOLDER CITY NAME = session.data.location[0].name
   if(!loadHistory){
     console.info("HISTORY: MAKING API CALL")
+    loadHistory  = defaultHistory!;
     //SYNC COOKIES WITH LOCAL STORAGE
     updateStorage = true;
     const coords : string = `${location.lat},${location.lon}`;
     
-    // const loadedData = await getWeatherRecentHistory(coords, request);
-    // if(loadedData && isNimbusError(loadedData)){
-    //   return manageApiErrors(loadedData);
-    // }
-    // loadHistory = loadedData;
-
-    loadHistory  = defaultHistory!;
+    const loadedData = await getWeatherRecentHistory(coords, request);
+    if(loadedData && isNimbusError(loadedData)){
+      return manageApiErrors(loadedData);
+    }
+    loadHistory = loadedData;
   }
   else{
     console.log("HISTORY: API CALL AVOIDED")
@@ -74,7 +75,13 @@ const RecentHistory = () => {
   const navigate = useNavigate();
   const [loadHistory, setLoadHistory]= useState<any | HistoryData | undefined>(useLoaderData<typeof loader>());
   const [parsedHistory, setParsedHistory] =useState<HistoryData | null>(null);
+  const [hourlyItems, setHourlyItems] = useState<HourlyItem[]>([]);
+  const [dailyItems, setDailyItems] = useState<DailyItem[]>([]);
   const [loadedFromLocalStorage, setLoadedFromLocalStorage] = useState<boolean>(false);
+
+
+  const [minTempWeek, setMinTempWeek] = useState<number>(0); 
+  const [maxTempWeek, setMaxTempWeek] = useState<number>(0);
 
   useEffect(() => {
     console.log("loadHistory: ", loadHistory)
@@ -101,6 +108,8 @@ const RecentHistory = () => {
 
     if(isHistoryData(readedData)){
       setParsedHistory(readedData);
+      setHourlyItems(readedData.timelines.hourly);
+      setDailyItems(readedData.timelines.daily);
       console.log("IS HISTORY DATA")
       return;
     }
@@ -119,6 +128,23 @@ const RecentHistory = () => {
     }
   },[parsedHistory]);
   
+
+  useEffect(() => {
+    if(!dailyItems || dailyItems.length == 0) return;
+    let smaller = Math.round(dailyItems[0].values.temperatureMin);
+    let bigger  = Math.round(dailyItems[0].values.temperatureMax);
+    dailyItems.slice(1,7).forEach((dailyItem, indx)=>{
+      const min = Math.round(dailyItem.values.temperatureMin);
+      const max = Math.round(dailyItem.values.temperatureMax);
+      if(min < smaller){ smaller = min}
+      if(max > bigger){ bigger = max}
+      }
+    )
+    setMinTempWeek(smaller);
+    setMaxTempWeek(bigger);
+  },[dailyItems]);
+
+
   return (
     loadHistory && isTomorrowError(loadHistory)
     ?
@@ -149,23 +175,63 @@ const RecentHistory = () => {
         animate={{ scale: 1 , height: "min-content", y:0}}
         transition={{ duration: 0.4 }}
       >
-      <div className={`p-4 bg-snowGray/0 ${cardStyleClass}
-        `}>
-        <h3 className="
-          font-semibold mb-4 text-blue/80 dark:text-iceBlue/80 border-b border-blue/40
-          dark:border-iceBlue/40 pb-2 text-sm uppercase">Last days were... </h3>
-        <ul className='flex flex-col align-center justify-start'>
-            {/* {
-            dailyItems.slice(0,7).map((dailyItem, indx)=> 
-              <ForecastDailyCard dailyItem={dailyItem} minTempWeek={0} maxTempWeek={10} indx={indx}/>
-            )
-            } */}
-        </ul>
-      </div>
+
+          <div className={`
+              ${cardStyleClass}
+              `}>
+              <h3 className=" 
+                text-sm uppercase
+                font-semibold mb-4 pb-2 text-blue/80 border-b border-blue/40 
+                dark:text-iceBlue/80 dark:border-iceBlue/40">Last Hours were</h3>
+                <ul className='flex flex-row overflow-scroll align-center justify-start'>
+                    {
+                    hourlyItems
+                      ?
+                      hourlyItems.slice(0,24).map((hourlyItem, indx)=> 
+                      <ForecastHourlyCard key={hourlyItem.time} hourlyItem={hourlyItem}  index={indx}/>
+                      )
+                      :""
+                    }
+                </ul>
+          </div>
+
+
+          <motion.div
+              initial={{ scale: 0.8 , height: 0, opacity: 0}}
+              animate={{ scale: 1 , height: "min-content", opacity: 1}}
+              transition={{ duration: 0.3, delay: 0.2  }}
+          >
+          <div className={` bg-snowGray/0
+            ${cardStyleClass}
+          `}>
+            <h3 className="
+                text-sm uppercase
+                font-semibold mb-4 text-blue/80 dark:text-iceBlue/80 border-b border-blue/40
+                dark:border-iceBlue/40 pb-2 "> Last days were
+            </h3>
+            <motion.ul
+              initial="hidden"
+              animate="visible"
+              variants={{
+                visible: { opacity: 1 },
+                hidden: { opacity: 0 },
+              }}
+            ></motion.ul>
+            <ul className='flex flex-col align-center justify-start lg:flex-row overflow-x-scroll'>
+                  {
+                  dailyItems?
+                  dailyItems.slice(0,7).map((dailyItem, indx)=> 
+                    <ForecastDailyCard key={dailyItem.time} dailyItem={dailyItem} minTempWeek={minTempWeek} maxTempWeek={maxTempWeek} indx={-(indx+1)}/>
+                  )
+                  : ""
+                  }
+            </ul>
+          </div>
+          </motion.div>
+     
+      
       </motion.div>
     </>
-
-    
   );
 };
 

@@ -14,7 +14,7 @@ export default function AccesAuth(){
             `}
           >
             <FaGoogle className="mr-4 fill-gold"  style={{ fontSize: '20px' }}/>
-            <span className='text-themeWhite/80'>Continue whit Google</span>
+            <span className='text-themeWhite/80'>Continue with Google</span>
           </button>
         </Form>
         {/* Facebook login button */}

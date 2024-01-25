@@ -11,7 +11,7 @@ export let externalUserSessionStorage = createCookieSessionStorage<ExternalUser>
       secure: true,
       sameSite: "lax", // Strict
       secrets: ["s3cret1"],
-      maxAge: 5 * 60, // 5 minutes
+      maxAge: 15 * 60, // 15 minutes
       // also 12 hours
     },
   });

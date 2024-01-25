@@ -23,7 +23,7 @@ export let userSessionStorage = createCookieSessionStorage<SessionData, SessionF
     secure: true,
     sameSite: 'lax', // Strict
     secrets: ["s3cret1"],
-    maxAge: 5 * 60, // 5 minutes
+    maxAge: 5 * 60* 3, // 5 minutes
     // also 12 hours
   },
 });

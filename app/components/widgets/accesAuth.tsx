@@ -18,7 +18,7 @@ export default function AccesAuth(){
           </button>
         </Form>
         {/* Facebook login button */}
-        <button
+        {/* <button
           type="button"
           className={`
             w-full flex justify-start items-center  text-blue px-8 py-2 rounded-md hover:bg-blue hover:text-white focus:outline-none
@@ -27,7 +27,7 @@ export default function AccesAuth(){
         >
           <FaFacebook className="mr-4 fill-iceBlue"  style={{ fontSize: '20px' }}/>
           <span className='text-themeWhite/80'>Continue whit Facebook</span>
-        </button>
+        </button> */}
       </div>
     )
 }

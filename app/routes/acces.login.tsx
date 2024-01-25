@@ -16,6 +16,7 @@ import { commitSession, getSession } from '~/session';
 import { SessionLocation } from '~/models/tomorrow/WeatherLocation';
 import { defaultLocation } from '~/components/constants/defaults';
 import { validateEmail, validatePassword } from '~/utils/inputValidations';
+import { FaEye, FaEyeSlash } from 'react-icons/fa/index.js';
 
 
 const colors = tailwindConfig.theme.extend.colors;
@@ -86,9 +87,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const actionData = useActionData<typeof action>(); 
 
   const incorrectFieldMsg = 'text-blue font-semibold p-2 text-xs ';
@@ -113,6 +113,8 @@ export default function Login() {
     }
   }, [actionData]);
 
+
+
   return (
       <>
       <div className='px-8 mt-12 lg:px-36'>
@@ -136,11 +138,12 @@ export default function Login() {
                   ) : null}
                 </p>
                 <p>
-                <PasswordInput
-                  password={password}
-                  setPassword={setPassword}
-                  twClass={actionData?.errors?.password ? "border-2 border-gold" :""}
-                />   
+                  <PasswordInput
+                    password={password}
+                    setPassword={setPassword}
+                    twClass={actionData?.errors?.password ? "border-2 border-gold" :""}
+                  /> 
+                 
                 {actionData?.errors?.password ? (
                     <span className={incorrectFieldMsg}>{actionData?.errors.password}</span>
                   ) : null}
